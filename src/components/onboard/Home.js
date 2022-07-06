@@ -1,19 +1,27 @@
 import styled from "styled-components";
-import axios from "axios";
-import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { UserContext } from "../../context/UserContext";
+//import axios from "axios";
+//import { useContext, useEffect, useState } from "react";
+//import { useNavigate } from "react-router-dom";
+//import { UserContext } from "../../context/UserContext";
 
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+//import Skeleton from "react-loading-skeleton";
+//import "react-loading-skeleton/dist/skeleton.css";
 
-function Home (){
+export default function Home (){
 
     return(
-        <>
-        <h1> Hello world!</h1>
-        </>
+        <Page>
+            <h1> Hello World!</h1>
+        </Page>
     )
 }
 
-export default Home;
+
+const Page = styled.div`
+    width: 100%;
+    height: 300px;
+    h1{
+        font-weight: 400;
+        font-size: 30px;
+    }
+`;

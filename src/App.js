@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import DataProvider from "./context/UserContext";
 import Home from "./components/onboard/Home"
 
-function App (){
+export default function App (){
     return(
         <DataProvider>
             <BrowserRouter>
@@ -14,4 +14,3 @@ function App (){
     )
 };
 
-export default App;
