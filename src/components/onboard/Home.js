@@ -10,18 +10,84 @@ import styled from "styled-components";
 export default function Home (){
 
     return(
-        <Page>
-            <h1> Hello World!</h1>
-        </Page>
+        <>
+        
+       <BigScreen>
+            <h3>S o n i t u s</h3>
+        </BigScreen>
+        <Container>
+            <SuggestedBox>
+                <h3> Gigg's selection</h3>
+            </SuggestedBox>
+            <SuggestedBox>
+                <h3> Música de corno </h3>
+            </SuggestedBox>
+            <SuggestedBox>
+                <h3> Rock concert </h3>
+            </SuggestedBox>
+        </Container>
+        </>
     )
 }
 
 
-const Page = styled.div`
+const Container = styled.div`
     width: 100%;
-    height: 300px;
-    h1{
-        font-weight: 400;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    background-color: #FFFFFF;
+    
+`;
+
+const Header = styled.div`
+    width: 100%;
+    height: 100px;
+    background-color: black;
+    position: fixed;
+    top: 0;
+    z-index: 2;
+`;
+
+const BigScreen = styled.div`
+    
+    width: 100%;
+    height: 400px;
+    background-image: url("https://secureservercdn.net/45.40.152.13/e5f.02f.myftpupload.com/wp-content/uploads/2018/12/MonostereoVinyl.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 400px;
+    outline: 2px solid red;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    
+    h3{ 
+        font-family: 'Roboto';
         font-size: 30px;
+        font-weight: 700;
+        color: #FFFFFF;
+    }
+
+
+`;
+
+
+const SuggestedBox = styled.div`
+    width: 100%;
+    height: 450px;
+    margin: 30px auto;
+    border-radius: 5px;
+    background-color: pink;
+    position: relative;
+
+    h3{
+        font-family: 'Jost';
+        font-size: 36px;
+        font-weight: 700;
+        color: #FFFFFF;
+        position: absolute;
+        left: 10px;
+        bottom: 10px;
     }
 `;
