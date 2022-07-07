@@ -78,8 +78,8 @@ function Footer (){
             <p>Terms of Use</p>
             </PolicyInfo>
             <LastInfo>
-                <p>© 2021 Nike. Todos os direitos reservados. Fisia Comércio de Produtos Esportivos Ltda - CNPJ: 59.546.515/0045-55<br/>
-                 Rodovia Fernão Dias, S/N Km 947.5 - Galpão Modulo 3640 - CEP 37640-903 - Externa - MG
+                <p>© 2022 Sonitus. All reserved rights . Sonitus Trade in Musical Products and Antiques Ltda - CNPJ: 66.666.666/6666-66<br/>
+                 Starway to Heaven, S/N 7000Km  - Module Shed 666 - CEP 99999-999 - Heaven - Sky
                 </p>
             </LastInfo>
         </FooterWrapper>
