@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import Header from "../shared/Header";
 //import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { DataContext } from "../../context/DataContext";
@@ -19,12 +18,11 @@ export default function Home (){
 
     return(
         <>
-        
-        <Container>
-        
-       <BigScreen>
-            <h3>S o n i t u s</h3>
+        <BigScreen>
+            <h3>O prazer do garimpo <br/>na palma da sua mão</h3>
         </BigScreen>
+        <Container>
+            <h2>Our Selection</h2>
             <SuggestedBox>
                 <h3> Gigg's selection</h3>
             </SuggestedBox>
@@ -46,7 +44,15 @@ const Container = styled.div`
     flex-direction: column;
     box-sizing: border-box;
     background-color: #FFFFFF;
-    
+    padding: 0 20px;
+
+    h2{
+        margin: 20px 0;
+        font-family: 'Jost';
+        font-size: 28px;
+        font-weight: 700;
+        color: #000000;
+    }
 `;
 
 
@@ -61,12 +67,15 @@ const BigScreen = styled.div`
     box-sizing: border-box;
     display: flex;
     justify-content: center;
+
     
     h3{ 
+        margin-top: 250px;
         font-family: 'Roboto';
-        font-size: 30px;
-        font-weight: 700;
-        color: #FFFFFF;
+        font-size: 24px;
+        font-weight: 400;
+        color: #DFDFDF;
+        text-align: center;
     }
 
 
@@ -76,7 +85,7 @@ const BigScreen = styled.div`
 const SuggestedBox = styled.div`
     width: 100%;
     height: 450px;
-    margin: 30px auto;
+    margin: 5px auto 5px;
     border-radius: 5px;
     background-color: pink;
     position: relative;
