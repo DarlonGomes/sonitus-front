@@ -21,8 +21,10 @@ export default function Header() {
 
   const ShowSideMenu = () => display ? <SideMenu setDisplay={setDisplay} /> : <></>;
   return(
-  <HeaderWrapper>
+    <>
     <ShowSideMenu />
+  <HeaderWrapper>
+    
     <TopMenu >
       <HeaderHighlight onClick={() => setDisplay(true)}>
         <ion-icon name="menu-outline"></ion-icon>
@@ -36,6 +38,7 @@ export default function Header() {
       <SearchBar placeholder="O que você procura?" />
     </SearchWrapper>
   </HeaderWrapper>
+  </>
   )
 }
 
@@ -54,6 +57,7 @@ const HeaderWrapper = styled.div`
   background-color: #333333;
   color: #333333;
   box-sizing: border-box;
+  z-index: 1;
 `
 
 const TopMenu = styled.div`
@@ -78,7 +82,7 @@ const SideMenuBody = styled.div`
   background-color: red;
   top: 0;
   left: 0;
-  z-index: 1;
+  z-index: 3;
 `
 
 const SideMenuShadow = styled.div`
@@ -90,7 +94,7 @@ const SideMenuShadow = styled.div`
   background-color: #00000070;
   top: 0;
   right: 0;
-  z-index: 1;
+  z-index: 2;
 `
 
 const SearchWrapper = styled.div`

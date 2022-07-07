@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Header from "../shared/Header";
 //import axios from "axios";
 //import { useContext, useEffect, useState } from "react";
 //import { useNavigate } from "react-router-dom";
@@ -12,10 +13,11 @@ export default function Home (){
     return(
         <>
         
+        <Container>
+        
        <BigScreen>
             <h3>S o n i t u s</h3>
         </BigScreen>
-        <Container>
             <SuggestedBox>
                 <h3> Gigg's selection</h3>
             </SuggestedBox>
@@ -40,14 +42,6 @@ const Container = styled.div`
     
 `;
 
-const Header = styled.div`
-    width: 100%;
-    height: 100px;
-    background-color: black;
-    position: fixed;
-    top: 0;
-    z-index: 2;
-`;
 
 const BigScreen = styled.div`
     
@@ -57,7 +51,6 @@ const BigScreen = styled.div`
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: 100% 400px;
-    outline: 2px solid red;
     box-sizing: border-box;
     display: flex;
     justify-content: center;
