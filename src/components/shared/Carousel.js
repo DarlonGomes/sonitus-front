@@ -7,3 +7,30 @@ import styled from "styled-components";
 //import Skeleton from "react-loading-skeleton";
 //import "react-loading-skeleton/dist/skeleton.css";
 
+function MainCarousel () {
+
+
+
+    return (
+        <CarouselWrapper>
+            
+            <Carousel>
+                <Item>
+
+                </Item>
+            </Carousel>
+
+        </CarouselWrapper>
+
+    );
+}
+
+
+const CarouselWrapper = styled.div`
+    
+`;
+
+const Carousel = styled.div``;
+
+const Item = styled.div``;
+
