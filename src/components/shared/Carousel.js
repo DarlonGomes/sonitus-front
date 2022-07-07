@@ -1,21 +1,40 @@
 import styled from "styled-components";
 //import axios from "axios";
-//import { useContext, useEffect, useState } from "react";
-//import { useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 //import { UserContext } from "../../context/UserContext";
 
 //import Skeleton from "react-loading-skeleton";
 //import "react-loading-skeleton/dist/skeleton.css";
 
 function MainCarousel (props) {
-
+    //const [carouselData, setCarouselData] = useState();  ---> isso vem do props, ao fazer o get na home
+    const navigate = useNavigate();
 
 
     return (
         <CarouselWrapper>
             <h2>{props.title}</h2>
             <Carousel>
-                <Item>
+
+                {/* 
+                {carouselData.map(element => 
+                    <Item onClick={()=>{navigate(`/${element.genre}/${element._id}`)}}>
+                        <img src={element.image} alt={element.album}/>
+                        <div className="info">
+                            <p className="bold">
+                                {element.album}
+                            </p>
+                            <p>
+                                {element.artist}
+                            </p>
+                            <p className="bold">
+                                R$ {element.price}
+                            </p>
+                        </div>
+                    </Item>)} 
+                */}
+                <Item onClick={()=>{navigate(`/${props.genre}/${props.id}`)}}>
                     <img src={props.image} alt={props.album}/>
                     <div className="info">
                         <p className="bold">
@@ -29,7 +48,7 @@ function MainCarousel (props) {
                         </p>
                     </div>
                 </Item>
-                <Item>
+                <Item onClick={()=>{navigate(`/${props.genre}/${props.id}`)}}>
                     <img src={props.image} alt={props.album}/>
                     <div className="info">
                         <p className="bold">
@@ -43,7 +62,7 @@ function MainCarousel (props) {
                         </p>
                     </div>
                 </Item>
-                <Item>
+                <Item onClick={()=>{navigate(`/${props.genre}/${props.id}`)}}>
                     <img src={props.image} alt={props.album}/>
                     <div className="info">
                         <p className="bold">
@@ -57,7 +76,7 @@ function MainCarousel (props) {
                         </p>
                     </div>
                 </Item>
-                <Item>
+                <Item onClick={()=>{navigate(`/${props.genre}/${props.id}`)}}>
                     <img src={props.image} alt={props.album}/>
                     <div className="info">
                         <p className="bold">
@@ -71,7 +90,7 @@ function MainCarousel (props) {
                         </p>
                     </div>
                 </Item>
-                <Item>
+                <Item onClick={()=>{navigate(`/${props.genre}/${props.id}`)}}>
                     <img src={props.image} alt={props.album}/>
                     <div className="info">
                         <p className="bold">
@@ -85,7 +104,7 @@ function MainCarousel (props) {
                         </p>
                     </div>
                 </Item>
-                <Item>
+                <Item onClick={()=>{navigate(`/${props.genre}/${props.id}`)}}>
                     <img src={props.image} alt={props.album}/>
                     <div className="info">
                         <p className="bold">
@@ -99,7 +118,7 @@ function MainCarousel (props) {
                         </p>
                     </div>
                 </Item>
-                <Item>
+                <Item onClick={()=>{navigate(`/${props.genre}/${props.id}`)}}>
                     <img src={props.image} alt={props.album}/>
                     <div className="info">
                         <p className="bold">
