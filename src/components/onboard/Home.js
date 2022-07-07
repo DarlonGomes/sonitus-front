@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import Header from "../shared/Header";
 //import axios from "axios";
-//import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { DataContext } from "../../context/DataContext";
 //import { useNavigate } from "react-router-dom";
 //import { UserContext } from "../../context/UserContext";
 
@@ -9,6 +10,12 @@ import Header from "../shared/Header";
 //import "react-loading-skeleton/dist/skeleton.css";
 
 export default function Home (){
+    const { dataRequest, setReqData, reqData } = useContext(DataContext);
+
+    useEffect(() => {
+        dataRequest();
+        // eslint-disable-next-line
+    }, [])
 
     return(
         <>
