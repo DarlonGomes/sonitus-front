@@ -8,11 +8,6 @@ import { useNavigate, Link } from "react-router-dom";
 //import "react-loading-skeleton/dist/skeleton.css";
 
 function Footer (){
-
-
-
-
-
     return (
         <FooterWrapper>
             <InfoBox>
