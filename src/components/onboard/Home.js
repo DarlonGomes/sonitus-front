@@ -13,7 +13,24 @@ import SmallBanner from "../shared/banners/smallBanner";
 import MainBanner from "../shared/banners/bigBanner";
 export default function Home (){
     const { dataRequest, setReqData, reqData } = useContext(DataContext);
+    const obj = {
+        
+        image:"https://studiosol-a.akamaihd.net/letras/272x272/albuns/f/4/b/0/588401501157108.jpg",
+        album:"Only Revolutions",
+        artist:"Biffy Clyro",
+        price:"200,00"
+    };
+    const title ="Discover"
+    const arr = [obj,obj,obj,obj,obj,obj,obj]
 
+    const famous = {
+        image:"https://m.media-amazon.com/images/I/91dMGXclQyL._AC_SX569_.jpg",
+        album:"Alucinação",
+        artist:"Belchior",
+        price:"180,00"
+    }
+
+    const famousArr = [famous,famous,famous,famous,famous,famous,famous]
     useEffect(() => {
         dataRequest();
         // eslint-disable-next-line
@@ -30,11 +47,11 @@ export default function Home (){
             <MainBanner title="Gigg's code playlist" image="https://i.pinimg.com/originals/77/dd/b9/77ddb90eee4b413ecdbf6b624315928c.png" id="giggs"/>
             <MainBanner title="Chico's odd playlist" image="https://yt3.ggpht.com/ytc/AKedOLRCU7jn-QSPH2EVwGiT7sSjDvdsPfX3svE9n_CAbg=s900-c-k-c0x00ffffff-no-rj" id="chico"/>
 
-            <MainCarousel title="Best Seller" image="https://m.media-amazon.com/images/I/91dMGXclQyL._AC_SX569_.jpg"  album="Alucinação" artist="Belchior" price="180,00"/>
+            <MainCarousel title="Best Seller" arr={famousArr}/> 
             
             <SmallBanner text="Run To The Hills" image="https://www.cnnbrasil.com.br/wp-content/uploads/sites/12/2022/04/iron-maiden-ft-lauderdale-2019-jmc-53197.jpg" genre="rock" id="666"/>
 
-            <MainCarousel title="Discover" image="https://studiosol-a.akamaihd.net/letras/272x272/albuns/f/4/b/0/588401501157108.jpg"  album="Only Revolutions" artist="Biffy Clyro" price="200,00"/>
+            <MainCarousel title={title} arr={arr}/>
         </Container>
         </>
     )

@@ -1,71 +1,35 @@
 import styled from "styled-components";
 //import axios from "axios";
-import { useContext, useEffect, useState } from "react";
-import { DataContext } from "../../context/DataContext";
+import { useEffect, useState } from "react";
 //import { useNavigate } from "react-router-dom";
 //import { UserContext } from "../../context/UserContext";
 
 //import Skeleton from "react-loading-skeleton";
 //import "react-loading-skeleton/dist/skeleton.css";
 
+import {GenreCarousel} from "../shared/Carousel";
+
 function GenreList () {
-
-    const Test = () => {
-        const arr = []
-        for(let i = 0; i < 4; i++){
-            arr.push({
-                image: "https://cdns-images.dzcdn.net/images/cover/4ba9235bc8e6947a60e2e03642709c40/264x264.jpg",
-                album: "Under The Covers",
-                artist: "Ninja Sex Party"
-            })
-        }
-
-        return(
-            <>
-            {arr.map(e => <Sample>
-                    <img src={e.image} alt={e.title}/>
-                    <div className="info">
-                        <p className="bold">{e.album}</p>
-                        <p>{e.artist}</p>
-                    </div>
-                </Sample>)}
-            </>
-        )
+    const [carouselData, setCarouselData] = useState();  
+    const obj={
+        image: "https://cdns-images.dzcdn.net/images/cover/4ba9235bc8e6947a60e2e03642709c40/264x264.jpg",
+        album: "Under The Covers",
+        artist: "Ninja Sex Party",
+        price: "200,00",
     }
-
-
+    const arr=[obj,obj,obj,obj]
+   const megaObject = {title: "Rock", arr}
 
     return (
         <>
         <Container>
             <h2> All Genres</h2>
-            <GenreWrapper>
-            <div className="info">
-            <h3>Rock</h3><h3>more...</h3>
-            </div>
-            <div className="sampleWrapper">
-                <Test/>
-            </div>
-            </GenreWrapper>
-
-            <GenreWrapper>
-            <div className="info">
-            <h3>Rock</h3><h3>more...</h3>
-            </div>
-            <div className="sampleWrapper">
-                <Test/>
-            </div>
-            </GenreWrapper>
-
-            <GenreWrapper>
-            <div className="info">
-            <h3>Rock</h3><h3>more...</h3>
-            </div>
-            <div className="sampleWrapper">
-                <Test/>
-            </div>
-            </GenreWrapper>
-
+            
+            <GenreCarousel title={megaObject.title} arr={megaObject.arr}/>
+            <GenreCarousel title={megaObject.title} arr={megaObject.arr}/>
+            <GenreCarousel title={megaObject.title} arr={megaObject.arr}/>
+            <GenreCarousel title={megaObject.title} arr={megaObject.arr}/>
+           
         </Container>
         </>
     )
@@ -79,7 +43,7 @@ const Container = styled.div`
     box-sizing: border-box;
     background-color: #FFFFFF;
     padding: 0 20px;
-    margin-top: 150px;
+    margin-top: 120px;
 
     h2{
         margin: 20px 0;
