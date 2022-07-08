@@ -16,9 +16,10 @@ function MainCarousel (props) {
             <h2>{props.title}</h2>
             <Carousel>
  
-                {carouselData.map((element,index) => 
-                    <Item key={index} onClick={()=>{navigate(`/${element.genre}/${element._id}`)}}>
-                        <img src={element.image} alt={element.album}/>
+                {carouselData.map(element => 
+                    <Item key={element._id} >
+                        <img src={element.image} alt={element.album} 
+                        onClick={()=>{navigate(`/${element.genre}/${element._id}`)}}/>
                         <div className="info">
                             <p className="bold">
                                 {element.album}
@@ -68,7 +69,7 @@ const Item = styled.div`
     display: flex;
     flex-direction: column;
     background-color: #FFFFFF;
-    margin: 0 5px;
+    margin-right: 10px;
 
     img{
         width: 250px;
@@ -101,18 +102,18 @@ export function GenreCarousel (props){
 
     const [carouselData, setCarouselData] = useState(props.arr); 
     const navigate = useNavigate();
-    console.log(carouselData)
 
     return (
         <GenreWrapper>
             <div className="more">
-            <h2>{props.title}</h2><ion-icon name="add-outline"></ion-icon>
+            <h2>{props.title}</h2><ion-icon name="add-outline" onClick={()=>{navigate(`/${props.title}`)}}></ion-icon>
             </div>
             <CarouselGenre>
 
-                {carouselData.map((element,index) => 
-                    <GenreItem key={index} >
-                        <img src={element.image} alt={element.album}/>
+                {carouselData.map(element => 
+                    <GenreItem key={element._id} >
+                        <img src={element.image} alt={element.album} 
+                        onClick={()=>{navigate(`/${element.genre}/${element._id}`)}}/>
                         <div className="info">
                             <p className="bold">
                                 {element.album}
