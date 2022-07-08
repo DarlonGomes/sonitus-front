@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useNavigate} from "react-router-dom";
-import { useState } from "react";
+//import { useState } from "react";
 function SmallBanner (props){
     //const [bannerData, setBannerData] = useState(props)  ---> vem do get na home
     const navigate = useNavigate();
@@ -8,7 +8,7 @@ function SmallBanner (props){
     return(
         
         <SmallSuggestedBox onClick={()=>{navigate(`/${props.genre}/${props.id}`)}}>
-            <img src={props.image}/>
+            <img src={props.image} alt={props.text}/>
             <h3>{props.text}</h3>
         </SmallSuggestedBox>
        
