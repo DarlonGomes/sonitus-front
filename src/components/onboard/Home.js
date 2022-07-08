@@ -12,7 +12,8 @@ import MainCarousel from "../shared/Carousel";
 import SmallBanner from "../shared/banners/smallBanner";
 import MainBanner from "../shared/banners/bigBanner";
 export default function Home (){
-    const { dataRequest, setReqData, reqData } = useContext(DataContext);
+    const { dataRequest, reqData } = useContext(DataContext);
+   
     const obj = {
         
         image:"https://studiosol-a.akamaihd.net/letras/272x272/albuns/f/4/b/0/588401501157108.jpg",
@@ -29,10 +30,11 @@ export default function Home (){
         artist:"Belchior",
         price:"180,00"
     }
-
+    
     const famousArr = [famous,famous,famous,famous,famous,famous,famous]
     useEffect(() => {
-        dataRequest();
+        const effect = async() => await dataRequest();
+        effect();
         // eslint-disable-next-line
     }, [])
 
