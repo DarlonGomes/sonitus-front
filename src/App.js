@@ -9,8 +9,8 @@ export default function App() {
   return (
     <DataProvider>
       <RequestProvider>
-        <Header />
         <BrowserRouter>
+          <Header />
           <Routes>
             <Route path="/" element={<Home />} />
           </Routes>

@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import { DataContext } from "../../context/DataContext";
@@ -34,7 +34,13 @@ function AccountMenu({ data, setAccount, setDisplay, setOperation }) {
   return (
     <UserContentWrapper>
       {data !== null ? (
-        <AccountDescription>Greetings, {data.name}</AccountDescription>
+        <AccountDescription>
+          <>
+          Greetings,<br/>{data.name}
+          </>
+          
+        </AccountDescription>
+        
       ) : (
         <AccountActions
           setOperation={setOperation}
@@ -46,28 +52,54 @@ function AccountMenu({ data, setAccount, setDisplay, setOperation }) {
   );
 }
 
-function SideMenu({ setDisplay, setAccount, setOperation, Genres, data, setData }) {
+function SideMenu({ setDisplay, setAccount, setOperation, Genres, data, setData, setIsCart, cart }) {
   function logout() {
     setDisplay(false);
     setData(null);
     localStorage.removeItem("data")
   }
-
-  return (
-    <>
-      <SideMenuBody>
-        <DataWrapper>
+  
+  const MenuData = () => {
+    return (
+      <>
+        <DataWrapper cart={cart}>
           <AccountMenu
             data={data}
             setOperation={setOperation}
             setDisplay={setDisplay}
             setAccount={setAccount}
+            setData={setData}
           />
           <Genres />
         </DataWrapper>
-        { data !== null ? <LogoutBox><LogoutButton onClick={logout}>Logout</LogoutButton></LogoutBox> : null }
+        {data !== null ? (
+          <LogoutBox>
+            <LogoutButton onClick={logout}><ion-icon name="log-out-outline"></ion-icon></LogoutButton>
+          </LogoutBox>
+        ) : null }
+      </>
+    );
+  };
+
+  const CartData = () => {
+    return(
+      <>
+       <DataWrapper cart={cart}>
+          CART<br/>CART<br/>CART<br/>CART<br/>CART<br/>CART<br/>CART<br/>CART<br/>CART<br/>CART<br/>CART<br/>CART<br/>CART<br/>
+       </DataWrapper>
+       <DataWrapper cart={cart}>
+          HISTORY
+       </DataWrapper>
+      </>
+    )
+  };
+
+  return (
+    <>
+      <SideMenuBody cart={cart}>
+        { cart ? <CartData /> : <MenuData /> }
       </SideMenuBody>
-      <SideMenuShadow onClick={() => setDisplay(false)} />
+      <SideMenuShadow onClick={() => cart ? setIsCart(false) : setDisplay(false)} />
     </>
   );
 }
@@ -210,26 +242,30 @@ function MenuCover({
 }
 
 export default function Header() {
+  const navigate = useNavigate();
   const [display, setDisplay] = useState(false);
   const [account, setAccount] = useState(null);
+  const [isCart, setIsCart] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeat, setRepeat] = useState("");
   const [operation, setOperation] = useState(false);
   const { reqData, productRequest } = useContext(DataContext);
-  const { data, setData, setToken } = useContext(UserContext);
-  useEffect(() => {}, []);
-
-  async function genreNavigate(queryId) {
-    const success = await productRequest(queryId);
-  }
+  const { data, setData, setToken, userLoadFromLocal } = useContext(UserContext);
+  
+  useEffect(() => {
+    const load = async() => {
+      await userLoadFromLocal()
+    }
+    load();
+    }, [userLoadFromLocal]);
 
   async function userLogin(credentials) {
     try {
       const response = await axios.post(`${URL}/user/signin`, credentials);
       if (response.status < 300) {
-        localStorage.setItem("data", response.data);
+        localStorage.setItem("data", JSON.stringify(response.data));
         setData({ ...response.data });
         const token = {
           headers: {
@@ -287,9 +323,9 @@ export default function Header() {
   const Genres = () => {
     return (
       <GenreWrapper>
-        <Genre onClick={() => genreNavigate("All")}>All Categories</Genre>
+        <Genre onClick={() => navigate(`/genres`)}>All Categories</Genre>
         {reqData.map((item, index) => (
-          <Genre onClick={() => genreNavigate(item._id)} key={index}>
+          <Genre onClick={() => navigate(`/products/${item._id}`)} key={index}>
             {item._id}
           </Genre>
         ))}
@@ -297,9 +333,23 @@ export default function Header() {
     );
   };
 
+  const ShowCartMenu = () =>
+  isCart ? (
+    <SideMenu
+      cart={true}
+      setData={setData}
+      Genres={Genres}
+      data={data}
+      setOperation={setOperation}
+      setAccount={setAccount}
+      setIsCart={setIsCart}
+    />
+  ) : null;
+
   const ShowSideMenu = () =>
     display ? (
       <SideMenu
+        cart={false}
         setData={setData}
         Genres={Genres}
         data={data}
@@ -319,6 +369,7 @@ export default function Header() {
   return (
     <>
       <ShowSideMenu />
+      <ShowCartMenu />
       {account === null ? null : (
         <MenuCover
           handleSubmit={handleSubmit}
@@ -338,9 +389,9 @@ export default function Header() {
       <HeaderWrapper>
         <TopMenu>
           <ion-icon onClick={() => setDisplay(true)} name="menu"></ion-icon>
-          <ion-icon name="disc"></ion-icon>
+          <ion-icon onClick={() => navigate('/')} name="disc"></ion-icon>
           <HeaderDownscale>
-            <ion-icon name="cart-outline"></ion-icon>
+            <ion-icon onClick={() => setIsCart(true)} name="cart-outline"></ion-icon>
           </HeaderDownscale>
         </TopMenu>
         {/* QUANDO O HAMBURGUER DESCER TEM QUE IMPEDIR DO USUARIO APERTAR OS BOTÕES QUE ESTÃO ATRAS */}
@@ -392,14 +443,14 @@ const HeaderDownscale = styled.div`
 `;
 
 const SideMenuBody = styled.div`
-  width: 65%;
+  width: ${ ({ cart }) => !cart ? '65%' : '75%' };
   height: 100vh;
   display: flex;
   flex-direction: column;
   position: fixed;
   background-color: #292929;
   top: 0;
-  left: 0;
+  ${ ({ cart }) => !cart ? {left: 0}  : {right: 0} }
   z-index: 3;
 `;
 
@@ -411,7 +462,7 @@ const SideMenuShadow = styled.div`
   backdrop-filter: blur(4px);
   background-color: #00000070;
   top: 0;
-  right: 0;
+  ${ ({ cart }) => cart ? {left: 0}  : {right: 0} }
   z-index: 2;
 `;
 
@@ -420,15 +471,17 @@ const DataWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-items: ${ ({ cart }) => cart ? 'flex-end' : 'flex-start' };;
   width: 100%;
   height: 40vh;
   margin-top: 2.25vh;
   padding-left: 4vw;
+  ${ ({ cart }) => cart ? 'padding-right: 4vw' : 'padding-left: 4vw' };
   font-size: 32px;
   color: #dfdfdf;
   font-weight: 500;
   box-sizing: border-box;
+  ${ ({ cart }) => cart ? 'overflow-y: scroll' : null};
 `;
 
 const UserContentWrapper = styled.div`
@@ -436,7 +489,7 @@ const UserContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   color: #dfdfdf;
-  width: 80%;
+  width: 95%;
   height: 10vh;
   margin-bottom: 25px;
   font-size: 28px;
@@ -447,7 +500,7 @@ const GenreWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 2.25vh;
-`
+`;
 
 const Genre = styled.p`
   line-height: 50px;
@@ -530,9 +583,11 @@ const AccountMenuWrapper = styled.div`
 
 const AccountDescription = styled.div`
   display: flex;
+  justify-content: space-between;
+  align-items: center;
   line-height: 38px;
-  width: 100px;
-  height: 50px;
+  width: 100%;
+  height: 100px;
 `;
 
 const LogoutBox = styled.div`
@@ -545,7 +600,7 @@ const LogoutBox = styled.div`
   height: 40vh;
   margin-bottom: 15vh;
   padding-left: 4vw;
-  font-size: 32px;
+  font-size: 36px;
   color: #DBDBDB;
   font-weight: 500;
   box-sizing: border-box;
@@ -559,7 +614,8 @@ const LogoutButton = styled.div`
   border: 1px solid #454545;
   background-color: #333333;
   height: 50px;
-  width: 120px;
+  width: 50px;
+  font-size: 36px;
   border-radius: 12px;
 `
 

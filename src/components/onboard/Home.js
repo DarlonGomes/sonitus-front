@@ -15,8 +15,7 @@ export default function Home (){
     const { dataRequest, reqData } = useContext(DataContext);
 
     useEffect(() => {
-        const effect = async() => await dataRequest();
-        effect();
+        dataRequest();
         // eslint-disable-next-line
     }, [])
 
