@@ -1,11 +1,10 @@
-import axios from "axios";
 import { createContext, useEffect, useState } from "react";
+import axios from "axios";
 
-// const API=process.env.REACT_APP_API_URI
-const API='http://localhost:5000'
+const API=process.env.REACT_APP_API_URI
+const requestParams = "products/?genre=Sample"
 
 export const DataContext = createContext();
-const requestParams = "products/?genre=Sample"
 
 const RequestProvider = ({ children }) => {
     const [reqData, setReqData] = useState(null);
@@ -15,7 +14,6 @@ const RequestProvider = ({ children }) => {
         if(products === null || (products.hasOwnProperty('genre') && !products.genre.includes(genre))) {
             try {
                 const response = await axios.get(`${API}/products/?genre=${genre}`);
-                console.log(response.data);
                 setProducts(response.data);
                 return true;
             } catch (err) {
@@ -28,6 +26,7 @@ const RequestProvider = ({ children }) => {
         try {
             const response = await axios.get(`${API}/${requestParams}`);
             setReqData(response.data);
+            return true;
         } catch (err) {
             return null;
         }

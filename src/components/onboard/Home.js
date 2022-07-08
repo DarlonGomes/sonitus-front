@@ -12,10 +12,11 @@ import MainCarousel from "../shared/Carousel";
 import SmallBanner from "../shared/banners/smallBanner";
 import MainBanner from "../shared/banners/bigBanner";
 export default function Home (){
-    const { dataRequest, setReqData, reqData } = useContext(DataContext);
+    const { dataRequest, reqData } = useContext(DataContext);
 
     useEffect(() => {
-        dataRequest();
+        const effect = async() => await dataRequest();
+        effect();
         // eslint-disable-next-line
     }, [])
 
