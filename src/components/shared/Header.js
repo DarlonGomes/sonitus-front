@@ -1,36 +1,16 @@
 import { useContext, useState, useEffect } from "react";
 // import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import styled from "styled-components";
 import { DataContext } from "../../context/DataContext";
 import { UserContext } from "../../context/UserContext";
+
+const URL=process.env.REACT_APP_API_URI
 
 //import Skeleton from "react-loading-skeleton";
 //import "react-loading-skeleton/dist/skeleton.css";
 
 // PENSAR EM COMPONENTIZAR EXTERNAMENTE A PARTIR DAQUI
-function Login({ handleSubmit, Button }) {
-  return (
-    <FormsWrapper onSubmit={handleSubmit}>
-      <input placeholder="e-mail" />
-      <input placeholder="senha" />
-      <Button />
-    </FormsWrapper>
-  );
-}
-
-function SignUp({ handleSubmit, Button }) {
-  return (
-    <FormsWrapper onSubmit={handleSubmit}>
-      <input placeholder="nome" />
-      <input placeholder="e-mail" />
-      <input placeholder="senha" />
-      <input placeholder="confirme a senha" />
-      <Button />
-    </FormsWrapper>
-  );
-}
-// PENSAR EM COMPONENTIZAR EXTERNAMENTE A PARTIR DAQUI
-
 function AccountActions({ setAccount, setDisplay, setOperation }) {
   function handleClick(flag) {
     setDisplay(false);
@@ -49,8 +29,8 @@ function AccountActions({ setAccount, setDisplay, setOperation }) {
 function AccountMenu({ data, setAccount, setDisplay, setOperation }) {
   return (
     <UserContentWrapper>
-      {data ? (
-        <>Olá {data.name}</>
+      {data !== null ? (
+        <>Greetings, {data.name}</>
       ) : (
         <AccountActions
           setOperation={setOperation}
@@ -81,22 +61,164 @@ function SideMenu({ setDisplay, setAccount, setOperation, Genres, data }) {
   );
 }
 
+function Login({ email, setEmail, password, setPassword, Button, handleSubmit }) {
+  return (
+    <FormsWrapper onSubmit={handleSubmit}>
+      <input
+        value={email}
+        type={'e-mail'}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="E-mail"
+        title=""
+        required 
+      />
+      <input
+        value={password}
+        type={'password'}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="Password"
+        title=""
+        required 
+      />
+      <Button type={"Submit"} />
+    </FormsWrapper>
+)};
+
+function SignUp({ name, setName, email, setEmail, password, setPassword, repeat, setRepeat, Button, handleSubmit }) {
+  return (
+    <FormsWrapper onSubmit={handleSubmit}>
+      <input
+        value={name}
+        type={'text'}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Name"
+        pattern="[a-zA-Z]{1,64}"
+        title=""
+        required 
+      />
+      <input
+        value={email}
+        type={'e-mail'}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="E-mail"
+        title=""
+        required 
+      />
+      <input
+        value={password}
+        type={'password'}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="Password"
+        title=""
+        required 
+      />
+      <input
+        value={repeat}
+        type={'password'}
+        onChange={(e) => setRepeat(e.target.value)}
+        placeholder="Re-enter the password"
+        title=""
+        required 
+      />
+      <Button type={"Submit"} />
+    </FormsWrapper>
+)}
+
+function MenuCover({ name, setName, email, setEmail, password, setPassword, repeat, setRepeat, Button, handleSubmit, setAccount, operation }) {
+  function handleClick() {
+    setAccount(null);
+    setEmail("");
+    setPassword("");
+    setName("");
+    setRepeat("");
+  }
+  
+  return (
+  <AccountMenuWrapper >
+    <CloseIcon onClick={handleClick}><ion-icon name="close"></ion-icon></CloseIcon>
+    {operation ? (
+      <Login handleSubmit={handleSubmit} setEmail={setEmail} setPassword={setPassword} email={email} password={password} Button={Button} />
+    ) : (
+      <SignUp handleSubmit={handleSubmit} setName={setName} setEmail={setEmail} setPassword={setPassword} setRepeat={setRepeat} name={name} email={email} password={password} repeat={repeat} Button={Button} />
+    )}
+  </AccountMenuWrapper>
+)}
+
 export default function Header() {
   const [display, setDisplay] = useState(false);
   const [account, setAccount] = useState(null);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [repeat, setRepeat] = useState("");
   const [operation, setOperation] = useState(false);
   const { reqData, productRequest } = useContext(DataContext);
-  const { data } = useContext(UserContext);
-
+  const { data, setData, setToken } = useContext(UserContext);
+  console.log(data);
   useEffect(() => {}, []);
 
   async function genreNavigate(queryId) {
     const success = await productRequest(queryId);
-    console.log(success);
   }
 
-  function handleSubmit(e) {
+  async function userLogin(credentials) {
+    try {
+      const response = await axios.post(`${URL}/user/signin`, credentials)
+      if(response.status < 300) {
+        localStorage.setItem("data", response.data);
+        setData({...response.data})
+        const token = {
+          headers: {
+            "Authentication": `Bearer ${response.data.token}`
+          }
+        }
+        setToken(token)
+      }
+      return;
+    } catch (err) {
+      return err;
+    }
+  }
+
+  async function userRegister(credentials) {
+    try {
+      const response = await axios.post(`${URL}/user/signup`, credentials)
+      console.log(response.data);
+      if(response.status < 300) {
+        localStorage.setItem("token", JSON.stringify(response.data.token));
+        localStorage.setItem("uid", JSON.stringify(response.data._id));
+      }
+      return;
+    } catch (err) {
+      return err;
+    }
+  }
+
+  function handleClick() {
+    setAccount(null);
+    setEmail("");
+    setPassword("");
+    setName("");
+    setRepeat("");
+  }
+
+  async function handleSubmit(e) {
     e.preventDefault();
+
+    const data = {
+      name: name,
+      email: email,
+      password: password,
+      repeat_password: repeat
+    }
+    if(data.name !== "") {
+      await userRegister(data);
+      return handleClick();
+    }
+    delete data.name
+    delete data.repeat_password
+    await userLogin(data);
+    return handleClick();
   }
 
   const Genres = () => {
@@ -106,16 +228,6 @@ export default function Header() {
       </Genre>
     ));
   };
-
-  const MenuCover = () => (
-    <AccountMenuWrapper onClick={() => setAccount(null)}>
-      {operation ? (
-        <Login handleSubmit={handleSubmit} Button={Button} />
-      ) : (
-        <SignUp handleSubmit={handleSubmit} Button={Button} />
-      )}
-    </AccountMenuWrapper>
-  );
 
   const ShowSideMenu = () =>
     display ? (
@@ -127,27 +239,27 @@ export default function Header() {
         setDisplay={setDisplay}
       />
     ) : (
-      <></>
-    );
+      null
+  );
 
   const Button = () => operation ? <InputButton>Login</InputButton> : <InputButton>Register</InputButton>;
 
   return (
     <>
       <ShowSideMenu />
-      {account !== null ? <MenuCover /> : <></>}
+      {account === null ? null : <MenuCover handleSubmit={handleSubmit} setName={setName} setEmail={setEmail} setPassword={setPassword} setRepeat={setRepeat} name={name} email={email} password={password} repeat={repeat} Button={Button} setAccount={setAccount} operation={operation} />}
       <HeaderWrapper>
         <TopMenu>
-          <HeaderHighlight onClick={() => setDisplay(true)}>
-            <ion-icon name="menu-outline"></ion-icon>
-          </HeaderHighlight>
+          <ion-icon onClick={() => setDisplay(true)} name="menu"></ion-icon>
           <ion-icon name="disc"></ion-icon>
-          <ion-icon name="cart-outline"></ion-icon>
+          <HeaderDownscale>
+            <ion-icon name="cart-outline"></ion-icon>
+          </HeaderDownscale>
         </TopMenu>
         {/* QUANDO O HAMBURGUER DESCER TEM QUE IMPEDIR DO USUARIO APERTAR OS BOTÕES QUE ESTÃO ATRAS */}
         <SearchWrapper>
-          <ion-icon name="search-outline"></ion-icon>
-          <SearchBar placeholder="O que você procura?" />
+          <ion-icon name="search"></ion-icon>
+          <SearchBar placeholder="What are you looking for?" />
         </SearchWrapper>
       </HeaderWrapper>
     </>
@@ -166,7 +278,7 @@ const HeaderWrapper = styled.div`
   padding: 1vh 2vw;
   top: 0;
   left: 0;
-  background-color: #333333;
+  background-color: #292929;
   color: #333333;
   box-sizing: border-box;
   z-index: 1;
@@ -175,14 +287,21 @@ const HeaderWrapper = styled.div`
 const TopMenu = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
   width: 100%;
-  height: 3.5vh;
+  height: 5.5vh;
   color: #ffffff;
-  font-size: 40px;
+  font-size: 50px;
+
+  * {
+    height: 50px;
+    width: 50px;
+  }
 `;
 
-const HeaderHighlight = styled.div`
-  font-size: 50px;
+const HeaderDownscale = styled.div`
+  font-size: 40px;
+  display: flex;
 `;
 
 const SideMenuBody = styled.div`
@@ -191,7 +310,7 @@ const SideMenuBody = styled.div`
   display: flex;
   flex-direction: column;
   position: fixed;
-  background-color: red;
+  background-color: #292929;
   top: 0;
   left: 0;
   z-index: 3;
@@ -220,7 +339,7 @@ const DataWrapper = styled.div`
   margin-top: 10vh;
   padding-left: 4vw;
   font-size: 32px;
-  color: #dfdfdf;
+  color: #DFDFDF;
   font-weight: 500;
   box-sizing: border-box;
 `;
@@ -229,7 +348,7 @@ const UserContentWrapper = styled.div`
   font-family: "Roboto", sans-serif;
   display: flex;
   flex-direction: column;
-  color: #ffffff;
+  color: #DFDFDF;
   width: 80%;
   height: 10vh;
   margin-bottom: 25px;
@@ -248,8 +367,12 @@ const SearchWrapper = styled.div`
   width: 100%;
   height: 4.5vh;
   font-size: 32px;
-  color: #ffffff;
-  background-color: red;
+  color: #292929;
+  background-color: #FFFFFF;
+  border: none;
+  padding: 0 5px;
+  border-radius: 5px;
+  box-sizing: border-box;
 
   div {
     min-height: 24px;
@@ -262,12 +385,16 @@ const SearchBar = styled.input`
   font-size: 20px;
   width: 90%;
   height: 3.5vh;
-  margin: 0.5vh 0.5vw;
+  margin: 0.5vh 1vw;
   border: none;
 
   ::placeholder {
     font-family: "Roboto", sans-serif;
     font-size: 18px;
+  }
+
+  :focus {
+    outline: none;
   }
 `;
 
@@ -310,23 +437,32 @@ const AccountMenuWrapper = styled.div`
 
 const AccountButton = styled.div`
   display: flex;
+  line-height: 40px;
   width: 100px;
   height: 50px;
 `;
 
-const InputButton = styled.div`
+const InputButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 95%;
   border: 1px solid #454545;
-  background-color: #333333;
+  background-color: #292929;
   height: 50px;
-  color: bisque;
+  color: #DFDFDF;
   font-family: "Roboto", sans-serif;
-  padding: 1vh 2vw;
+  padding: 1.25vh 2vw;
   margin: 1.25vh 4vw;
-  font-size: 20px;
+  font-size: 24px;
   border-radius: 8px;
   box-sizing: border-box;
+`;
+
+const CloseIcon = styled.div`
+  position: fixed;
+  font-size: 48px;
+  top: 1.25vh;
+  left: 1.25vw;
+  color: #DBDBDB;
 `;
