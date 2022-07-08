@@ -154,7 +154,6 @@ export default function Header() {
   const [operation, setOperation] = useState(false);
   const { reqData, productRequest } = useContext(DataContext);
   const { data, setData, setToken } = useContext(UserContext);
-  console.log(data);
   useEffect(() => {}, []);
 
   async function genreNavigate(queryId) {
@@ -183,7 +182,6 @@ export default function Header() {
   async function userRegister(credentials) {
     try {
       const response = await axios.post(`${URL}/user/signup`, credentials)
-      console.log(response.data);
       if(response.status < 300) {
         localStorage.setItem("token", JSON.stringify(response.data.token));
         localStorage.setItem("uid", JSON.stringify(response.data._id));
