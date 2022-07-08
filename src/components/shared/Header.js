@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { DataContext } from "../../context/DataContext";
 import { UserContext } from "../../context/UserContext";
 
-const URL=process.env.REACT_APP_API_URI
+const URL = process.env.REACT_APP_API_URI;
 
 //import Skeleton from "react-loading-skeleton";
 //import "react-loading-skeleton/dist/skeleton.css";
@@ -20,8 +20,12 @@ function AccountActions({ setAccount, setDisplay, setOperation }) {
 
   return (
     <>
-      <AccountButton onClick={() => handleClick(true)}>Login</AccountButton>
-      <AccountButton onClick={() => handleClick(false)}>Signup</AccountButton>
+      <AccountDescription onClick={() => handleClick(true)}>
+        Login
+      </AccountDescription>
+      <AccountDescription onClick={() => handleClick(false)}>
+        Signup
+      </AccountDescription>
     </>
   );
 }
@@ -30,7 +34,7 @@ function AccountMenu({ data, setAccount, setDisplay, setOperation }) {
   return (
     <UserContentWrapper>
       {data !== null ? (
-        <>Greetings, {data.name}</>
+        <AccountDescription>Greetings, {data.name}</AccountDescription>
       ) : (
         <AccountActions
           setOperation={setOperation}
@@ -42,7 +46,13 @@ function AccountMenu({ data, setAccount, setDisplay, setOperation }) {
   );
 }
 
-function SideMenu({ setDisplay, setAccount, setOperation, Genres, data }) {
+function SideMenu({ setDisplay, setAccount, setOperation, Genres, data, setData }) {
+  function logout() {
+    setDisplay(false);
+    setData(null);
+    localStorage.removeItem("data")
+  }
+
   return (
     <>
       <SideMenuBody>
@@ -55,76 +65,110 @@ function SideMenu({ setDisplay, setAccount, setOperation, Genres, data }) {
           />
           <Genres />
         </DataWrapper>
+        { data !== null ? <LogoutBox><LogoutButton onClick={logout}>Logout</LogoutButton></LogoutBox> : null }
       </SideMenuBody>
       <SideMenuShadow onClick={() => setDisplay(false)} />
     </>
   );
 }
 
-function Login({ email, setEmail, password, setPassword, Button, handleSubmit }) {
+function Login({
+  email,
+  setEmail,
+  password,
+  setPassword,
+  Button,
+  handleSubmit,
+}) {
   return (
     <FormsWrapper onSubmit={handleSubmit}>
       <input
         value={email}
-        type={'e-mail'}
+        type={"e-mail"}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="E-mail"
         title=""
-        required 
+        required
       />
       <input
         value={password}
-        type={'password'}
+        type={"password"}
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Password"
         title=""
-        required 
+        required
       />
       <Button type={"Submit"} />
     </FormsWrapper>
-)};
+  );
+}
 
-function SignUp({ name, setName, email, setEmail, password, setPassword, repeat, setRepeat, Button, handleSubmit }) {
+function SignUp({
+  name,
+  setName,
+  email,
+  setEmail,
+  password,
+  setPassword,
+  repeat,
+  setRepeat,
+  Button,
+  handleSubmit,
+}) {
   return (
     <FormsWrapper onSubmit={handleSubmit}>
       <input
         value={name}
-        type={'text'}
+        type={"text"}
         onChange={(e) => setName(e.target.value)}
         placeholder="Name"
         pattern="[a-zA-Z]{1,64}"
         title=""
-        required 
+        required
       />
       <input
         value={email}
-        type={'e-mail'}
+        type={"e-mail"}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="E-mail"
         title=""
-        required 
+        required
       />
       <input
         value={password}
-        type={'password'}
+        type={"password"}
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Password"
         title=""
-        required 
+        required
       />
       <input
         value={repeat}
-        type={'password'}
+        type={"password"}
         onChange={(e) => setRepeat(e.target.value)}
         placeholder="Re-enter the password"
         title=""
-        required 
+        required
       />
       <Button type={"Submit"} />
     </FormsWrapper>
-)}
+  );
+}
 
-function MenuCover({ name, setName, email, setEmail, password, setPassword, repeat, setRepeat, Button, handleSubmit, setAccount, operation }) {
+function MenuCover({
+  name,
+  setName,
+  email,
+  setEmail,
+  password,
+  setPassword,
+  repeat,
+  setRepeat,
+  Button,
+  handleSubmit,
+  setAccount,
+  operation,
+}) {
   function handleClick() {
     setAccount(null);
     setEmail("");
@@ -132,17 +176,38 @@ function MenuCover({ name, setName, email, setEmail, password, setPassword, repe
     setName("");
     setRepeat("");
   }
-  
+
   return (
-  <AccountMenuWrapper >
-    <CloseIcon onClick={handleClick}><ion-icon name="close"></ion-icon></CloseIcon>
-    {operation ? (
-      <Login handleSubmit={handleSubmit} setEmail={setEmail} setPassword={setPassword} email={email} password={password} Button={Button} />
-    ) : (
-      <SignUp handleSubmit={handleSubmit} setName={setName} setEmail={setEmail} setPassword={setPassword} setRepeat={setRepeat} name={name} email={email} password={password} repeat={repeat} Button={Button} />
-    )}
-  </AccountMenuWrapper>
-)}
+    <AccountMenuWrapper>
+      <CloseIcon onClick={handleClick}>
+        <ion-icon name="close"></ion-icon>
+      </CloseIcon>
+      {operation ? (
+        <Login
+          handleSubmit={handleSubmit}
+          setEmail={setEmail}
+          setPassword={setPassword}
+          email={email}
+          password={password}
+          Button={Button}
+        />
+      ) : (
+        <SignUp
+          handleSubmit={handleSubmit}
+          setName={setName}
+          setEmail={setEmail}
+          setPassword={setPassword}
+          setRepeat={setRepeat}
+          name={name}
+          email={email}
+          password={password}
+          repeat={repeat}
+          Button={Button}
+        />
+      )}
+    </AccountMenuWrapper>
+  );
+}
 
 export default function Header() {
   const [display, setDisplay] = useState(false);
@@ -162,16 +227,16 @@ export default function Header() {
 
   async function userLogin(credentials) {
     try {
-      const response = await axios.post(`${URL}/user/signin`, credentials)
-      if(response.status < 300) {
+      const response = await axios.post(`${URL}/user/signin`, credentials);
+      if (response.status < 300) {
         localStorage.setItem("data", response.data);
-        setData({...response.data})
+        setData({ ...response.data });
         const token = {
           headers: {
-            "Authentication": `Bearer ${response.data.token}`
-          }
-        }
-        setToken(token)
+            Authentication: `Bearer ${response.data.token}`,
+          },
+        };
+        setToken(token);
       }
       return;
     } catch (err) {
@@ -181,8 +246,8 @@ export default function Header() {
 
   async function userRegister(credentials) {
     try {
-      const response = await axios.post(`${URL}/user/signup`, credentials)
-      if(response.status < 300) {
+      const response = await axios.post(`${URL}/user/signup`, credentials);
+      if (response.status < 300) {
         localStorage.setItem("token", JSON.stringify(response.data.token));
         localStorage.setItem("uid", JSON.stringify(response.data._id));
       }
@@ -207,45 +272,69 @@ export default function Header() {
       name: name,
       email: email,
       password: password,
-      repeat_password: repeat
-    }
-    if(data.name !== "") {
+      repeat_password: repeat,
+    };
+    if (data.name !== "") {
       await userRegister(data);
       return handleClick();
     }
-    delete data.name
-    delete data.repeat_password
+    delete data.name;
+    delete data.repeat_password;
     await userLogin(data);
     return handleClick();
   }
 
   const Genres = () => {
-    return reqData.map((item, index) => (
-      <Genre onClick={() => genreNavigate(item._id)} key={index}>
-        {item._id}
-      </Genre>
-    ));
+    return (
+      <GenreWrapper>
+        <Genre onClick={() => genreNavigate("All")}>All Categories</Genre>
+        {reqData.map((item, index) => (
+          <Genre onClick={() => genreNavigate(item._id)} key={index}>
+            {item._id}
+          </Genre>
+        ))}
+      </GenreWrapper>
+    );
   };
 
   const ShowSideMenu = () =>
     display ? (
       <SideMenu
+        setData={setData}
         Genres={Genres}
         data={data}
         setOperation={setOperation}
         setAccount={setAccount}
         setDisplay={setDisplay}
       />
-    ) : (
-      null
-  );
+    ) : null;
 
-  const Button = () => operation ? <InputButton>Login</InputButton> : <InputButton>Register</InputButton>;
+  const Button = () =>
+    operation ? (
+      <InputButton>Login</InputButton>
+    ) : (
+      <InputButton>Register</InputButton>
+    );
 
   return (
     <>
       <ShowSideMenu />
-      {account === null ? null : <MenuCover handleSubmit={handleSubmit} setName={setName} setEmail={setEmail} setPassword={setPassword} setRepeat={setRepeat} name={name} email={email} password={password} repeat={repeat} Button={Button} setAccount={setAccount} operation={operation} />}
+      {account === null ? null : (
+        <MenuCover
+          handleSubmit={handleSubmit}
+          setName={setName}
+          setEmail={setEmail}
+          setPassword={setPassword}
+          setRepeat={setRepeat}
+          name={name}
+          email={email}
+          password={password}
+          repeat={repeat}
+          operation={operation}
+          Button={Button}
+          setAccount={setAccount}
+        />
+      )}
       <HeaderWrapper>
         <TopMenu>
           <ion-icon onClick={() => setDisplay(true)} name="menu"></ion-icon>
@@ -334,10 +423,10 @@ const DataWrapper = styled.div`
   align-items: flex-start;
   width: 100%;
   height: 40vh;
-  margin-top: 10vh;
+  margin-top: 2.25vh;
   padding-left: 4vw;
   font-size: 32px;
-  color: #DFDFDF;
+  color: #dfdfdf;
   font-weight: 500;
   box-sizing: border-box;
 `;
@@ -346,13 +435,19 @@ const UserContentWrapper = styled.div`
   font-family: "Roboto", sans-serif;
   display: flex;
   flex-direction: column;
-  color: #DFDFDF;
+  color: #dfdfdf;
   width: 80%;
   height: 10vh;
   margin-bottom: 25px;
   font-size: 28px;
   box-sizing: border-box;
 `;
+
+const GenreWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 2.25vh;
+`
 
 const Genre = styled.p`
   line-height: 50px;
@@ -366,7 +461,7 @@ const SearchWrapper = styled.div`
   height: 4.5vh;
   font-size: 32px;
   color: #292929;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border: none;
   padding: 0 5px;
   border-radius: 5px;
@@ -433,12 +528,40 @@ const AccountMenuWrapper = styled.div`
   z-index: 2;
 `;
 
-const AccountButton = styled.div`
+const AccountDescription = styled.div`
   display: flex;
-  line-height: 40px;
+  line-height: 38px;
   width: 100px;
   height: 50px;
 `;
+
+const LogoutBox = styled.div`
+  font-family: "Roboto", sans-serif;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  height: 40vh;
+  margin-bottom: 15vh;
+  padding-left: 4vw;
+  font-size: 32px;
+  color: #DBDBDB;
+  font-weight: 500;
+  box-sizing: border-box;
+`;
+
+const LogoutButton = styled.div`
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #454545;
+  background-color: #333333;
+  height: 50px;
+  width: 120px;
+  border-radius: 12px;
+`
 
 const InputButton = styled.button`
   display: flex;
@@ -448,7 +571,7 @@ const InputButton = styled.button`
   border: 1px solid #454545;
   background-color: #292929;
   height: 50px;
-  color: #DFDFDF;
+  color: #dfdfdf;
   font-family: "Roboto", sans-serif;
   padding: 1.25vh 2vw;
   margin: 1.25vh 4vw;
@@ -462,5 +585,5 @@ const CloseIcon = styled.div`
   font-size: 48px;
   top: 1.25vh;
   left: 1.25vw;
-  color: #DBDBDB;
+  color: #dbdbdb;
 `;
