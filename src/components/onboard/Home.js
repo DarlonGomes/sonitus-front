@@ -2,7 +2,7 @@ import styled from "styled-components";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { DataContext } from "../../context/DataContext";
-import { useNavigate } from "react-router-dom";
+
 //import { UserContext } from "../../context/UserContext";
 
 import Skeleton from "react-loading-skeleton";
@@ -19,6 +19,7 @@ export default function Home (){
     const { dataRequest, reqData } = useContext(DataContext);
     const [ isLoading, setIsLoading] = useState(true);
     const [albumRequest, setAlbumRequest] = useState(null)
+    
     
     const getData = async() =>{
         try {
@@ -104,7 +105,7 @@ export default function Home (){
         
                     <MainCarousel title="Best Seller" arr={albumRequest.best}/>
                     
-                    <SmallBanner text="Run To The Hills" image="https://www.cnnbrasil.com.br/wp-content/uploads/sites/12/2022/04/iron-maiden-ft-lauderdale-2019-jmc-53197.jpg" genre="Rock" id="666"/>
+                    <SmallBanner text="Run To The Hills" image="https://www.cnnbrasil.com.br/wp-content/uploads/sites/12/2022/04/iron-maiden-ft-lauderdale-2019-jmc-53197.jpg" genre="Rock" id="62c8a93f9088872ba4856467"/>
                     
                     <MainCarousel title="Discover" arr={albumRequest.discover}/>
                 </Container>
@@ -144,6 +145,7 @@ const Container = styled.div`
         font-size: 28px;
         font-weight: 700;
         color: #000000;
+        z-index: 0;
     }
 `;
 

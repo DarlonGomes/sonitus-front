@@ -4,9 +4,9 @@ import axios from "axios";
 import styled from "styled-components";
 import { DataContext } from "../../context/DataContext";
 import { UserContext } from "../../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const URL = process.env.REACT_APP_API_URI;
-
 //import Skeleton from "react-loading-skeleton";
 //import "react-loading-skeleton/dist/skeleton.css";
 
@@ -285,9 +285,10 @@ export default function Header() {
   }
 
   const Genres = () => {
+    const navigate = useNavigate();
     return (
       <GenreWrapper>
-        <Genre onClick={() => genreNavigate("All")}>All Categories</Genre>
+        <Genre onClick={() =>{navigate("/genres")}}>All Categories</Genre>
         {reqData.map((item, index) => (
           <Genre onClick={() => genreNavigate(item._id)} key={index}>
             {item._id}
