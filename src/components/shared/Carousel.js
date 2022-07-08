@@ -10,16 +10,14 @@ import { useNavigate } from "react-router-dom";
 function MainCarousel (props) {
     const [carouselData, setCarouselData] = useState(props.arr); 
     const navigate = useNavigate();
-    console.log(carouselData)
 
     return (
         <CarouselWrapper>
             <h2>{props.title}</h2>
             <Carousel>
-
-                
+ 
                 {carouselData.map((element,index) => 
-                    <Item key={index}>
+                    <Item key={index} onClick={()=>{navigate(`/${element.genre}/${element._id}`)}}>
                         <img src={element.image} alt={element.album}/>
                         <div className="info">
                             <p className="bold">
@@ -33,22 +31,6 @@ function MainCarousel (props) {
                             </p>
                         </div>
                     </Item>)} 
-
-                    {/* {carouselData.map((element,index) => 
-                    {<Item key={index} onClick={()=>{navigate(`/${element.genre}/${element._id}`)}}>
-                        <img src={element.image} alt={element.album}/>
-                        <div className="info">
-                            <p className="bold">
-                                {element.album}
-                            </p>
-                            <p>
-                                {element.artist}
-                            </p>
-                            <p className="bold">
-                                R$ {element.price}
-                            </p>
-                        </div>
-                    </Item>})}  */}
                 
             </Carousel>
 
@@ -129,7 +111,7 @@ export function GenreCarousel (props){
             <CarouselGenre>
 
                 {carouselData.map((element,index) => 
-                    <GenreItem key={index}>
+                    <GenreItem key={index} >
                         <img src={element.image} alt={element.album}/>
                         <div className="info">
                             <p className="bold">
