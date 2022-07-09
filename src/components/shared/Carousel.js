@@ -60,7 +60,11 @@ const Carousel = styled.div`
     display: flex;
     overflow-x: auto;
     scroll-behavior: smooth;
-
+    ::-webkit-scrollbar{
+        display: none;
+    }
+    -ms-overflow-style: none; 
+    scrollbar-width: none;  
 `;
 
 const Item = styled.div`
@@ -102,11 +106,13 @@ export function GenreCarousel (props){
 
     const [carouselData, setCarouselData] = useState(props.arr); 
     const navigate = useNavigate();
-
+    function goTo (param){
+        navigate(`/${props.title}`);
+    }
     return (
         <GenreWrapper>
             <div className="more">
-            <h2>{props.title}</h2><ion-icon name="add-outline" onClick={()=>{navigate(`/${props.title}`)}}></ion-icon>
+            <h2>{props.title}</h2><ion-icon name="add-outline" onClick={()=>{goTo(props.title)}}></ion-icon>
             </div>
             <CarouselGenre>
 
@@ -126,7 +132,7 @@ export function GenreCarousel (props){
                             </p>
                         </div>
                     </GenreItem>)} 
-                    <MoreItem>
+                    <MoreItem onClick={()=>{goTo(props.title)}}>
                     <ion-icon name="add-outline"></ion-icon>
                     </MoreItem>
                 
@@ -164,7 +170,11 @@ const CarouselGenre = styled.div`
     display: flex;
     overflow-x: auto;
     scroll-behavior: smooth;
-
+    ::-webkit-scrollbar{
+        display: none;
+    }
+    -ms-overflow-style: none; 
+    scrollbar-width: none;  
 `;
 
 const GenreItem = styled.div`

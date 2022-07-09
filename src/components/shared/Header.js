@@ -219,6 +219,7 @@ export default function Header() {
   const [operation, setOperation] = useState(false);
   const { reqData, productRequest } = useContext(DataContext);
   const { data, setData, setToken } = useContext(UserContext);
+  const navigate = useNavigate();
   useEffect(() => {}, []);
 
   async function genreNavigate(queryId) {
@@ -339,7 +340,7 @@ export default function Header() {
       <HeaderWrapper>
         <TopMenu>
           <ion-icon onClick={() => setDisplay(true)} name="menu"></ion-icon>
-          <ion-icon name="disc"></ion-icon>
+          <ion-icon name="disc" onClick={()=>{(navigate("/"))}}></ion-icon>
           <HeaderDownscale>
             <ion-icon name="cart-outline"></ion-icon>
           </HeaderDownscale>
