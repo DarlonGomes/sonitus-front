@@ -84,7 +84,6 @@ function Footer (){
 export default Footer;
 
 const FooterWrapper = styled.div`
-    margin-top: 20px;
     width: 100%;
     display: flex;
     flex-direction: column;

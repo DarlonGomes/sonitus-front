@@ -116,8 +116,7 @@ export default function Home (){
 
     }
     useEffect(() => {
-        const effect = async() => await dataRequest();
-        effect();
+        dataRequest();
         getData();
         
         // eslint-disable-next-line
@@ -136,7 +135,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-    background-color: #FFFFFF;
+    background-color: #DFDFDF;
     padding: 0 20px;
 
     h2{
@@ -197,6 +196,11 @@ const LoadCarousel = styled.div`
     display: flex;
     overflow-x: auto;
     scroll-behavior: smooth;
+    ::-webkit-scrollbar{
+        display: none;
+    }
+    -ms-overflow-style: none; 
+    scrollbar-width: none;  
     }
     .item{
         width: 250px;
