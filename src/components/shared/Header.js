@@ -101,7 +101,7 @@ function SideMenu({
           <EmptyCart />
         </DataWrapper>
         <Checkout>
-          <div onClick={() => navigate("/checkout")}>
+          <div onClick={() => navigate("/checkout")}><<<<<<< sidemenu-expansion
             Go to Checkout <ion-icon name="cart-outline"></ion-icon>
           </div>
         </Checkout>
@@ -284,7 +284,7 @@ export default function Header() {
   const { reqData, productRequest } = useContext(DataContext);
   const { data, setData, setToken, userLoadFromLocal } =
     useContext(UserContext);
-
+    
   useEffect(() => {
     const load = async () => {
       await userLoadFromLocal();
@@ -420,7 +420,9 @@ export default function Header() {
       <HeaderWrapper>
         <TopMenu>
           <ion-icon onClick={() => setDisplay(true)} name="menu"></ion-icon>
+
           <ion-icon onClick={() => navigate("/")} name="disc"></ion-icon>
+
           <HeaderDownscale>
             <ion-icon
               onClick={() => setIsCart(true)}
