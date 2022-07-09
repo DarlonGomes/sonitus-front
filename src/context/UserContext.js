@@ -19,6 +19,7 @@ const DataProvider = ({ children }) => {
                   Authentication: `Bearer ${storageData.token}`,
                 },
               };
+            localStorage.setItem("token", JSON.stringify(token))
             setToken(token);
         }
     }
