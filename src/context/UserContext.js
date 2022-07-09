@@ -3,21 +3,31 @@ import axios from "axios";
 
 export const UserContext = createContext();
 
-const API=process.env.REACT_APP_API_URI
-
 const DataProvider = ({ children }) => {
     const [data, setData] = useState(null);
     const [token, setToken] = useState(null);
 
-    const userRequest = async() => {
-        // varrer o local storage
+    const userLoadFromLocal = () => {
         if(data===null) {
-
+            //Esse tipo de requisição tá dando ruim
+            //JSON.parse(localStorage.getItem("data"))
+            const storageData = null
+           
+            if(storageData === null) {
+                return;
+            }
+            setData(storageData)
+            const token = {
+                headers: {
+                  Authentication: `Bearer ${storageData.token}`,
+                },
+              };
+            setToken(token);
         }
     }
 
     return(
-        <UserContext.Provider value={{ data, setData, token, setToken}}>
+        <UserContext.Provider value={{ data, setData, token, setToken, userLoadFromLocal}}>
             { children }
         </UserContext.Provider>
     )
