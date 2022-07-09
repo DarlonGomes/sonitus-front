@@ -1,10 +1,10 @@
 import { useContext, useState, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import { DataContext } from "../../context/DataContext";
 import { UserContext } from "../../context/UserContext";
-import { useNavigate } from "react-router-dom";
+import CartItem, { EmptyCart } from "./CartItem";
 
 const URL = process.env.REACT_APP_API_URI;
 //import Skeleton from "react-loading-skeleton";
@@ -34,7 +34,11 @@ function AccountMenu({ data, setAccount, setDisplay, setOperation }) {
   return (
     <UserContentWrapper>
       {data !== null ? (
-        <AccountDescription>Greetings, {data.name}</AccountDescription>
+        <AccountDescription>
+          Greetings,
+          <br />
+          {data.name}
+        </AccountDescription>
       ) : (
         <AccountActions
           setOperation={setOperation}
@@ -46,28 +50,86 @@ function AccountMenu({ data, setAccount, setDisplay, setOperation }) {
   );
 }
 
-function SideMenu({ setDisplay, setAccount, setOperation, Genres, data, setData }) {
+function SideMenu({
+  setDisplay,
+  setAccount,
+  setOperation,
+  Genres,
+  data,
+  setData,
+  setIsCart,
+  cart,
+}) {
+  const navigate = useNavigate();
+
   function logout() {
     setDisplay(false);
     setData(null);
-    localStorage.removeItem("data")
+    localStorage.removeItem("data");
   }
 
-  return (
-    <>
-      <SideMenuBody>
-        <DataWrapper>
+  const MenuData = () => {
+    return (
+      <>
+        <DataWrapper cart={cart}>
           <AccountMenu
             data={data}
             setOperation={setOperation}
             setDisplay={setDisplay}
             setAccount={setAccount}
+            setData={setData}
           />
           <Genres />
         </DataWrapper>
-        { data !== null ? <LogoutBox><LogoutButton onClick={logout}>Logout</LogoutButton></LogoutBox> : null }
+        {data !== null ? (
+          <LogoutBox>
+            <LogoutButton onClick={logout}>
+              <ion-icon name="log-out-outline"></ion-icon>
+            </LogoutButton>
+          </LogoutBox>
+        ) : null}
+      </>
+    );
+  };
+
+  const CartData = () => {
+    // LEMBRAR DE PASSAR O isHistory COMO VERDADEIRO/FALSO NA HORA DE CARREGAR OS QUADROS COM ALBUM
+    return (
+      <>
+        {/* <CartHeader /> */}
+        <DataWrapper cart={cart}>
+          <EmptyCart />
+        </DataWrapper>
+        <Checkout>
+          {/* <div onClick={() => navigate("/checkout")}>
+            Go to Checkout <ion-icon name="cart-outline"></ion-icon>
+          </div> */}
+        </Checkout>
+        {/* <Subtotal /><Checkout /> */}
+        {/* <HistoryHeader /> */}
+        <DataWrapper cart={cart}>
+          <CartItem
+            isHistory={true}
+            image={
+              "https://upload.wikimedia.org/wikipedia/en/0/01/Rick_Astley_-_The_Best_of_Me.png"
+            }
+            price={19.89}
+            album={"rolled"}
+            artist={"asdfqwer3"}
+          />
+        </DataWrapper>
+      </>
+    );
+  };
+
+  return (
+    <>
+      <SideMenuBody cart={cart}>
+        {cart ? <CartData /> : <MenuData />}
       </SideMenuBody>
-      <SideMenuShadow onClick={() => setDisplay(false)} />
+      <SideMenuShadow
+        onClick={() => (cart ? setIsCart(false) : setDisplay(false))}
+      />
     </>
   );
 }
@@ -210,27 +272,31 @@ function MenuCover({
 }
 
 export default function Header() {
+  const navigate = useNavigate();
   const [display, setDisplay] = useState(false);
   const [account, setAccount] = useState(null);
+  const [isCart, setIsCart] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeat, setRepeat] = useState("");
   const [operation, setOperation] = useState(false);
   const { reqData, productRequest } = useContext(DataContext);
-  const { data, setData, setToken } = useContext(UserContext);
-  const navigate = useNavigate();
-  useEffect(() => {}, []);
+  const { data, setData, setToken, userLoadFromLocal } =
+  useContext(UserContext);
 
-  async function genreNavigate(queryId) {
-    const success = await productRequest(queryId);
-  }
+  useEffect(() => {
+    const load = async () => {
+      await userLoadFromLocal();
+    };
+    load();
+  }, [userLoadFromLocal]);
 
   async function userLogin(credentials) {
     try {
       const response = await axios.post(`${URL}/user/signin`, credentials);
       if (response.status < 300) {
-        localStorage.setItem("data", response.data);
+        localStorage.setItem("data", JSON.stringify(response.data));
         setData({ ...response.data });
         const token = {
           headers: {
@@ -287,12 +353,11 @@ export default function Header() {
   }
 
   const Genres = () => {
-    const navigate = useNavigate();
     return (
       <GenreWrapper>
-        <Genre onClick={() =>{navigate("/genres")}}>All Categories</Genre>
+        <Genre onClick={() => navigate("/genres")}>All Categories</Genre>
         {reqData.map((item, index) => (
-          <Genre onClick={() => genreNavigate(item._id)} key={index}>
+          <Genre onClick={() => navigate(`/products/${item._id}`)} key={index}>
             {item._id}
           </Genre>
         ))}
@@ -300,9 +365,23 @@ export default function Header() {
     );
   };
 
+  const ShowCartMenu = () =>
+    isCart ? (
+      <SideMenu
+        cart={true}
+        setData={setData}
+        Genres={Genres}
+        data={data}
+        setOperation={setOperation}
+        setAccount={setAccount}
+        setIsCart={setIsCart}
+      />
+    ) : null;
+
   const ShowSideMenu = () =>
     display ? (
       <SideMenu
+        cart={false}
         setData={setData}
         Genres={Genres}
         data={data}
@@ -322,6 +401,7 @@ export default function Header() {
   return (
     <>
       <ShowSideMenu />
+      <ShowCartMenu />
       {account === null ? null : (
         <MenuCover
           handleSubmit={handleSubmit}
@@ -341,9 +421,12 @@ export default function Header() {
       <HeaderWrapper>
         <TopMenu>
           <ion-icon onClick={() => setDisplay(true)} name="menu"></ion-icon>
-          <ion-icon name="disc" onClick={()=>{(navigate("/"))}}></ion-icon>
+          <ion-icon onClick={() => navigate("/")} name="disc"></ion-icon>
           <HeaderDownscale>
-            <ion-icon name="cart-outline"></ion-icon>
+            <ion-icon
+              onClick={() => setIsCart(true)}
+              name="cart-outline"
+            ></ion-icon>
           </HeaderDownscale>
         </TopMenu>
         {/* QUANDO O HAMBURGUER DESCER TEM QUE IMPEDIR DO USUARIO APERTAR OS BOTÕES QUE ESTÃO ATRAS */}
@@ -395,14 +478,14 @@ const HeaderDownscale = styled.div`
 `;
 
 const SideMenuBody = styled.div`
-  width: 65%;
+  width: ${({ cart }) => (!cart ? "65%" : "75%")};
   height: 100vh;
   display: flex;
   flex-direction: column;
   position: fixed;
   background-color: #292929;
   top: 0;
-  left: 0;
+  ${({ cart }) => (!cart ? { left: 0 } : { right: 0 })}
   z-index: 3;
 `;
 
@@ -414,7 +497,7 @@ const SideMenuShadow = styled.div`
   backdrop-filter: blur(4px);
   background-color: #00000070;
   top: 0;
-  right: 0;
+  ${({ cart }) => (cart ? { left: 0 } : { right: 0 })}
   z-index: 2;
 `;
 
@@ -423,15 +506,17 @@ const DataWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-items: ${({ cart }) => (cart ? "flex-end" : "flex-start")};
   width: 100%;
-  height: 40vh;
+  height: ${({ cart }) => (cart ? "45vh" : "40vh")};
   margin-top: 2.25vh;
-  padding-left: 4vw;
+  ${({ cart }) => (cart ? "padding-right: 3vw" : "padding-left: 3vw")};
+  ${({ cart }) => (cart ? "padding-left: 1vw" : "padding-right: 1vw")};
   font-size: 32px;
   color: #dfdfdf;
   font-weight: 500;
   box-sizing: border-box;
+  ${({ cart }) => (cart ? "overflow-y: scroll" : null)};
 `;
 
 const UserContentWrapper = styled.div`
@@ -439,7 +524,7 @@ const UserContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   color: #dfdfdf;
-  width: 80%;
+  width: 95%;
   height: 10vh;
   margin-bottom: 25px;
   font-size: 28px;
@@ -450,7 +535,7 @@ const GenreWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 2.25vh;
-`
+`;
 
 const Genre = styled.p`
   line-height: 50px;
@@ -533,9 +618,11 @@ const AccountMenuWrapper = styled.div`
 
 const AccountDescription = styled.div`
   display: flex;
+  justify-content: space-between;
+  align-items: center;
   line-height: 38px;
-  width: 100px;
-  height: 50px;
+  width: 100%;
+  height: 100px;
 `;
 
 const LogoutBox = styled.div`
@@ -548,8 +635,8 @@ const LogoutBox = styled.div`
   height: 40vh;
   margin-bottom: 15vh;
   padding-left: 4vw;
-  font-size: 32px;
-  color: #DBDBDB;
+  font-size: 36px;
+  color: #dbdbdb;
   font-weight: 500;
   box-sizing: border-box;
 `;
@@ -562,9 +649,10 @@ const LogoutButton = styled.div`
   border: 1px solid #454545;
   background-color: #333333;
   height: 50px;
-  width: 120px;
+  width: 50px;
+  font-size: 36px;
   border-radius: 12px;
-`
+`;
 
 const InputButton = styled.button`
   display: flex;
@@ -589,4 +677,26 @@ const CloseIcon = styled.div`
   top: 1.25vh;
   left: 1.25vw;
   color: #dbdbdb;
+`;
+
+const Checkout = styled.div`
+  font-family: "Roboto", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 36px;
+
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    width: 60%;
+    height: 50px;
+    font-size: 20px;
+    color: #dfdfdf;
+    background-color: #008c02;
+    border: 1px solid #00a302;
+  }
 `;

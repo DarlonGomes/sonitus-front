@@ -13,7 +13,7 @@ export default function App() {
     <DataProvider>
       <RequestProvider>
         <BrowserRouter>
-        <Header />
+          <Header />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/genres" element={<GenreList />} />

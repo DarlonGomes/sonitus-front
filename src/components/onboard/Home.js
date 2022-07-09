@@ -122,7 +122,6 @@ export default function Home (){
     useEffect(() => {
         dataRequest();
         getData();
-        
         // eslint-disable-next-line
     }, [])
 
