@@ -106,7 +106,7 @@ const Container = styled.div`
         font-family: 'Jost';
         font-size: 28px;
         font-weight: 700;
-        color: #000000;
+        color: #292929;
         z-index: 0;
     }
 `;
