@@ -4,6 +4,7 @@ import axios from "axios";
 import styled from "styled-components";
 import { DataContext } from "../../context/DataContext";
 import { UserContext } from "../../context/UserContext";
+import CartItem, { EmptyCart } from "./CartItem";
 
 const URL = process.env.REACT_APP_API_URI;
 //import Skeleton from "react-loading-skeleton";
@@ -34,12 +35,10 @@ function AccountMenu({ data, setAccount, setDisplay, setOperation }) {
     <UserContentWrapper>
       {data !== null ? (
         <AccountDescription>
-          <>
-          Greetings,<br/>{data.name}
-          </>
-          
+          Greetings,
+          <br />
+          {data.name}
         </AccountDescription>
-        
       ) : (
         <AccountActions
           setOperation={setOperation}
@@ -51,13 +50,24 @@ function AccountMenu({ data, setAccount, setDisplay, setOperation }) {
   );
 }
 
-function SideMenu({ setDisplay, setAccount, setOperation, Genres, data, setData, setIsCart, cart }) {
+function SideMenu({
+  setDisplay,
+  setAccount,
+  setOperation,
+  Genres,
+  data,
+  setData,
+  setIsCart,
+  cart,
+}) {
+  const navigate = useNavigate();
+
   function logout() {
     setDisplay(false);
     setData(null);
-    localStorage.removeItem("data")
+    localStorage.removeItem("data");
   }
-  
+
   const MenuData = () => {
     return (
       <>
@@ -73,32 +83,53 @@ function SideMenu({ setDisplay, setAccount, setOperation, Genres, data, setData,
         </DataWrapper>
         {data !== null ? (
           <LogoutBox>
-            <LogoutButton onClick={logout}><ion-icon name="log-out-outline"></ion-icon></LogoutButton>
+            <LogoutButton onClick={logout}>
+              <ion-icon name="log-out-outline"></ion-icon>
+            </LogoutButton>
           </LogoutBox>
-        ) : null }
+        ) : null}
       </>
     );
   };
 
   const CartData = () => {
-    return(
+    // LEMBRAR DE PASSAR O isHistory COMO VERDADEIRO/FALSO NA HORA DE CARREGAR OS QUADROS COM ALBUM
+    return (
       <>
-       <DataWrapper cart={cart}>
-          CART<br/>CART<br/>CART<br/>CART<br/>CART<br/>CART<br/>CART<br/>CART<br/>CART<br/>CART<br/>CART<br/>CART<br/>CART<br/>
-       </DataWrapper>
-       <DataWrapper cart={cart}>
-          HISTORY
-       </DataWrapper>
+        {/* <CartHeader /> */}
+        <DataWrapper cart={cart}>
+          <EmptyCart />
+        </DataWrapper>
+        <Checkout>
+          <div onClick={() => navigate("/checkout")}>
+            Go to Checkout <ion-icon name="cart-outline"></ion-icon>
+          </div>
+        </Checkout>
+        {/* <Subtotal /><Checkout /> */}
+        {/* <HistoryHeader /> */}
+        <DataWrapper cart={cart}>
+          <CartItem
+            isHistory={true}
+            image={
+              "https://upload.wikimedia.org/wikipedia/en/0/01/Rick_Astley_-_The_Best_of_Me.png"
+            }
+            price={19.89}
+            album={"rolled"}
+            artist={"asdfqwer3"}
+          />
+        </DataWrapper>
       </>
-    )
+    );
   };
 
   return (
     <>
       <SideMenuBody cart={cart}>
-        { cart ? <CartData /> : <MenuData /> }
+        {cart ? <CartData /> : <MenuData />}
       </SideMenuBody>
-      <SideMenuShadow onClick={() => cart ? setIsCart(false) : setDisplay(false)} />
+      <SideMenuShadow
+        onClick={() => (cart ? setIsCart(false) : setDisplay(false))}
+      />
     </>
   );
 }
@@ -251,14 +282,15 @@ export default function Header() {
   const [repeat, setRepeat] = useState("");
   const [operation, setOperation] = useState(false);
   const { reqData, productRequest } = useContext(DataContext);
-  const { data, setData, setToken, userLoadFromLocal } = useContext(UserContext);
-  
+  const { data, setData, setToken, userLoadFromLocal } =
+    useContext(UserContext);
+
   useEffect(() => {
-    const load = async() => {
-      await userLoadFromLocal()
-    }
+    const load = async () => {
+      await userLoadFromLocal();
+    };
     load();
-    }, [userLoadFromLocal]);
+  }, [userLoadFromLocal]);
 
   async function userLogin(credentials) {
     try {
@@ -320,10 +352,9 @@ export default function Header() {
   }
 
   const Genres = () => {
-    const navigate = useNavigate();
     return (
       <GenreWrapper>
-        <Genre onClick={() => navigate('/genres')}>All Categories</Genre>
+        <Genre onClick={() => navigate("/genres")}>All Categories</Genre>
         {reqData.map((item, index) => (
           <Genre onClick={() => navigate(`/products/${item._id}`)} key={index}>
             {item._id}
@@ -334,17 +365,17 @@ export default function Header() {
   };
 
   const ShowCartMenu = () =>
-  isCart ? (
-    <SideMenu
-      cart={true}
-      setData={setData}
-      Genres={Genres}
-      data={data}
-      setOperation={setOperation}
-      setAccount={setAccount}
-      setIsCart={setIsCart}
-    />
-  ) : null;
+    isCart ? (
+      <SideMenu
+        cart={true}
+        setData={setData}
+        Genres={Genres}
+        data={data}
+        setOperation={setOperation}
+        setAccount={setAccount}
+        setIsCart={setIsCart}
+      />
+    ) : null;
 
   const ShowSideMenu = () =>
     display ? (
@@ -389,9 +420,12 @@ export default function Header() {
       <HeaderWrapper>
         <TopMenu>
           <ion-icon onClick={() => setDisplay(true)} name="menu"></ion-icon>
-          <ion-icon onClick={() => navigate('/')} name="disc"></ion-icon>
+          <ion-icon onClick={() => navigate("/")} name="disc"></ion-icon>
           <HeaderDownscale>
-            <ion-icon onClick={() => setIsCart(true)} name="cart-outline"></ion-icon>
+            <ion-icon
+              onClick={() => setIsCart(true)}
+              name="cart-outline"
+            ></ion-icon>
           </HeaderDownscale>
         </TopMenu>
         {/* QUANDO O HAMBURGUER DESCER TEM QUE IMPEDIR DO USUARIO APERTAR OS BOTÕES QUE ESTÃO ATRAS */}
@@ -443,14 +477,14 @@ const HeaderDownscale = styled.div`
 `;
 
 const SideMenuBody = styled.div`
-  width: ${ ({ cart }) => !cart ? '65%' : '75%' };
+  width: ${({ cart }) => (!cart ? "65%" : "75%")};
   height: 100vh;
   display: flex;
   flex-direction: column;
   position: fixed;
   background-color: #292929;
   top: 0;
-  ${ ({ cart }) => !cart ? {left: 0}  : {right: 0} }
+  ${({ cart }) => (!cart ? { left: 0 } : { right: 0 })}
   z-index: 3;
 `;
 
@@ -462,7 +496,7 @@ const SideMenuShadow = styled.div`
   backdrop-filter: blur(4px);
   background-color: #00000070;
   top: 0;
-  ${ ({ cart }) => cart ? {left: 0}  : {right: 0} }
+  ${({ cart }) => (cart ? { left: 0 } : { right: 0 })}
   z-index: 2;
 `;
 
@@ -471,17 +505,17 @@ const DataWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: ${ ({ cart }) => cart ? 'flex-end' : 'flex-start' };;
+  align-items: ${({ cart }) => (cart ? "flex-end" : "flex-start")};
   width: 100%;
-  height: 40vh;
+  height: ${({ cart }) => (cart ? "45vh" : "40vh")};
   margin-top: 2.25vh;
-  padding-left: 4vw;
-  ${ ({ cart }) => cart ? 'padding-right: 4vw' : 'padding-left: 4vw' };
+  ${({ cart }) => (cart ? "padding-right: 3vw" : "padding-left: 3vw")};
+  ${({ cart }) => (cart ? "padding-left: 1vw" : "padding-right: 1vw")};
   font-size: 32px;
   color: #dfdfdf;
   font-weight: 500;
   box-sizing: border-box;
-  ${ ({ cart }) => cart ? 'overflow-y: scroll' : null};
+  ${({ cart }) => (cart ? "overflow-y: scroll" : null)};
 `;
 
 const UserContentWrapper = styled.div`
@@ -601,7 +635,7 @@ const LogoutBox = styled.div`
   margin-bottom: 15vh;
   padding-left: 4vw;
   font-size: 36px;
-  color: #DBDBDB;
+  color: #dbdbdb;
   font-weight: 500;
   box-sizing: border-box;
 `;
@@ -617,7 +651,7 @@ const LogoutButton = styled.div`
   width: 50px;
   font-size: 36px;
   border-radius: 12px;
-`
+`;
 
 const InputButton = styled.button`
   display: flex;
@@ -642,4 +676,26 @@ const CloseIcon = styled.div`
   top: 1.25vh;
   left: 1.25vw;
   color: #dbdbdb;
+`;
+
+const Checkout = styled.div`
+  font-family: "Roboto", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 36px;
+
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    width: 60%;
+    height: 50px;
+    font-size: 20px;
+    color: #dfdfdf;
+    background-color: #008c02;
+    border: 1px solid #00a302;
+  }
 `;
