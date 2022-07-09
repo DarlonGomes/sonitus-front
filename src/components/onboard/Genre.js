@@ -31,7 +31,29 @@ const Render = () =>{
     if(isLoading){
         return(
             <>
-            <Skeleton width={300} height={300}/>
+            <Container>
+                <h2><Skeleton width={170} height={40}/></h2>
+                <DoubleColumn>
+                    <LoadWrapper>
+                        <Skeleton width={150} height={220}/>
+                    </LoadWrapper>
+                    <LoadWrapper>
+                        <Skeleton width={150} height={220}/>
+                    </LoadWrapper>
+                    <LoadWrapper>
+                        <Skeleton width={150} height={220}/>
+                    </LoadWrapper>
+                    <LoadWrapper>
+                        <Skeleton width={150} height={220}/>
+                    </LoadWrapper>
+                    <LoadWrapper>
+                        <Skeleton width={150} height={220}/>
+                    </LoadWrapper>
+                    <LoadWrapper>
+                        <Skeleton width={150} height={220}/>
+                    </LoadWrapper>
+                </DoubleColumn>
+            </Container>
             </>
         )
     }else{
@@ -49,7 +71,7 @@ const Render = () =>{
                             </p>
                             <p>{element.artist}</p>
                             <p className="bold">
-                                {element.price}
+                               R$ {element.price}
                             </p>
                         </div>
 
@@ -75,7 +97,7 @@ const Container = styled.div`
     flex-direction: column;
     box-sizing: border-box;
     background-color: #FFFFFF;
-    padding: 0 20px;
+    padding: 0 20px 30px;
     margin-top: 120px;
     background-color: #DFDFDF;
     flex: 1;
@@ -101,7 +123,7 @@ const AlbumWrapper = styled.div`
     height: 220px;
     background-color: #FFFFFF;
     border-radius: 4px;
-    margin: 20px 8px;
+    margin: 10px 8px;
     box-sizing: border-box;
     padding: 5px;
     img{
@@ -137,4 +159,7 @@ const AlbumWrapper = styled.div`
     }
 `;
 
-
+const LoadWrapper = styled.div`
+    margin: 10px 8px;
+    z-index: 0;
+`;
