@@ -278,7 +278,8 @@ export default function Header() {
     if (data.name !== "") {
       await userRegister(data);
       return handleClick();
-    }
+    };
+    
     delete data.name;
     delete data.repeat_password;
     await userLogin(data);
