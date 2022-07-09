@@ -1,5 +1,4 @@
 import { useContext, useState, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import { DataContext } from "../../context/DataContext";
@@ -290,10 +289,10 @@ export default function Header() {
     const navigate = useNavigate();
     return (
       <GenreWrapper>
-        <Genre onClick={() =>{navigate("/genres")}}>All Categories</Genre>
+        <Genre onClick={() =>{navigate("/genres"); setDisplay(false)}}>All Categories</Genre>
         {reqData.map((item, index) => (
-          <Genre onClick={() => genreNavigate(item._id)} key={index}>
-            {item._id}
+          <Genre onClick={() => {navigate(`/${item._id}`); setDisplay(false)}} key={index}>
+            <div className="type">{item._id}</div>
           </Genre>
         ))}
       </GenreWrapper>
@@ -450,6 +449,10 @@ const GenreWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 2.25vh;
+
+  .type{
+    font-size: 24px;
+  }
 `
 
 const Genre = styled.p`

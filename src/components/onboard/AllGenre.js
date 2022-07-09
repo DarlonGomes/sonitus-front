@@ -36,7 +36,7 @@ function GenreList () {
     const Render = () =>{
         if(isLoading){
             return(
-                <>
+               
                 <Container>
                     <h2><Skeleton width={100} height={40}/></h2>
                 <LoadCarousel>
@@ -97,7 +97,7 @@ function GenreList () {
                 </div>
                 </LoadCarousel>
                 </Container>
-                </>
+                
             )
         }else{
             return (
