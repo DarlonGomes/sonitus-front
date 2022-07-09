@@ -6,7 +6,6 @@ import { DataContext } from "../../context/DataContext";
 import { UserContext } from "../../context/UserContext";
 
 const URL = process.env.REACT_APP_API_URI;
-
 //import Skeleton from "react-loading-skeleton";
 //import "react-loading-skeleton/dist/skeleton.css";
 
@@ -321,9 +320,10 @@ export default function Header() {
   }
 
   const Genres = () => {
+    const navigate = useNavigate();
     return (
       <GenreWrapper>
-        <Genre onClick={() => navigate(`/genres`)}>All Categories</Genre>
+        <Genre onClick={() => navigate('/genres')}>All Categories</Genre>
         {reqData.map((item, index) => (
           <Genre onClick={() => navigate(`/products/${item._id}`)} key={index}>
             {item._id}
