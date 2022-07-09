@@ -124,8 +124,8 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-    background-color: #FFFFFF;
-    padding: 0 20px;
+    background-color: #DFDFDF;
+    padding: 0 20px 30px;
     margin-top: 120px;
 
     h2{
@@ -133,7 +133,7 @@ const Container = styled.div`
         font-family: 'Jost';
         font-size: 28px;
         font-weight: 500;
-        color: #000000;
+        color: #292929;
         z-index: 0;
     }
 `;
