@@ -290,7 +290,7 @@ export default function Header() {
       await userLoadFromLocal();
     };
     load();
-  }, [userLoadFromLocal]);
+  }, []);
 
   async function userLogin(credentials) {
     try {
@@ -451,7 +451,7 @@ const HeaderWrapper = styled.div`
   padding: 1vh 2vw;
   top: 0;
   left: 0;
-  background-color: #2929;
+  background-color: #292929;
   box-sizing: border-box;
   z-index: 1;
 `;
