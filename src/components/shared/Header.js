@@ -290,9 +290,10 @@ export default function Header() {
     const navigate = useNavigate();
     return (
       <GenreWrapper>
-        <Genre onClick={() =>{navigate("/genres")}}>All Categories</Genre>
+        <Genre onClick={() =>{navigate("/genres"); setDisplay(false)}}>All Categories</Genre>
         {reqData.map((item, index) => (
-          <Genre onClick={() => genreNavigate(item._id)} key={index}>
+          <Genre onClick={() => {navigate(`/${item._id}`);
+          setDisplay(false)}} key={index}>
             {item._id}
           </Genre>
         ))}

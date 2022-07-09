@@ -77,6 +77,7 @@ const Container = styled.div`
     margin-top: 120px;
     background-color: #DFDFDF;
     flex: 1;
+    
     h2{
         margin: 20px 0;
         font-family: 'Jost';
@@ -84,6 +85,7 @@ const Container = styled.div`
         font-weight: 700;
         color: #292929;
         z-index: 0;
+        
     }
     
 `;
