@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 //import { useNavigate } from "react-router-dom";
 //import { UserContext } from "../../context/UserContext";
 
@@ -8,31 +8,27 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 import {GenreCarousel} from "../shared/Carousel";
+import { DataContext } from "../../context/DataContext.js";
+
 
 const URL=process.env.REACT_APP_API_URI;
 
 function GenreList () {
     const [carouselData, setCarouselData] = useState();  
     const [isLoading, setIsLoading] = useState(true);
-    const obj={
-        image: "https://cdns-images.dzcdn.net/images/cover/4ba9235bc8e6947a60e2e03642709c40/264x264.jpg",
-        album: "Under The Covers",
-        artist: "Ninja Sex Party",
-        price: "200,00",
-    }
-    const arr=[obj,obj,obj,obj]
-   const megaObject = {title: "Rock", arr}
+    const {dataRequest} = useContext(DataContext)
+    
     async function getData (){
         try {
             const response = await axios.get(`${URL}/products/?genre=All`);
             setCarouselData(response.data);
-            console.log(response.data)
             setTimeout(()=>setIsLoading(false), "1000");
         } catch (error) {
             console.log(error);
         }
     }
     useEffect(()=>{
+        dataRequest();
         getData();
         
     },[])
@@ -128,8 +124,8 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-    background-color: #FFFFFF;
-    padding: 0 20px;
+    background-color: #DFDFDF;
+    padding: 0 20px 30px;
     margin-top: 120px;
 
     h2{
@@ -137,7 +133,7 @@ const Container = styled.div`
         font-family: 'Jost';
         font-size: 28px;
         font-weight: 500;
-        color: #000000;
+        color: #292929;
         z-index: 0;
     }
 `;
@@ -161,6 +157,11 @@ const LoadCarousel = styled.div`
     display: flex;
     overflow-x: auto;
     scroll-behavior: smooth;
+    ::-webkit-scrollbar{
+        display: none;
+    }
+    -ms-overflow-style: none; 
+    scrollbar-width: none;  
     }
     .item{
         width: 200px;

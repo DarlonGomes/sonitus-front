@@ -51,7 +51,7 @@ const CarouselWrapper = styled.div`
         font-family: 'Jost';
         font-size: 28px;
         font-weight: 700;
-        color: #000000;
+        color: #292929;
     }
     
 `;
@@ -60,7 +60,11 @@ const Carousel = styled.div`
     display: flex;
     overflow-x: auto;
     scroll-behavior: smooth;
-
+    ::-webkit-scrollbar{
+        display: none;
+    }
+    -ms-overflow-style: none; 
+    scrollbar-width: none;  
 `;
 
 const Item = styled.div`
@@ -70,10 +74,13 @@ const Item = styled.div`
     flex-direction: column;
     background-color: #FFFFFF;
     margin-right: 10px;
+    box-sizing: border-box;
+    padding: 5px 5px 0 5px;
+    border-radius: 5px;
 
     img{
-        width: 250px;
-        height: 250px;
+        width: 240px;
+        height: 240px;
         object-fit: fill;
     }
 
@@ -102,11 +109,13 @@ export function GenreCarousel (props){
 
     const [carouselData, setCarouselData] = useState(props.arr); 
     const navigate = useNavigate();
-
+    function goTo (param){
+        navigate(`/${props.title}`);
+    }
     return (
         <GenreWrapper>
             <div className="more">
-            <h2>{props.title}</h2><ion-icon name="add-outline" onClick={()=>{navigate(`/${props.title}`)}}></ion-icon>
+            <h2>{props.title}</h2><ion-icon name="add-outline" onClick={()=>{goTo(props.title)}}></ion-icon>
             </div>
             <CarouselGenre>
 
@@ -126,9 +135,9 @@ export function GenreCarousel (props){
                             </p>
                         </div>
                     </GenreItem>)} 
-                    <MoreItem>
+                    {/* <MoreItem onClick={()=>{goTo(props.title)}}>
                     <ion-icon name="add-outline"></ion-icon>
-                    </MoreItem>
+                    </MoreItem> */}
                 
             </CarouselGenre>
 
@@ -153,10 +162,11 @@ const GenreWrapper = styled.div`
         font-family: 'Jost';
         font-size: 28px;
         font-weight: 500;
-        color: #000000;
+        color: #292929;
     }
     ion-icon{
         font-size: 28px;
+        color: #292929;
     }
 `;
 
@@ -164,7 +174,11 @@ const CarouselGenre = styled.div`
     display: flex;
     overflow-x: auto;
     scroll-behavior: smooth;
-
+    ::-webkit-scrollbar{
+        display: none;
+    }
+    -ms-overflow-style: none; 
+    scrollbar-width: none;  
 `;
 
 const GenreItem = styled.div`
@@ -173,11 +187,14 @@ const GenreItem = styled.div`
     display: flex;
     flex-direction: column;
     background-color: #FFFFFF;
-    margin: 0 5px;
+    margin-right: 10px;
+    box-sizing: border-box;
+    padding: 5px;
+    border-radius: 5px;
 
     img{
-        width: 200px;
-        height: 200px;
+        width: 190px;
+        height: 190px;
         object-fit: fill;
     }
 
@@ -203,17 +220,17 @@ const GenreItem = styled.div`
 `;
 
 const MoreItem = styled.div`
-    min-width: 50px;
-    height: 50px;
+    min-width: 60px;
+    height: 60px;
     border-radius: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #D0D0D0;
-    margin:75px 30px;
+    background-color: #EEEEEE;
+    margin:105px 30px;
     box-shadow: 0 3px 9px 0 rgb(213 217 217 / 50%);
    ion-icon{
     font-size: 28px;
-    color: #FFFFFF;
+    color: #DFDFDF;
    }
 `;

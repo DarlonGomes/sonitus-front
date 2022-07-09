@@ -108,6 +108,10 @@ export default function Home (){
                     <SmallBanner text="Run To The Hills" image="https://www.cnnbrasil.com.br/wp-content/uploads/sites/12/2022/04/iron-maiden-ft-lauderdale-2019-jmc-53197.jpg" genre="Rock" id="62c8a93f9088872ba4856467"/>
                     
                     <MainCarousel title="Discover" arr={albumRequest.discover}/>
+                
+                    <SmallBanner text="So What" image="https://polimorfismoperveso.files.wordpress.com/2016/11/miles-davis-foto-principal.jpg?w=1000&h=500&crop=1" genre="Jazz" id="62c8338f460101f3304370f8" />
+
+                    
                 </Container>
                 </>
             )
@@ -134,15 +138,15 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-    background-color: #FFFFFF;
-    padding: 0 20px;
+    background-color: #DFDFDF;
+    padding: 0 20px 30px;
 
     h2{
         margin: 20px 0;
         font-family: 'Jost';
         font-size: 28px;
         font-weight: 700;
-        color: #000000;
+        color: #292929;
         z-index: 0;
     }
 `;
@@ -195,6 +199,11 @@ const LoadCarousel = styled.div`
     display: flex;
     overflow-x: auto;
     scroll-behavior: smooth;
+    ::-webkit-scrollbar{
+        display: none;
+    }
+    -ms-overflow-style: none; 
+    scrollbar-width: none;  
     }
     .item{
         width: 250px;
@@ -213,4 +222,9 @@ const Loader = styled.div`
     .small{
         margin: 50px auto 10px;
     }
+`;
+
+const EmptySpace = styled.div`
+    width:100%;
+    height: 30px;
 `;

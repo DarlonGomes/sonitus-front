@@ -4,6 +4,8 @@ import Home from "./components/onboard/Home";
 import Header from "./components/shared/Header";
 import Footer from "./components/shared/Footer";
 import GenreList from "./components/onboard/AllGenre";
+import Genre from "./components/onboard/Genre";
+import Album from "./components/onboard/Album";
 import RequestProvider from "./context/DataContext";
 
 export default function App() {
@@ -15,6 +17,8 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/genres" element={<GenreList />} />
+            <Route path="/:genre" element={<Genre />} />
+            <Route path="/:genre/:id" element={<Album />} />
           </Routes>
         </BrowserRouter>
         <Footer />

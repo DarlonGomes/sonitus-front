@@ -101,9 +101,9 @@ function SideMenu({
           <EmptyCart />
         </DataWrapper>
         <Checkout>
-          <div onClick={() => navigate("/checkout")}>
+          {/* <div onClick={() => navigate("/checkout")}>
             Go to Checkout <ion-icon name="cart-outline"></ion-icon>
-          </div>
+          </div> */}
         </Checkout>
         {/* <Subtotal /><Checkout /> */}
         {/* <HistoryHeader /> */}
@@ -283,7 +283,7 @@ export default function Header() {
   const [operation, setOperation] = useState(false);
   const { reqData, productRequest } = useContext(DataContext);
   const { data, setData, setToken, userLoadFromLocal } =
-    useContext(UserContext);
+  useContext(UserContext);
 
   useEffect(() => {
     const load = async () => {
@@ -344,7 +344,8 @@ export default function Header() {
     if (data.name !== "") {
       await userRegister(data);
       return handleClick();
-    }
+    };
+    
     delete data.name;
     delete data.repeat_password;
     await userLogin(data);
