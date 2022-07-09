@@ -357,7 +357,7 @@ export default function Header() {
       <GenreWrapper>
         <Genre onClick={() => {navigate("/genres"); setDisplay(false)}}>All Categories</Genre>
         {reqData.map((item, index) => (
-          <Genre onClick={() => {navigate(`/${item._id}`); setDisplay(false)}} key={index}>
+          <Genre className="type" onClick={() => {navigate(`/${item._id}`); setDisplay(false)}} key={index}>
             {item._id}
           </Genre>
         ))}
@@ -534,9 +534,14 @@ const GenreWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 2.25vh;
+
+  .type{
+    font-size: 24px;
+  }
 `;
 
 const Genre = styled.p`
+  
   line-height: 50px;
 `;
 
