@@ -128,6 +128,7 @@ const AlbumWrapper = styled.div`
     margin: 10px 8px;
     box-sizing: border-box;
     padding: 5px;
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
     img{
         width: 140px;
         height: 140px;

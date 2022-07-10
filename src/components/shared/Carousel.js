@@ -77,6 +77,7 @@ const Item = styled.div`
     box-sizing: border-box;
     padding: 5px 5px 0 5px;
     border-radius: 5px;
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1);
 
     img{
         width: 240px;
@@ -192,6 +193,7 @@ const GenreItem = styled.div`
     box-sizing: border-box;
     padding: 5px;
     border-radius: 5px;
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1);
 
     img{
         width: 190px;

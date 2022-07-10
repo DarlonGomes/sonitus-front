@@ -11,7 +11,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import MainCarousel from "../shared/Carousel";
 import SmallBanner from "../shared/banners/smallBanner";
 import MainBanner from "../shared/banners/bigBanner";
-
+import PartnerBanner from "../shared/banners/partner"
 
 const URL=process.env.REACT_APP_API_URI;
 
@@ -110,8 +110,8 @@ export default function Home (){
                     <MainCarousel title="Discover" arr={albumRequest.best}/>
                 
                     <SmallBanner text="So What" image="https://polimorfismoperveso.files.wordpress.com/2016/11/miles-davis-foto-principal.jpg?w=1000&h=500&crop=1" genre="Jazz" id="62c8338f460101f3304370f8" />
-
-                    
+                    <h2 className="partners">Partners</h2>
+                    <PartnerBanner title="Night Owl" image="https://www.msc.com/-/media/images/msc-cargo/sectors/agriculture/coffee/msc21008133/msc21008133_s.jpg" link="https://projeto-14-front-eta.vercel.app/"/>
                 </Container>
                 </>
             )
@@ -149,6 +149,11 @@ const Container = styled.div`
         color: #292929;
         z-index: 0;
     }
+
+    .partners{
+        margin: 30px 0 0;
+    }
+
 `;
 
 
@@ -164,7 +169,7 @@ const BigScreen = styled.div`
     display: flex;
     justify-content: center;
     flex-direction: column;
-
+    
     
     h3{ 
         margin-top: 20px;
@@ -224,7 +229,4 @@ const Loader = styled.div`
     }
 `;
 
-const EmptySpace = styled.div`
-    width:100%;
-    height: 30px;
-`;
+

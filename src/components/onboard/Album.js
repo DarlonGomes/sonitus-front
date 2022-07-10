@@ -117,6 +117,7 @@ const AlbumInfo = styled.div`
     padding: 5px;
     box-sizing: border-box;
     justify-content: space-between;
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1);
 
     img{
         width: 200px;
@@ -157,6 +158,7 @@ const DescriptionText = styled.div`
     box-sizing: border-box;
     border-radius: 5px;
     background-color: #FFFFFF;
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1);
 
     p{
         font-family: 'Jost';
