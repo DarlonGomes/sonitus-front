@@ -45,7 +45,7 @@ function PaymentForms({
 
 export default function Checkout() {
   const { dataRequest, reqData } = useContext(DataContext);
-  const [test, setTest] = useState(null);
+  // const [test, setTest] = useState(null);
   const [cart, setCart] = useState([]);
   const [forms, setForms] = useState(false);
   const [address, setAddress] = useState("");
@@ -79,12 +79,16 @@ export default function Checkout() {
     // isso muda totalmente, as requisições são enviadas ao servidor quando o usuario clica em add ao carrinho
     // e tambem sao salvas no local storage, na hora do checkout, se le do local não da API
     // se o localstorage ta vazio, entao a req busca o dado do carrinho do usuario
-    const response = await axios.get(
-      `${URL}/products/?id=62c83418460101f3304370f9`
-    );
-    console.log(response.data[0]);
-    setTest(response.data[0]);
+    // const response = await axios.get(
+    //   `${URL}/products/?id=62c83418460101f3304370f9`
+    // );
+    // console.log(response.data[0]);
+    // setTest(response.data[0]);
   };
+
+  const ShoppingList = () => {
+    return cart.length > 0 && cart.map((item) => <CartItem isCheckout={true} props={item} /> )
+  }
 
   function verifyLoginAndProceed() {
     // varre o local storage por token, se achou, carrega pagina de pagamentos, senão da um erro
@@ -108,10 +112,7 @@ export default function Checkout() {
         />
       )}
       <ContentWrapper>
-        {test && <CartItem isCheckout={true} props={test} />}
-        {test && <CartItem isCheckout={true} props={test} />}
-        {test && <CartItem isCheckout={true} props={test} />}
-        {test && <CartItem isCheckout={true} props={test} />}
+        <ShoppingList />
       </ContentWrapper>
       <Info>
         <p>N items</p>
