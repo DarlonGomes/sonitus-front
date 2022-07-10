@@ -1,15 +1,16 @@
 import styled from "styled-components";
 import record from "../../assets/record.png";
+import empty from "../../assets/empty.png";
+// import { useContext, useState } from "react";
 import { useContext } from "react";
 import { DataContext } from "../../context/DataContext";
 
 export function EmptyCart({props, isHistory}) {
-
   return (
     <ContentWrapper>
-      <AlbumCover src={record} alt={"Cart is empty"} />
+      <AlbumCover isHistory={isHistory} src={isHistory ? empty : record} alt={"Empty"} />
       <AlbumHeader>
-       { isHistory ? <p>You do not have a history yet...</p> : <p>Your cart is empty...</p> }
+        { isHistory ? <p>You do not have a history yet...</p> : <p>Your cart is empty...</p> }
       </AlbumHeader>
     </ContentWrapper>
   );
@@ -75,6 +76,7 @@ const AlbumCover = styled.img`
   display: flex;
   height: 105px;
   height: 105px;
+  ${ ({isHistory}) => (isHistory ? "filter: invert(0.4)" : null) };
   object-fit: contain;
   border-radius: 2px;
 `;
