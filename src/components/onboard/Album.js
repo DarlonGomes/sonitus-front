@@ -3,53 +3,101 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { DataContext } from "../../context/DataContext";
 import { useNavigate, useParams } from "react-router-dom";
-//import { UserContext } from "../../context/UserContext";
-
 
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 const URL=process.env.REACT_APP_API_URI;
 
 export default function Album (){
+
     const {id} = useParams();
-    const {dataRequest} = useContext(DataContext);
+    const {dataRequest, setCartProducts, cartProducts} = useContext(DataContext);
     const [albumData, setAlbumData] = useState();
     const [spotify, setSpotify] = useState()
     const [isLoading, setIsLoading] = useState(true);
-   const navigate = useNavigate();
+    const [number, setNumber] = useState(0);
+    const [limit , setLimit] = useState()
+    
+    const navigate = useNavigate();
+
     const getData = async() =>{
         try {
             const response = await axios.get(`${URL}/products/?id=${id}`)
             setAlbumData(response.data[0]);
+            console.log(response.data[0].stock)
             setSpotify(response.data[0].embed);
+            setLimit(response.data[0].stock)
             setTimeout(setIsLoading(false), "1000");
         } catch (error) {
             console.log(error);
         }
     }
 
+    function validate(event){
+        event.preventDefault();
+        
+        if(number > limit){
+            toast.error("Quantity exceed our stock.", {
+                position: "top-right",
+                autoClose: 1500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+                theme: "colored"
+            })
+        return
+        }
+        
+        const product = {
+            quantity: number,
+            album: albumData.album,
+            artist: albumData.artist,
+            price: albumData.price,
+            id: albumData._id
+        }
+        
+
+        const newArr = [...cartProducts, product]
+        console.log(newArr)
+        setCartProducts(newArr)
+    }
      
     const Render = () => {
         if(isLoading){
             return(
                 <Container>
                     <Skeleton width={300} height={300}/>
-
                 </Container>
             )
         }else{
             return(
                 <>
+                <ToastContainer />
                 <Container>
                     <h2>{albumData.album}</h2>
                     <p> {albumData.artist}</p>
                     <AlbumInfo>
                         <img src={albumData.image} alt={albumData.album} />
                         <div className="info">
-                            <div className="limit">
-                            
-                            </div>
+                            <Quantity onSubmit={(event)=> validate(event)}>
+                                <div className="inputWrapper">
+                                    <div className="decrease" onClick={()=>{setNumber(number - 1)}}><ion-icon name="remove-outline"></ion-icon></div>
+                                    <input
+                                        type="number"
+                                        value={number}
+                                        onChange={e=> setNumber(e.target.number)}
+                                        required
+                                        disabled= {false}
+                                        min ={1}
+                                        ></input>
+                                    <div className="increase" onClick={()=>{setNumber(number + 1)}}><ion-icon name="add-outline"></ion-icon></div>
+                                </div>
+                                <button type="submit">Add to cart</button>
+                            </Quantity>
                         </div>
                     </AlbumInfo>
                     <h2>Description</h2>
@@ -57,7 +105,6 @@ export default function Album (){
                     <h2>Listen</h2>
                     <AlbumSample dangerouslySetInnerHTML={{__html: spotify}} />
                 </Container>
-                
                 </>
             )
         }
@@ -83,6 +130,7 @@ const Container = styled.div`
     margin-top: 120px;
     background-color: #DFDFDF;
     flex: 1;
+    z-index: 0;
     
     h2{
         margin: 30px 0 10px;
@@ -103,9 +151,6 @@ const Container = styled.div`
         z-index: 0;
     }
 
-    .embed{
-
-    }
     
 `;
 
@@ -126,14 +171,14 @@ const AlbumInfo = styled.div`
     }
 
     .info{
-        flex: 1;
+        width: 100%;
         margin-left: 5px;
-
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
     }
-    .limit{
-        height: 70px;
-        overflow: hidden;
-    }
+    
     p{  
         
         font-family: 'Roboto';
@@ -165,5 +210,65 @@ const DescriptionText = styled.div`
         font-size: 16px;
         line-height: 1.5;
         font-weight: 400;
+    }
+`;
+
+const Quantity = styled.form`
+    
+    .increase{
+        width: 35px;
+        height: 35px;
+        background-color: gray;
+        border-radius: 0 25px 25px 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .decrease{
+        width: 35px;
+        height: 35px;
+        background-color: gray;
+        border-radius: 25px 0 0 25px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .inputWrapper{
+        display: flex;
+        flex-direction: row;
+        
+        
+    }
+    input{
+        height: 35px;
+        width: 35px;
+        background-color: gray;
+        box-sizing: border-box;
+        text-align: center;
+        border: none;
+        font-family: 'Roboto';
+        font-size: 16px;
+        font-weight: 400;
+        color: #FFFFFF;
+    }
+
+    button{
+        width: 105px;
+        height: 35px;
+        border-radius: 17.5px;
+        margin-top: 5px;
+        background-color: green;
+        border: none;
+        font-family: 'Roboto';
+        font-size: 16px;
+        font-weight: 400;
+        color: #FFFFFF;
+
+    }
+
+    ion-icon{
+        font-size: 20px;
+        color: #FFFFFF;
     }
 `;

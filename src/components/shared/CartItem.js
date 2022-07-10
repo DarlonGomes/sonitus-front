@@ -3,6 +3,7 @@ import record from "../../assets/record.png";
 // import { useContext, useState } from "react";
 
 export function EmptyCart() {
+  console.log("Vziozinho")
   return (
     <ContentWrapper>
       <AlbumCover src={record} alt={"Cart is empty"} />
@@ -13,8 +14,9 @@ export function EmptyCart() {
   );
 }
 
-export default function CartItem({props, isHistory, isCheckout}) {
-  const exludeButton = isHistory ? null : (
+export function CartItem({props, isHistory, isCheckout}) {
+  console.log("Ta ruim")
+  const excludeButton = isHistory ? null : (
     <p onClick={() => console.log("remove")}>
       <ion-icon name="close"></ion-icon>
     </p>
@@ -27,7 +29,7 @@ export default function CartItem({props, isHistory, isCheckout}) {
   const convertToCash = Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
-  }).format(props.price);
+  }).format(props.price );
 
   return (
     <ContentWrapper contentFormat={isCheckout}>
@@ -35,7 +37,7 @@ export default function CartItem({props, isHistory, isCheckout}) {
       <AlbumText contentFormat={isCheckout}>
         <AlbumHeader contentFormat={isCheckout}>
           <h1>{props.album}</h1>
-          {exludeButton}
+          {excludeButton}
         </AlbumHeader>
         <p>{props.artist}</p>
         <AlbumFooter>
