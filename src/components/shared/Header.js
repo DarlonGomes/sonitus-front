@@ -292,7 +292,7 @@ export default function Header() {
       await userLoadFromLocal();
     };
     load();
-  }, [userLoadFromLocal]);
+  }, []);
 
   async function userLogin(credentials) {
     try {
@@ -357,9 +357,9 @@ export default function Header() {
   const Genres = () => {
     return (
       <GenreWrapper>
-        <Genre onClick={() => navigate("/genres")}>All Categories</Genre>
+        <Genre onClick={() => {navigate("/genres"); setDisplay(false)}}>All Categories</Genre>
         {reqData.map((item, index) => (
-          <Genre onClick={() => navigate(`/products/${item._id}`)} key={index}>
+          <Genre className="type" onClick={() => {navigate(`/${item._id}`); setDisplay(false)}} key={index}>
             {item._id}
           </Genre>
         ))}
@@ -454,7 +454,6 @@ const HeaderWrapper = styled.div`
   top: 0;
   left: 0;
   background-color: #292929;
-  color: #333333;
   box-sizing: border-box;
   z-index: 1;
 `;
@@ -537,9 +536,14 @@ const GenreWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 2.25vh;
+
+  .type{
+    font-size: 24px;
+  }
 `;
 
 const Genre = styled.p`
+  
   line-height: 50px;
 `;
 

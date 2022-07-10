@@ -9,7 +9,10 @@ const DataProvider = ({ children }) => {
 
     const userLoadFromLocal = () => {
         if(data===null) {
-            const storageData = JSON.parse(localStorage.getItem("data"))
+            //Esse tipo de requisição tá dando ruim
+            //JSON.parse(localStorage.getItem("data"))
+            const storageData = null
+           
             if(storageData === null) {
                 return;
             }
