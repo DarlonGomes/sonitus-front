@@ -83,6 +83,7 @@ const Container = styled.div`
     margin-top: 120px;
     background-color: #DFDFDF;
     flex: 1;
+    z-index: 0;
     
     h2{
         margin: 30px 0 10px;
@@ -103,9 +104,6 @@ const Container = styled.div`
         z-index: 0;
     }
 
-    .embed{
-
-    }
     
 `;
 
