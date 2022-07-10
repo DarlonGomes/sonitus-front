@@ -9,6 +9,7 @@ export const DataContext = createContext();
 const RequestProvider = ({ children }) => {
     const [reqData, setReqData] = useState(null);
     const [products, setProducts] = useState(null);
+    const [cartProducts, setCartProducts] = useState([]);
 
     const productRequest = async(genre) => {
         try {
@@ -31,7 +32,7 @@ const RequestProvider = ({ children }) => {
     }
 
     return(
-        <DataContext.Provider value={{ reqData, dataRequest, products, productRequest }}>
+        <DataContext.Provider value={{ reqData, dataRequest, products, productRequest, cartProducts, setCartProducts }}>
             { children }
         </DataContext.Provider>
     )
