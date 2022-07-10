@@ -52,6 +52,9 @@ export default function Album (){
                             </div>
                         </div>
                     </AlbumInfo>
+                    <h2>Description</h2>
+                    <DescriptionText><p>{albumData.description}</p></DescriptionText>
+                    <h2>Listen</h2>
                     <AlbumSample dangerouslySetInnerHTML={{__html: spotify}} />
                 </Container>
                 
@@ -145,5 +148,20 @@ const AlbumInfo = styled.div`
 `;
 
 const AlbumSample = styled.div`
-    margin-top: 20px;
+`;
+
+const DescriptionText = styled.div`
+    width: 100%;
+    height: auto;
+    padding: 5px 5px 0;
+    box-sizing: border-box;
+    border-radius: 5px;
+    background-color: #FFFFFF;
+
+    p{
+        font-family: 'Jost';
+        font-size: 16px;
+        line-height: 1.5;
+        font-weight: 400;
+    }
 `;

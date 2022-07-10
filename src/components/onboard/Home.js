@@ -103,11 +103,11 @@ export default function Home (){
                     <MainBanner title="Gigg's code playlist" image="https://i.pinimg.com/originals/77/dd/b9/77ddb90eee4b413ecdbf6b624315928c.png" id="giggs"/>
                     <MainBanner title="Chico's odd playlist" image="https://yt3.ggpht.com/ytc/AKedOLRCU7jn-QSPH2EVwGiT7sSjDvdsPfX3svE9n_CAbg=s900-c-k-c0x00ffffff-no-rj" id="Chico"/>
         
-                    <MainCarousel title="Best Seller" arr={albumRequest.best}/>
+                    <MainCarousel title="Best Seller" arr={albumRequest.discover}/>
                     
                     <SmallBanner text="Run To The Hills" image="https://www.cnnbrasil.com.br/wp-content/uploads/sites/12/2022/04/iron-maiden-ft-lauderdale-2019-jmc-53197.jpg" genre="Rock" id="62c8a93f9088872ba4856467"/>
                     
-                    <MainCarousel title="Discover" arr={albumRequest.discover}/>
+                    <MainCarousel title="Discover" arr={albumRequest.best}/>
                 
                     <SmallBanner text="So What" image="https://polimorfismoperveso.files.wordpress.com/2016/11/miles-davis-foto-principal.jpg?w=1000&h=500&crop=1" genre="Jazz" id="62c8338f460101f3304370f8" />
 

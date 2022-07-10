@@ -69,7 +69,7 @@ const Carousel = styled.div`
 
 const Item = styled.div`
     width: 250px;
-    height: 320px;
+    height: 325px;
     display: flex;
     flex-direction: column;
     background-color: #FFFFFF;
@@ -82,6 +82,7 @@ const Item = styled.div`
         width: 240px;
         height: 240px;
         object-fit: fill;
+        margin-bottom: 5px;
     }
 
     .info{  
@@ -89,7 +90,7 @@ const Item = styled.div`
         width: 100%;
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
+        justify-content: space-between;
     }
     p{
         font-family: 'Roboto';
@@ -183,7 +184,7 @@ const CarouselGenre = styled.div`
 
 const GenreItem = styled.div`
     width: 200px;
-    height: 270px;
+    height: 275px;
     display: flex;
     flex-direction: column;
     background-color: #FFFFFF;
@@ -196,6 +197,7 @@ const GenreItem = styled.div`
         width: 190px;
         height: 190px;
         object-fit: fill;
+        margin-bottom: 5px;
     }
 
     .info{  
@@ -203,7 +205,7 @@ const GenreItem = styled.div`
         width: 100%;
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
+        justify-content: space-between;
     }
     p{
         font-family: 'Roboto';
