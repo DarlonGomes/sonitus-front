@@ -4,7 +4,7 @@ import axios from "axios";
 import styled from "styled-components";
 import { DataContext } from "../../context/DataContext";
 import { UserContext } from "../../context/UserContext";
-import CartItem, { EmptyCart } from "./CartItem";
+import  { EmptyCart, CartItem } from "./CartItem";
 
 const URL = process.env.REACT_APP_API_URI;
 //import Skeleton from "react-loading-skeleton";
@@ -60,6 +60,7 @@ function SideMenu({
   setIsCart,
   cart,
 }) {
+  const {cartProducts} = useContext(DataContext)
   const navigate = useNavigate();
 
   function logout() {
@@ -93,35 +94,48 @@ function SideMenu({
   };
 
   const CartData = () => {
-    const object = {
-      image:
-        "https://upload.wikimedia.org/wikipedia/en/0/01/Rick_Astley_-_The_Best_of_Me.png",
-      price: 19.89,
-      album: "rolled",
-      artist: "asdfqwer3",
-    };
-    // LEMBRAR DE PASSAR O isHistory COMO VERDADEIRO/FALSO NA HORA DE CARREGAR OS QUADROS COM ALBUM
-    return (
-      <>
-        {/* <CartHeader /> */}
+    console.log(cartProducts)
+    if(cartProducts.length < 1){
+      console.log("Im here")
+      return(
+        <>
         <DataWrapper cart={cart}>
           <EmptyCart />
         </DataWrapper>
-        <Checkout>
-          <div onClick={() => navigate("/checkout")}>
-            Go to Checkout <ion-icon name="cart-outline"></ion-icon>
-          </div>
-        </Checkout>
-        {/* <Subtotal /><Checkout /> */}
-        {/* <HistoryHeader /> */}
         <DataWrapper cart={cart}>
           <CartItem
             isHistory={true}
-            props={object}
+            
           />
         </DataWrapper>
       </>
-    );
+      )
+    }else{
+      console.log("dEU BOSTA")
+      return (
+        <>
+          {/* <CartHeader /> */}
+          <DataWrapper cart={cart}>
+            {/* {cartProducts.map(e=>
+               <CartItem key={e._id} quantity={e.quantity} album={e.album} artist={e.artist} price={e.artist}/>)} */}
+          </DataWrapper>
+          <Checkout>
+            <div onClick={() => navigate("/checkout")}>
+              Go to Checkout <ion-icon name="cart-outline"></ion-icon>
+            </div>
+          </Checkout>
+          {/* <Subtotal /><Checkout /> */}
+          {/* <HistoryHeader /> */}
+          <DataWrapper cart={cart}>
+            <CartItem
+              isHistory={true}
+            />
+          </DataWrapper>
+        </>
+      );
+    }
+    // LEMBRAR DE PASSAR O isHistory COMO VERDADEIRO/FALSO NA HORA DE CARREGAR OS QUADROS COM ALBUM
+    
   };
 
   return (
