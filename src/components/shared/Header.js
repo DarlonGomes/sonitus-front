@@ -93,6 +93,13 @@ function SideMenu({
   };
 
   const CartData = () => {
+    const object = {
+      image:
+        "https://upload.wikimedia.org/wikipedia/en/0/01/Rick_Astley_-_The_Best_of_Me.png",
+      price: 19.89,
+      album: "rolled",
+      artist: "asdfqwer3",
+    };
     // LEMBRAR DE PASSAR O isHistory COMO VERDADEIRO/FALSO NA HORA DE CARREGAR OS QUADROS COM ALBUM
     return (
       <>
@@ -101,21 +108,16 @@ function SideMenu({
           <EmptyCart />
         </DataWrapper>
         <Checkout>
-          {/* <div onClick={() => navigate("/checkout")}>
+          <div onClick={() => navigate("/checkout")}>
             Go to Checkout <ion-icon name="cart-outline"></ion-icon>
-          </div> */}
+          </div>
         </Checkout>
         {/* <Subtotal /><Checkout /> */}
         {/* <HistoryHeader /> */}
         <DataWrapper cart={cart}>
           <CartItem
             isHistory={true}
-            image={
-              "https://upload.wikimedia.org/wikipedia/en/0/01/Rick_Astley_-_The_Best_of_Me.png"
-            }
-            price={19.89}
-            album={"rolled"}
-            artist={"asdfqwer3"}
+            props={object}
           />
         </DataWrapper>
       </>
@@ -583,7 +585,7 @@ const SearchBar = styled.input`
   }
 `;
 
-const FormsWrapper = styled.form`
+export const FormsWrapper = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -658,7 +660,7 @@ const LogoutButton = styled.div`
   border-radius: 12px;
 `;
 
-const InputButton = styled.button`
+export const InputButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -675,7 +677,7 @@ const InputButton = styled.button`
   box-sizing: border-box;
 `;
 
-const CloseIcon = styled.div`
+export const CloseIcon = styled.div`
   position: fixed;
   font-size: 48px;
   top: 1.25vh;

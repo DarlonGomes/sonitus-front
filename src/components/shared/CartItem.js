@@ -13,7 +13,7 @@ export function EmptyCart() {
   );
 }
 
-export default function CartItem(props, isHistory) {
+export default function CartItem({props, isHistory, isCheckout}) {
   const exludeButton = isHistory ? null : (
     <p onClick={() => console.log("remove")}>
       <ion-icon name="close"></ion-icon>
@@ -22,17 +22,18 @@ export default function CartItem(props, isHistory) {
   const date = isHistory ? (
     <p>{props.quantity || 1} - 07/09</p>
   ) : (
-    <p>Qty {props.quantity}</p>
+    <p>Qty {props.quantity || 1}</p>
   );
   const convertToCash = Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
   }).format(props.price);
+
   return (
-    <ContentWrapper>
+    <ContentWrapper contentFormat={isCheckout}>
       <AlbumCover src={props.image} alt={props.album} />
-      <AlbumText>
-        <AlbumHeader>
+      <AlbumText contentFormat={isCheckout}>
+        <AlbumHeader contentFormat={isCheckout}>
           <h1>{props.album}</h1>
           {exludeButton}
         </AlbumHeader>
@@ -56,7 +57,7 @@ const ContentWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   box-sizing: border-box;
-  background-color: #393939;
+  background-color: ${ ({contentFormat}) => contentFormat ? '#FAFAFA' : '#393939'};
   border-radius: 2px;
 `;
 
@@ -79,7 +80,7 @@ const AlbumText = styled.div`
   font-weight: 500;
   width: 100%;
   height: 100%;
-  color: #dfdfdf;
+  color: ${ ({contentFormat}) => contentFormat ? '#393939' : '#DFDFDF'};
 
   p {
     font-size: 24px;
@@ -97,8 +98,8 @@ const AlbumHeader = styled.div`
 
   h1 {
     display: flex;
-    min-width: 32vw;
-    max-width: 32vw;
+    min-width: ${ ({contentFormat}) => contentFormat ? '52vw' : '32vw'};
+    max-width: ${ ({contentFormat}) => contentFormat ? '52vw' : '32vw'};
     line-height: 36px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -126,7 +127,7 @@ const AlbumFooter = styled.div`
 
   p {
     font-size: 20px;
-    color: #afafaf;
+    color: ${ ({contentFormat}) => contentFormat ? '#393939' : '#AFAFAF'};
     font-weight: 300;
   }
 
