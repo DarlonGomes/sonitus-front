@@ -15,24 +15,21 @@ export default function Album (){
     const {id} = useParams();
     const {dataRequest} = useContext(DataContext);
     const [albumData, setAlbumData] = useState();
+    const [spotify, setSpotify] = useState()
     const [isLoading, setIsLoading] = useState(true);
-    const navigate = useNavigate();
-    const height = 380;
-    let embed;
+   const navigate = useNavigate();
     const getData = async() =>{
         try {
             const response = await axios.get(`${URL}/products/?id=${id}`)
             setAlbumData(response.data[0]);
-            console.log(response.data[0])
-            const jsonString = response.data[0].embed;
-            embed = jsonString.replace(/"/g, "");
-            console.log(embed)
+            setSpotify(response.data[0].embed);
             setTimeout(setIsLoading(false), "1000");
         } catch (error) {
             console.log(error);
         }
     }
 
+     
     const Render = () => {
         if(isLoading){
             return(
@@ -55,8 +52,9 @@ export default function Album (){
                             </div>
                         </div>
                     </AlbumInfo>
-                    {embed}
+                    <AlbumSample dangerouslySetInnerHTML={{__html: spotify}} />
                 </Container>
+                
                 </>
             )
         }
@@ -101,6 +99,10 @@ const Container = styled.div`
         color: #292929;
         z-index: 0;
     }
+
+    .embed{
+
+    }
     
 `;
 
@@ -140,4 +142,8 @@ const AlbumInfo = styled.div`
 
     }
 
+`;
+
+const AlbumSample = styled.div`
+    margin-top: 20px;
 `;
