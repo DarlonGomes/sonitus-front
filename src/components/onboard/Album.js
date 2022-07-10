@@ -54,10 +54,12 @@ export default function Album (){
         
         const product = {
             quantity: number,
+            image: albumData.image,
             album: albumData.album,
             artist: albumData.artist,
             price: albumData.price,
-            id: albumData._id
+            id: albumData._id,
+            index: cartProducts.length
         }
         
 

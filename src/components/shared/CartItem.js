@@ -1,23 +1,31 @@
 import styled from "styled-components";
 import record from "../../assets/record.png";
-// import { useContext, useState } from "react";
+import { useContext } from "react";
+import { DataContext } from "../../context/DataContext";
 
-export function EmptyCart() {
-  console.log("Vziozinho")
+export function EmptyCart({props, isHistory}) {
+
   return (
     <ContentWrapper>
       <AlbumCover src={record} alt={"Cart is empty"} />
       <AlbumHeader>
-        <p>Your cart is empty...</p>
+       { isHistory ? <p>You do not have a history yet...</p> : <p>Your cart is empty...</p> }
       </AlbumHeader>
     </ContentWrapper>
   );
 }
 
 export function CartItem({props, isHistory, isCheckout}) {
-  console.log("Ta ruim")
+  const {cartProducts, setCartProduts} = useContext(DataContext);
   const excludeButton = isHistory ? null : (
-    <p onClick={() => console.log("remove")}>
+    <p onClick={()=>{
+      const response = window.confirm("Do you wish to delete this item from the cart?")
+      if(response){
+        const arr = cartProducts.splice(props.index, 1);
+        setCartProduts(arr)
+        return;
+      }
+    }}>
       <ion-icon name="close"></ion-icon>
     </p>
   );

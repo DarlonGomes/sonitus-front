@@ -96,28 +96,24 @@ function SideMenu({
   const CartData = () => {
     console.log(cartProducts)
     if(cartProducts.length < 1){
-      console.log("Im here")
       return(
         <>
         <DataWrapper cart={cart}>
           <EmptyCart />
         </DataWrapper>
         <DataWrapper cart={cart}>
-          <CartItem
-            isHistory={true}
-            
-          />
+          <EmptyCart /> 
         </DataWrapper>
       </>
       )
     }else{
-      console.log("dEU BOSTA")
+     
       return (
         <>
           {/* <CartHeader /> */}
           <DataWrapper cart={cart}>
-            {/* {cartProducts.map(e=>
-               <CartItem key={e._id} quantity={e.quantity} album={e.album} artist={e.artist} price={e.artist}/>)} */}
+             {cartProducts.map(e=>
+               <CartItem key={e._id} props={e} />)} 
           </DataWrapper>
           <Checkout>
             <div onClick={() => navigate("/checkout")}>
@@ -127,9 +123,7 @@ function SideMenu({
           {/* <Subtotal /><Checkout /> */}
           {/* <HistoryHeader /> */}
           <DataWrapper cart={cart}>
-            <CartItem
-              isHistory={true}
-            />
+            <EmptyCart/> 
           </DataWrapper>
         </>
       );
