@@ -21,7 +21,8 @@ const SuggestedBox = styled.div`
     height: 450px;
     margin: 5px auto 5px;
     position: relative;
-
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1);
     img{
         width: 100%;
         height: 450px;
