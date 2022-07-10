@@ -4,8 +4,8 @@ import { useContext, useEffect, useState } from "react";
 import { DataContext } from "../../context/DataContext";
 import { useNavigate, useParams } from "react-router-dom";
 import {CartItem} from "../shared/CartItem";
-import { FormsWrapper, InputButton, CloseIcon } from "../shared/Header";
-
+import { InputButton, CloseIcon } from "../shared/Header";
+import { FormsWrapper } from "../../handlers/loginHandlers";
 
 const URL = process.env.REACT_APP_API_URI;
 
