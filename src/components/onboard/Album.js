@@ -17,12 +17,16 @@ export default function Album (){
     const [albumData, setAlbumData] = useState();
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
-
+    const height = 380;
+    let embed;
     const getData = async() =>{
         try {
             const response = await axios.get(`${URL}/products/?id=${id}`)
             setAlbumData(response.data[0]);
             console.log(response.data[0])
+            const jsonString = response.data[0].embed;
+            embed = jsonString.replace(/"/g, "");
+            console.log(embed)
             setTimeout(setIsLoading(false), "1000");
         } catch (error) {
             console.log(error);
@@ -42,22 +46,23 @@ export default function Album (){
                 <>
                 <Container>
                     <h2>{albumData.album}</h2>
-                    
+                    <p> {albumData.artist}</p>
                     <AlbumInfo>
                         <img src={albumData.image} alt={albumData.album} />
                         <div className="info">
                             <div className="limit">
-                            <p className="limit">{albumData.artist}</p>
+                            
                             </div>
                         </div>
                     </AlbumInfo>
+                    {embed}
                 </Container>
                 </>
             )
         }
     }
 
-
+    
     useEffect(()=>{
         dataRequest();
         getData();
@@ -79,13 +84,22 @@ const Container = styled.div`
     flex: 1;
     
     h2{
-        margin: 20px 0;
+        margin: 30px 0 10px;
         font-family: 'Jost';
         font-size: 28px;
         font-weight: 700;
         color: #292929;
         z-index: 0;
         
+    }
+
+    p{
+        margin: 0 0 15px;
+        font-family: 'Jost';
+        font-size: 25px;
+        font-weight: 400;
+        color: #292929;
+        z-index: 0;
     }
     
 `;

@@ -18,10 +18,10 @@ export default function Genre () {
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
     const getData = async() =>{
+        setIsLoading(true)
         try {
             const response = await axios.get(`${URL}/products/?genre=${genre}`);
             setGenreAlbums(response.data);
-            console.log("fiz request")
             setTimeout(()=>setIsLoading(false), "1000");
         } catch (error) {
             console.log(error);
@@ -86,7 +86,7 @@ const Render = () =>{
     useEffect(()=>{
         dataRequest();
         getData();
-    },[])
+    },[genre])
     
     return(
         <Render/>
