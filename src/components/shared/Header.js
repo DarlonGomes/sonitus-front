@@ -1,10 +1,12 @@
-import { useContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
+import { useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { DataContext } from "../../context/DataContext";
 import { UserContext } from "../../context/UserContext";
+import { Login, SignUp } from "../../handlers/loginHandlers.js";
 import  { EmptyCart, CartItem } from "./CartItem";
+
 
 const URL = process.env.REACT_APP_API_URI;
 //import Skeleton from "react-loading-skeleton";
@@ -96,28 +98,23 @@ function SideMenu({
   const CartData = () => {
     console.log(cartProducts)
     if(cartProducts.length < 1){
-      console.log("Im here")
       return(
         <>
         <DataWrapper cart={cart}>
           <EmptyCart />
         </DataWrapper>
         <DataWrapper cart={cart}>
-          <CartItem
-            isHistory={true}
-            
-          />
+          <EmptyCart /> 
         </DataWrapper>
       </>
       )
     }else{
-      console.log("dEU BOSTA")
       return (
         <>
           {/* <CartHeader /> */}
           <DataWrapper cart={cart}>
-            {/* {cartProducts.map(e=>
-               <CartItem key={e._id} quantity={e.quantity} album={e.album} artist={e.artist} price={e.artist}/>)} */}
+             {cartProducts.map(e=>
+               <CartItem key={e._id} props={e} />)} 
           </DataWrapper>
           <Checkout>
             <div onClick={() => navigate("/checkout")}>
@@ -127,9 +124,7 @@ function SideMenu({
           {/* <Subtotal /><Checkout /> */}
           {/* <HistoryHeader /> */}
           <DataWrapper cart={cart}>
-            <CartItem
-              isHistory={true}
-            />
+            <EmptyCart/> 
           </DataWrapper>
         </>
       );
@@ -147,89 +142,6 @@ function SideMenu({
         onClick={() => (cart ? setIsCart(false) : setDisplay(false))}
       />
     </>
-  );
-}
-
-function Login({
-  email,
-  setEmail,
-  password,
-  setPassword,
-  Button,
-  handleSubmit,
-}) {
-  return (
-    <FormsWrapper onSubmit={handleSubmit}>
-      <input
-        value={email}
-        type={"e-mail"}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="E-mail"
-        title=""
-        required
-      />
-      <input
-        value={password}
-        type={"password"}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-        title=""
-        required
-      />
-      <Button type={"Submit"} />
-    </FormsWrapper>
-  );
-}
-
-function SignUp({
-  name,
-  setName,
-  email,
-  setEmail,
-  password,
-  setPassword,
-  repeat,
-  setRepeat,
-  Button,
-  handleSubmit,
-}) {
-  return (
-    <FormsWrapper onSubmit={handleSubmit}>
-      <input
-        value={name}
-        type={"text"}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Name"
-        pattern="[a-zA-Z]{1,64}"
-        title=""
-        required
-      />
-      <input
-        value={email}
-        type={"e-mail"}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="E-mail"
-        title=""
-        required
-      />
-      <input
-        value={password}
-        type={"password"}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-        title=""
-        required
-      />
-      <input
-        value={repeat}
-        type={"password"}
-        onChange={(e) => setRepeat(e.target.value)}
-        placeholder="Re-enter the password"
-        title=""
-        required
-      />
-      <Button type={"Submit"} />
-    </FormsWrapper>
   );
 }
 
@@ -312,7 +224,8 @@ export default function Header() {
     try {
       const response = await axios.post(`${URL}/user/signin`, credentials);
       if (response.status < 300) {
-        localStorage.setItem("data", JSON.stringify(response.data));
+        const localData = { email: credentials.email, name: response.data.name }
+        localStorage.setItem("data", JSON.stringify(localData));
         setData({ ...response.data });
         const token = {
           headers: {
@@ -557,7 +470,6 @@ const GenreWrapper = styled.div`
 `;
 
 const Genre = styled.p`
-  
   line-height: 50px;
 `;
 
@@ -596,31 +508,6 @@ const SearchBar = styled.input`
 
   :focus {
     outline: none;
-  }
-`;
-
-export const FormsWrapper = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  height: 5vh;
-  margin-top: 25vh;
-  box-sizing: border-box;
-
-  input {
-    font-family: "Roboto", sans-serif;
-    display: flex;
-    width: 90%;
-    padding: 1vh 2vw;
-    margin: 0.75vh 2.25vw;
-    font-size: 20px;
-    border-radius: 5px;
-    border: none;
-
-    ::placeholder {
-      font-family: "Roboto", sans-serif;
-    }
   }
 `;
 
