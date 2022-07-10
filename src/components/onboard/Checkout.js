@@ -4,7 +4,8 @@ import { useContext, useEffect, useState } from "react";
 import { DataContext } from "../../context/DataContext";
 import { useNavigate, useParams } from "react-router-dom";
 import CartItem from "../shared/CartItem";
-import { FormsWrapper, InputButton, CloseIcon } from "../shared/Header";
+import { InputButton, CloseIcon } from "../shared/Header";
+import { FormsWrapper } from "../../handlers/loginHandlers";
 
 const URL = process.env.REACT_APP_API_URI;
 
@@ -14,10 +15,11 @@ function PaymentForms({
   setAddress,
   cardNumber,
   setCardNumber,
+  handleSubmit
 }) {
   return (
     <FormsContainer>
-      <FormsWrapper>
+      <FormsWrapper onSubmit={handleSubmit}>
         <BrightIcon onClick={handleClick}>
           <ion-icon name="close"></ion-icon>
         </BrightIcon>
@@ -56,23 +58,53 @@ export default function Checkout() {
     dataRequest();
   }, []);
 
-  async function handleClick(e) {
+  // {
+  //   "_id": "62c6cc06067e3e346a1ca89e",
+  //   "artist": "Judy Garland",
+  //   "album": "Miss Show Business",
+  //   "image": "https://m.media-amazon.com/images/I/613waHj+QoS._SY355_.jpg",
+  //   "genre": "Pop",
+  //   "tags": "",
+  //   "embed": "<iframe style='border-radius:12px' src='https://open.spotify.com/embed/album/0uramtIEMZmRFjozebnomm?utm_source=generator' width='100%' height={heigth} frameBorder='0' allowfullscreen='' allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture'></iframe>",
+  //   "description": "Judy Garland's Miss Show Business was originally released in 1955 through Capitol Records and the album peaked at No. 5 on the Billboard 200. Universal Music Enterprises is now issuing the 60th Anniversary Edition, remastered on 180 gram vinyl, with notes by Lorna Luft.",
+  //   "price": 102.71,
+  //   "access": 0,
+  //   "stock": 100
+  // }
+
+  async function handleSubmit(e) {
     e.preventDefault();
-    setForms(false);
+    const cart = [
+      {
+        _id: "62c6cc06067e3e346a1ca89e",
+        artist: "Judy Garland",
+        album: "Miss Show Business",
+        price: 102.71,
+        quantity: 1,
+      },
+    ];
+    const userEmail = JSON.parse(localStorage.getItem("data")).email
     const token = JSON.parse(localStorage.getItem("token"));
     const requisitionData = {
       address: address,
       cardNumber: cardNumber,
+      email: userEmail,
       data: cart
     }
     setAddress("");
     setCardNumber("");
+    console.log(requisitionData);
     try {
-      const response = await axios.post(`${URL}/aonde???`, requisitionData, token)
+      // const response = await axios.post(`${URL}/aonde???`, requisitionData, token)
+      const response = await axios.post(`http://localhost:5000/checkout`, requisitionData, token)
       console.log(response);
     } catch(err) {
       return err;
     }
+  }
+
+  function handleClick() {
+    setForms(false);
   }
 
   const product = async () => {
@@ -109,6 +141,7 @@ export default function Checkout() {
           setCardNumber={setCardNumber}
           address={address}
           cardNumber={cardNumber}
+          handleSubmit={handleSubmit}
         />
       )}
       <ContentWrapper>
