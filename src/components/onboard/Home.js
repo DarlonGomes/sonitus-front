@@ -12,6 +12,7 @@ import MainCarousel from "../shared/Carousel";
 import SmallBanner from "../shared/banners/smallBanner";
 import MainBanner from "../shared/banners/bigBanner";
 import PartnerBanner from "../shared/banners/partner"
+import { Navigate, useNavigate } from "react-router-dom";
 
 const URL=process.env.REACT_APP_API_URI;
 
@@ -19,7 +20,7 @@ export default function Home (){
     const { dataRequest, reqData } = useContext(DataContext);
     const [ isLoading, setIsLoading] = useState(true);
     const [albumRequest, setAlbumRequest] = useState(null)
-    
+    const navigate = useNavigate()
     
     const getData = async() =>{
         try {
@@ -102,8 +103,8 @@ export default function Home (){
                 <Container>
                     
                     <h2>Our Selection</h2>
-                    <MainBanner title="Gigg's code playlist" image="https://i.pinimg.com/originals/77/dd/b9/77ddb90eee4b413ecdbf6b624315928c.png" id="giggs"/>
-                    <MainBanner title="Chico's odd playlist" image="https://yt3.ggpht.com/ytc/AKedOLRCU7jn-QSPH2EVwGiT7sSjDvdsPfX3svE9n_CAbg=s900-c-k-c0x00ffffff-no-rj" id="Chico"/>
+                    <MainBanner title="Gigg's code playlist" image="https://i.pinimg.com/originals/77/dd/b9/77ddb90eee4b413ecdbf6b624315928c.png" id="Jazz" />
+                    <MainBanner title="Chico's odd playlist" image="https://yt3.ggpht.com/ytc/AKedOLRCU7jn-QSPH2EVwGiT7sSjDvdsPfX3svE9n_CAbg=s900-c-k-c0x00ffffff-no-rj" id="Rock" />
         
                     <MainCarousel title="Best Seller" arr={albumRequest.best}/>
                     
