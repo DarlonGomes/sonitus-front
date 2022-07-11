@@ -133,9 +133,7 @@ function SideMenu({
         <DataWrapper cart={cart}>
           <EmptyCart />
         </DataWrapper>
-        <DataWrapper cart={cart}>
-          <HistoryData/>
-        </DataWrapper>
+        
       </>
       )
       }else{
@@ -151,9 +149,7 @@ function SideMenu({
               Go to Checkout <ion-icon name="cart-outline"></ion-icon>
             </div>
           </Checkout>
-          <DataWrapper cart={cart}>
-          <HistoryData/>
-          </DataWrapper>
+         
         </>
       );
     }
@@ -239,6 +235,7 @@ export default function Header() {
   const [operation, setOperation] = useState(false);
   const { reqData, setHistory } = useContext(DataContext);
   const { data, setData, userLoadFromLocal } = useContext(UserContext);
+  const [ searchInput, setSearchInput] = useState("");
   
 
   useEffect(() => {
@@ -252,7 +249,7 @@ export default function Header() {
   async function getHistory (token){
     
       try {
-        const response = await axios.get(`http://localhost:5000/history`, token);
+        const response = await axios.get(`${URL}/history`, token);
         setHistory(response.data);
         return
       } catch (error) {
@@ -262,7 +259,7 @@ export default function Header() {
   }
   async function userLogin(credentials) {
     try {
-      const response = await axios.post(`http://localhost:5000/user/signin`, credentials);
+      const response = await axios.post(`${URL}/user/signin`, credentials);
       if (response.status < 300) {
         const localData = { email: credentials.email, name: response.data.name }
         localStorage.setItem("sonitusData", JSON.stringify(localData));
@@ -308,7 +305,19 @@ export default function Header() {
     setRepeat("");
   }
 
+  async function search(event){
+    event.preventDefault();
 
+    try {
+      const response = await axios.get(`${URL}/search/${searchInput}`);
+      setSearchInput("");
+
+    } catch (error) {
+      
+    }
+
+    navigate(`/search/${searchInput}`)
+  }
   async function handleSubmit(e) {
     e.preventDefault();
 
@@ -411,7 +420,10 @@ export default function Header() {
         {/* QUANDO O HAMBURGUER DESCER TEM QUE IMPEDIR DO USUARIO APERTAR OS BOTÕES QUE ESTÃO ATRAS */}
         <SearchWrapper>
           <ion-icon name="search"></ion-icon>
-          <SearchBar placeholder="What are you looking for?" />
+          <form onSubmit={(event)=>search(event)}>
+          <SearchBar type="text" onChange={e=> setSearchInput(e.target.value)} value={searchInput} placeholder="What are you looking for?" />
+          <ion-icon name="send" type="submit"></ion-icon>
+          </form>
         </SearchWrapper>
       </HeaderWrapper>
     </>
@@ -486,7 +498,7 @@ const DataWrapper = styled.div`
   justify-content: flex-start;
   align-items: ${({ cart }) => (cart ? "flex-end" : "flex-start")};
   width: 100%;
-  height: ${({ cart }) => (cart ? "45vh" : "40vh")};
+  height: ${({ cart }) => (cart ? "100%" : "40vh")};
   margin-top: 2.25vh;
   ${({ cart }) => (cart ? "padding-right: 3vw" : "padding-left: 3vw")};
   ${({ cart }) => (cart ? "padding-left: 1vw" : "padding-right: 1vw")};
@@ -540,6 +552,11 @@ const SearchWrapper = styled.div`
   div {
     min-height: 24px;
     min-width: 24px;
+  }
+  form{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 `;
 

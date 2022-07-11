@@ -59,8 +59,8 @@ export default function Checkout() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const userEmail = JSON.parse(localStorage.getItem("data")).email
-    const token = JSON.parse(localStorage.getItem("token"));
+    const userEmail = JSON.parse(localStorage.getItem("sonitusData")).email
+    const token = JSON.parse(localStorage.getItem("sonitusToken"));
     const requisitionData = {
       address: address,
       cardNumber: cardNumber,
@@ -70,7 +70,7 @@ export default function Checkout() {
     setAddress("");
     setCardNumber("");
     try {
-      const response = await axios.post(`http://localhost:5000/checkout`, requisitionData, token)
+      const response = await axios.post(`${URL}/checkout`, requisitionData, token)
       console.log(response.status.message);
     } catch(err) {
       console.log(err.response.data)
@@ -108,7 +108,7 @@ export default function Checkout() {
   };
 
   function verifyLoginAndProceed() {
-    const token = JSON.parse(localStorage.getItem("token"));
+    const token = JSON.parse(localStorage.getItem("sonitusToken"));
     if (token === null) {
       alert("!");
       return;
