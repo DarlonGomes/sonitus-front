@@ -21,9 +21,7 @@ export function EmptyCart({ isHistory }) {
 function ExcludeItem(index, setCartProducts, cartProducts) {
   const response = window.confirm("Do you wish to delete this item from the cart?");
   if(response){
-    console.log(index);
     cartProducts.splice(index, 1);
-    console.log(cartProducts);
     setCartProducts([...cartProducts]);
     toast.info("Removed from the cart.", {
       position: "top-right",

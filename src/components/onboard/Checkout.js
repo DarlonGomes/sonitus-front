@@ -6,6 +6,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { CartItem } from "../shared/CartItem";
 import { InputButton, CloseIcon } from "../shared/Header";
 import { FormsWrapper } from "../../handlers/loginHandlers";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 const URL = process.env.REACT_APP_API_URI;
@@ -67,10 +69,12 @@ export default function Checkout() {
       email: userEmail,
       data: cart
     }
+    console.log(requisitionData, token, cart);
     setAddress("");
     setCardNumber("");
     try {
-      const response = await axios.post(`${URL}/checkout`, requisitionData, token)
+      // const response = await axios.post(`${URL}/checkout`, requisitionData, token)
+      const response = await axios.post(`http://localhost:5000/checkout`, requisitionData, token)
       console.log(response.status.message);
     } catch(err) {
       console.log(err.response.data)
@@ -83,7 +87,7 @@ export default function Checkout() {
   }
 
   const ShoppingList = () => {
-    return cart.length > 0 && cart.map((item) => <CartItem key={item._id} isCheckout={true} props={item} /> )
+    return cart.length > 0 && cart.map((item, index) => <CartItem key={index} isCheckout={true} props={item} /> )
   }
 
   const ShoppingInfo = () => {
@@ -93,6 +97,7 @@ export default function Checkout() {
       cart.map((item) => {
         items += 1 * item.quantity;
         value += item.quantity * item.price;
+        return item;
       });
     return (
       <Info>
@@ -107,16 +112,51 @@ export default function Checkout() {
     );
   };
 
-  function verifyLoginAndProceed() {
+  function isCartEmpty() {
+    if(cartProducts.length === 0) {
+      toast.info("Cart is empty.", {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      return false;
+    }
+    return true;
+  }
+
+  function isTokenEmpty() {
     const token = JSON.parse(localStorage.getItem("sonitusToken"));
     if (token === null) {
-      alert("!");
+      toast.info("Login is required.", {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      return false;
+    }
+    return true;
+  }
+
+  function verifyLoginAndProceed() {
+    if(isCartEmpty() && isTokenEmpty()) {
+      setForms(true);
       return;
     }
-    setForms(true);
+    return;
   }
   return (
     <Container>
+      <ToastContainer />
       {forms && (
         <PaymentForms
           handleClick={handleClick}

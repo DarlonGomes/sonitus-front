@@ -124,6 +124,7 @@ function SideMenu({
       navigate('/checkout')
       return;
     }
+    setIsCart(false);
     toast.info("Cart is empty.", {
       position: "top-right",
       autoClose: 1500,
