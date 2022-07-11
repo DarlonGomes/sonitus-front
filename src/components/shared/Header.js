@@ -10,8 +10,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const URL = process.env.REACT_APP_API_URI;
-//import Skeleton from "react-loading-skeleton";
-//import "react-loading-skeleton/dist/skeleton.css";
+
 
 // PENSAR EM COMPONENTIZAR EXTERNAMENTE A PARTIR DAQUI
 function AccountActions({ setAccount, setDisplay, setOperation }) {
@@ -70,7 +69,18 @@ function SideMenu({
   function logout() {
     setDisplay(false);
     setData(null);
-    localStorage.removeItem("data");
+    localStorage.removeItem("sonitusData");
+    localStorage.removeItem("sonitusToken");
+    toast.info("Logout made successfully.", {
+      position: "top-right",
+      autoClose: 1500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    })
   }
 
   const MenuData = () => {
@@ -96,16 +106,7 @@ function SideMenu({
       </>
     );
   };
-  // toast.error("Quantity exceed our stock.", {
-  //   position: "top-right",
-  //   autoClose: 1500,
-  //   hideProgressBar: false,
-  //   closeOnClick: true,
-  //   pauseOnHover: false,
-  //   draggable: true,
-  //   progress: undefined,
-  //   theme: "colored",
-  // });
+  
   function checkIfLoggedIn(token) {
     if(token !== null) {
       navigate("/checkout")
@@ -113,8 +114,6 @@ function SideMenu({
   }
 
   const HistoryData = () =>{
-    console.log(token)
-    console.log(history)
     if(history){
       return(
         <>
@@ -127,7 +126,7 @@ function SideMenu({
       )
     }
   }
-  const CartData = () => {
+  const CartData = ({setDisplay}) => {
     if(cartProducts.length < 1){
       return(
         <>
@@ -145,7 +144,7 @@ function SideMenu({
         
           <DataWrapper cart={cart}>
              {cartProducts.map(e=>
-               <CartItem key={e._id} props={e} />)} 
+               <CartItem key={e._id} props={e} setDisplay={setDisplay}/>)} 
           </DataWrapper>
           <Checkout>
             <div onClick={() => checkIfLoggedIn(token)}>
@@ -165,7 +164,7 @@ function SideMenu({
   return (
     <>
       <SideMenuBody cart={cart}>
-        {cart ? <CartData /> : <MenuData />}
+        {cart ? <CartData setDisplay={setDisplay}/> : <MenuData />}
       </SideMenuBody>
       <SideMenuShadow
         onClick={() => (cart ? setIsCart(false) : setDisplay(false))}
@@ -238,41 +237,43 @@ export default function Header() {
   const [password, setPassword] = useState("");
   const [repeat, setRepeat] = useState("");
   const [operation, setOperation] = useState(false);
-  const { reqData } = useContext(DataContext);
-  const { data, setData, token, setToken, userLoadFromLocal } = useContext(UserContext);
-  const {history , setHistory} = useContext(DataContext);
+  const { reqData, setHistory } = useContext(DataContext);
+  const { data, setData, userLoadFromLocal } = useContext(UserContext);
+  
 
   useEffect(() => {
-    const load = async () => {
-      await userLoadFromLocal();
-    };
-    load();
-    getHistory();
-  }, [isCart]);
-
-  async function getHistory (){
-    try {
-      const response = await axios.get(`http://localhost:5000/history`, token);
-      console.log(response.data)
-      setHistory(response.data);
-    } catch (error) {
-      console.log(error)
+    autoLogin();
+    const key = JSON.parse(localStorage.getItem("sonitusToken"))
+    if(key){
+      getHistory(key)
     }
+  }, []);
+
+  async function getHistory (token){
+    
+      try {
+        const response = await axios.get(`http://localhost:5000/history`, token);
+        setHistory(response.data);
+        return
+      } catch (error) {
+        console.log(error)
+      }
+    
   }
   async function userLogin(credentials) {
     try {
       const response = await axios.post(`http://localhost:5000/user/signin`, credentials);
       if (response.status < 300) {
         const localData = { email: credentials.email, name: response.data.name }
-        localStorage.setItem("data", JSON.stringify(localData));
+        localStorage.setItem("sonitusData", JSON.stringify(localData));
         setData({ ...response.data });
         const token = {
           headers: {
             Authorization: `Bearer ${response.data.token}`,
           },
         };
-        setToken(token);
-        localStorage.setItem("token", JSON.stringify(token));
+        
+        localStorage.setItem("sonitusToken", JSON.stringify(token));
       }
       return;
     } catch (err) {
@@ -280,6 +281,7 @@ export default function Header() {
     }
   }
 
+  
   async function userRegister(credentials) {
     try {
       const response = await axios.post(`${URL}/user/signup`, credentials);
@@ -290,6 +292,14 @@ export default function Header() {
     }
   }
 
+  function autoLogin(){
+    const localData = JSON.parse(localStorage.getItem("sonitusData"))
+    const localToken = JSON.parse(localStorage.getItem("sonitusToken"))
+    if(localData && localToken){
+      setData(localData);
+    }
+  }
+
   function handleClick() {
     setAccount(null);
     setEmail("");
@@ -297,6 +307,7 @@ export default function Header() {
     setName("");
     setRepeat("");
   }
+
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -341,7 +352,6 @@ export default function Header() {
         setOperation={setOperation}
         setAccount={setAccount}
         setIsCart={setIsCart}
-        token={token}
       />
     ) : null;
 
@@ -368,7 +378,7 @@ export default function Header() {
   return (
     <>
       <ShowSideMenu />
-      <ShowCartMenu token={token} />
+      <ShowCartMenu />
       {account === null ? null : (
         <MenuCover
           handleSubmit={handleSubmit}

@@ -9,6 +9,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import dayjs from "dayjs";
+import Spotify from "react-spotify-embed";
 
 const URL = process.env.REACT_APP_API_URI;
 
@@ -21,14 +22,14 @@ export default function Album() {
   const [isLoading, setIsLoading] = useState(true);
   const [number, setNumber] = useState(1);
   const [limit, setLimit] = useState();
-
+  const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
   const getData = async () => {
     try {
       const response = await axios.get(`${URL}/products/?id=${id}`);
       setAlbumData(response.data[0]);
-      setSpotify(response.data[0].embed);
+      setSpotify(response.data[0].embed)
       setLimit(response.data[0].stock);
       setTimeout(setIsLoading(false), "1000");
     } catch (error) {
@@ -77,10 +78,20 @@ export default function Album() {
     } else {
         newArr.push(product)
     }
-
+    toast.success("Added to cart.",{
+      position: "top-right",
+      autoClose: 1500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
     setCartProducts(newArr);
-  }
+  };
 
+  
   const Render = () => {
     if (isLoading) {
       return (
@@ -98,6 +109,8 @@ export default function Album() {
             <AlbumInfo>
               <img src={albumData.image} alt={albumData.album} />
               <div className="info">
+                <div className="value"><p>${albumData.price}</p></div>
+
                 <Quantity onSubmit={(event) => validate(event)}>
                   <div className="inputWrapper">
                     <div
@@ -130,11 +143,15 @@ export default function Album() {
               </div>
             </AlbumInfo>
             <h2>Description</h2>
-            <DescriptionText>
+            <DescriptionText open={isOpen}>
               <p>{albumData.description}</p>
+              {isOpen? <ion-icon name="chevron-up-circle-outline" onClick={()=>setIsOpen(false)}></ion-icon>: <ion-icon name="chevron-down-circle-outline" onClick={()=>setIsOpen(true)}></ion-icon>}
             </DescriptionText>
+            
             <h2>Listen</h2>
-            <AlbumSample dangerouslySetInnerHTML={{ __html: spotify }} />
+             <AlbumSample>
+              <Spotify height={232} width={"100%"} link={spotify}/>
+              </AlbumSample> 
           </Container>
         </>
       );
@@ -202,8 +219,9 @@ const AlbumInfo = styled.div`
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+    position: relative;
   }
-
+  
   p {
     font-family: "Roboto";
     font-size: 24px;
@@ -213,18 +231,30 @@ const AlbumInfo = styled.div`
     z-index: 0;
     text-align: center;
   }
+
+  .info p {
+    font-family: "Jost";
+    font-size: 22px;
+    font-weight: 500;
+    color: #292929;
+    margin-top: 20px;
+    z-index: 0;
+    text-align: center;
+  }
 `;
 
-const AlbumSample = styled.div``;
+
 
 const DescriptionText = styled.div`
   width: 100%;
-  height: auto;
+  height: ${(props) => props.open ? "auto" : "150px"};
   padding: 5px 5px 0;
   box-sizing: border-box;
   border-radius: 5px;
   background-color: #ffffff;
   box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1);
+  overflow-y: ${(props) => props.open ? "none" : "hidden"};
+  position: relative;
 
   p {
     font-family: "Jost";
@@ -232,24 +262,42 @@ const DescriptionText = styled.div`
     line-height: 1.5;
     font-weight: 400;
   }
+
+  ion-icon{
+    font-size: 30px;
+    color: #7E7E7E;
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+  }
+  
+  
 `;
 
+
+
 const Quantity = styled.form`
+  position: absolute;
+  bottom: 5px;
   .increase {
     width: 35px;
     height: 35px;
-    background-color: gray;
-    border-radius: 0 25px 25px 0;
+    background-color: #FFFFFF;
+    border-radius: 0 10px 10px 0;
     display: flex;
+    border: 1px solid gray;
+    border-left: none;
     justify-content: center;
     align-items: center;
   }
   .decrease {
     width: 35px;
     height: 35px;
-    background-color: gray;
-    border-radius: 25px 0 0 25px;
+    background-color: #FFFFFF;
+    border-radius: 10px 0 0 10px;
     display: flex;
+    border: 1px solid gray;
+    border-right: none;
     justify-content: center;
     align-items: center;
   }
@@ -257,18 +305,19 @@ const Quantity = styled.form`
   .inputWrapper {
     display: flex;
     flex-direction: row;
+    margin-bottom: 30px;
   }
   input {
-    height: 35px;
-    width: 35px;
-    background-color: gray;
+    height: 37px;
+    width: 30px;
+    background-color: #FFFFFF;
     box-sizing: border-box;
     text-align: center;
-    border: none;
+    border: 0.5px solid gray;
     font-family: "Roboto";
     font-size: 16px;
     font-weight: 400;
-    color: #ffffff;
+    color: #292929;
   }
 
   button {
@@ -276,16 +325,18 @@ const Quantity = styled.form`
     height: 35px;
     border-radius: 17.5px;
     margin-top: 5px;
-    background-color: green;
-    border: none;
+    background-color: #FFFFFF;
+    border: 1px solid gray;
     font-family: "Roboto";
     font-size: 16px;
     font-weight: 400;
-    color: #ffffff;
+    color: #292929;
   }
 
   ion-icon {
     font-size: 20px;
-    color: #ffffff;
+    color: #292929;
   }
 `;
+
+const AlbumSample = styled.div``;
