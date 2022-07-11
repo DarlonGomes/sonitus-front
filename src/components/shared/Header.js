@@ -62,7 +62,7 @@ function SideMenu({
   cart,
   token,
 }) {
-  
+
   const { cartProducts, history } = useContext(DataContext);
   const navigate = useNavigate();
 
