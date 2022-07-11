@@ -9,17 +9,24 @@ import "react-loading-skeleton/dist/skeleton.css";
 
 import { DataContext } from "../../context/DataContext.js";
 
+const URL = process.env.REACT_APP_API_URI;
+
 
 export default function History () {
-    const { history } = useContext(DataContext);
-    const [isLoading, setIsLoading] = useState(false);
+    const { history, setHistory } = useContext(DataContext);
+    const [isLoading, setIsLoading] = useState(true);
     const [ isOpen, setIsOpen ] = useState(false);
-    console.log(history)
+   
+    const token = JSON.parse(localStorage.getItem("sonitusToken"));
+
     const Render = () =>{
         if(isLoading){
             return(
                 <Container>
-
+                    <h2><Skeleton width={200} height={40} /></h2>
+                    <Purchase>
+                        <Skeleton width={"100%"} height={160} />
+                    </Purchase>
                 </Container>
             )
         }
@@ -27,6 +34,12 @@ export default function History () {
             return(
                 <Container>
                     <h2>History</h2>
+                    {history.map(element => <Purchase> 
+                        <div className="header">
+                            <p className="date">{element.date}</p>
+                            <p >{element.addres}</p>
+                        </div>
+                    </Purchase>)}
                     <Purchase>
                         <div className="header">
                             <p className="date">11/07</p>
@@ -69,6 +82,24 @@ export default function History () {
         }
     }
 
+    async function getHistory(token) {
+        if (token === null) {
+          return;
+        }
+        try {
+          const response = await axios.get(`${URL}/history`, token);
+          setHistory(response.data);
+          setTimeout(setIsLoading(false), "1000");
+          return;
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
+
+    useEffect(()=>{
+        getHistory(token)
+    },[])
     return(
         <Render/>
     )
