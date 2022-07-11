@@ -9,6 +9,7 @@ import Album from "./components/onboard/Album";
 import RequestProvider from "./context/DataContext";
 import Checkout from "./components/onboard/Checkout";
 import Results from "./components/onboard/Results";
+import History from "./components/onboard/History";
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
             <Route path="/:genre/:id" element={<Album />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/search/results" element={<Results />} />
+            <Route path="/history" element={<History/>} />
           </Routes>
         </BrowserRouter>
         <Footer />
