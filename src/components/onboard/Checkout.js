@@ -59,8 +59,8 @@ export default function Checkout() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const userEmail = JSON.parse(localStorage.getItem("data")).email
-    const token = JSON.parse(localStorage.getItem("token"));
+    const userEmail = JSON.parse(localStorage.getItem("sonitusData")).email
+    const token = JSON.parse(localStorage.getItem("sonitusToken"));
     const requisitionData = {
       address: address,
       cardNumber: cardNumber,
@@ -108,7 +108,7 @@ export default function Checkout() {
   };
 
   function verifyLoginAndProceed() {
-    const token = JSON.parse(localStorage.getItem("token"));
+    const token = JSON.parse(localStorage.getItem("sonitusToken"));
     if (token === null) {
       alert("!");
       return;
