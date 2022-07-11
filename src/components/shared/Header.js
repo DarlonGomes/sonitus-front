@@ -121,6 +121,7 @@ function SideMenu({
 
   function isLoggedIn(token) {
     if (token !== null) {
+      
       return true;
     }
     return false;
