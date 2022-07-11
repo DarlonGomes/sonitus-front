@@ -11,7 +11,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 const URL = process.env.REACT_APP_API_URI;
 
-
 // PENSAR EM COMPONENTIZAR EXTERNAMENTE A PARTIR DAQUI
 function AccountActions({ setAccount, setDisplay, setOperation }) {
   function handleClick(flag) {
@@ -63,7 +62,7 @@ function SideMenu({
   cart,
   token,
 }) {
-  const {cartProducts, history} = useContext(DataContext)
+  const { cartProducts, history } = useContext(DataContext);
   const navigate = useNavigate();
 
   function logout() {
@@ -80,7 +79,7 @@ function SideMenu({
       draggable: true,
       progress: undefined,
       theme: "colored",
-    })
+    });
   }
 
   const MenuData = () => {
@@ -106,61 +105,93 @@ function SideMenu({
       </>
     );
   };
-  
-  function checkIfLoggedIn(token) {
-    if(token !== null) {
-      navigate("/checkout")
-    }
+
+  function handleClick() {
+    setAccount(true);
+    setOperation(true);
+    setIsCart(false);
   }
 
-  const HistoryData = () =>{
-    if(history){
-      return(
-        <>
-          {history.map((element, index) => <p key={index}> {element.albums}</p>)}
-        </>
-      )
-    }else{
-      return(
-        <EmptyCart/>
-      )
+  function isLoggedIn(token) {
+    if (token !== null) {
+      return true;
     }
+    return false;
   }
-  const CartData = ({setDisplay}) => {
-    if(cartProducts.length < 1){
-      return(
+
+  function isCartEmpty() {
+    if(cartProducts.length !== 0) {
+      navigate('/checkout')
+      return;
+    }
+    setIsCart(false);
+    toast.info("Cart is empty.", {
+      position: "top-right",
+      autoClose: 1500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+    return;
+  }
+
+  const CheckoutButton = () => <div onClick={isCartEmpty}> Go to Checkout <h1><ion-icon name="cart-outline"></ion-icon></h1></div>
+
+  const LoginButton = () => <>
+  <div onClick={handleClick} >Login<h1><ion-icon name="enter-outline"></ion-icon></h1></div>
+  <p>You need to Log In to checkout</p>
+  </>
+
+  const HistoryData = () => {
+    if (history) {
+      return (
+        <>
+          {history.map((element, index) => (
+            <p key={index}> {element.albums}</p>
+          ))}
+        </>
+      );
+    } else {
+      return <EmptyCart isHistory={true} />;
+    }
+  };
+  const CartData = ({ setDisplay }) => {
+    if (cartProducts.length < 1) {
+      return (
         <>
         <DataWrapper cart={cart}>
           <EmptyCart />
         </DataWrapper>
+        <Checkout >
+          { isLoggedIn(token) ? <CheckoutButton /> : <LoginButton /> }
+        </Checkout>
         
       </>
       )
       }else{
       return (
         <>
-        
           <DataWrapper cart={cart}>
-             {cartProducts.map(e=>
-               <CartItem key={e._id} props={e} setDisplay={setDisplay}/>)} 
+            {cartProducts.map((e, index) => (
+              <CartItem key={e._id} index={index} props={e} setDisplay={setDisplay} />
+            ))}
           </DataWrapper>
           <Checkout>
-            <div onClick={() => checkIfLoggedIn(token)}>
-              Go to Checkout <ion-icon name="cart-outline"></ion-icon>
-            </div>
+            { isLoggedIn(token) ? <CheckoutButton /> : <LoginButton /> }
           </Checkout>
          
         </>
       );
     }
-    // LEMBRAR DE PASSAR O isHistory COMO VERDADEIRO/FALSO NA HORA DE CARREGAR OS QUADROS COM ALBUM
-    
   };
 
   return (
     <>
       <SideMenuBody cart={cart}>
-        {cart ? <CartData setDisplay={setDisplay}/> : <MenuData />}
+        {cart ? <CartData setDisplay={setDisplay} /> : <MenuData />}
       </SideMenuBody>
       <SideMenuShadow
         onClick={() => (cart ? setIsCart(false) : setDisplay(false))}
@@ -240,28 +271,32 @@ export default function Header() {
 
   useEffect(() => {
     autoLogin();
-    const key = JSON.parse(localStorage.getItem("sonitusToken"))
-    if(key){
-      getHistory(key)
+    const key = JSON.parse(localStorage.getItem("sonitusToken"));
+    if (key) {
+      getHistory(key);
     }
   }, []);
 
-  async function getHistory (token){
-    
-      try {
-        const response = await axios.get(`${URL}/history`, token);
-        setHistory(response.data);
-        return
-      } catch (error) {
-        console.log(error)
-      }
-    
+  async function getHistory(token) {
+    if(token === null) {
+      return;
+    }
+    try {
+      const response = await axios.get(`${URL}/history`, token);
+      setHistory(response.data);
+      return;
+    } catch (error) {
+      console.log(error);
+    }
   }
   async function userLogin(credentials) {
     try {
       const response = await axios.post(`${URL}/user/signin`, credentials);
       if (response.status < 300) {
-        const localData = { email: credentials.email, name: response.data.name }
+        const localData = {
+          email: credentials.email,
+          name: response.data.name,
+        };
         localStorage.setItem("sonitusData", JSON.stringify(localData));
         setData({ ...response.data });
         const token = {
@@ -269,7 +304,6 @@ export default function Header() {
             Authorization: `Bearer ${response.data.token}`,
           },
         };
-        
         localStorage.setItem("sonitusToken", JSON.stringify(token));
       }
       return;
@@ -278,21 +312,20 @@ export default function Header() {
     }
   }
 
-  
   async function userRegister(credentials) {
     try {
       const response = await axios.post(`${URL}/user/signup`, credentials);
-      
+
       return;
     } catch (err) {
       return err;
     }
   }
 
-  function autoLogin(){
-    const localData = JSON.parse(localStorage.getItem("sonitusData"))
-    const localToken = JSON.parse(localStorage.getItem("sonitusToken"))
-    if(localData && localToken){
+  function autoLogin() {
+    const localData = JSON.parse(localStorage.getItem("sonitusData"));
+    const localToken = JSON.parse(localStorage.getItem("sonitusToken"));
+    if (localData && localToken) {
       setData(localData);
     }
   }
@@ -330,8 +363,8 @@ export default function Header() {
     if (data.name !== "") {
       await userRegister(data);
       return handleClick();
-    };
-    
+    }
+
     delete data.name;
     delete data.repeat_password;
     await userLogin(data);
@@ -341,9 +374,23 @@ export default function Header() {
   const Genres = () => {
     return (
       <GenreWrapper>
-        <Genre onClick={() => {navigate("/genres"); setDisplay(false)}}>All Categories</Genre>
+        <Genre
+          onClick={() => {
+            navigate("/genres");
+            setDisplay(false);
+          }}
+        >
+          All Categories
+        </Genre>
         {reqData.map((item, index) => (
-          <Genre className="type" onClick={() => {navigate(`/${item._id}`); setDisplay(false)}} key={index}>
+          <Genre
+            className="type"
+            onClick={() => {
+              navigate(`/${item._id}`);
+              setDisplay(false);
+            }}
+            key={index}
+          >
             {item._id}
           </Genre>
         ))}
@@ -361,6 +408,7 @@ export default function Header() {
         setOperation={setOperation}
         setAccount={setAccount}
         setIsCart={setIsCart}
+        token={JSON.parse(localStorage.getItem("sonitusToken"))}
       />
     ) : null;
 
@@ -374,6 +422,7 @@ export default function Header() {
         setOperation={setOperation}
         setAccount={setAccount}
         setDisplay={setDisplay}
+        token={JSON.parse(localStorage.getItem("sonitusToken"))}
       />
     ) : null;
 
@@ -402,11 +451,10 @@ export default function Header() {
           operation={operation}
           Button={Button}
           setAccount={setAccount}
-          
         />
       )}
       <HeaderWrapper>
-        <ToastContainer/>
+        <ToastContainer />
         <TopMenu>
           <ion-icon onClick={() => setDisplay(true)} name="menu"></ion-icon>
           <ion-icon onClick={() => navigate("/")} name="disc"></ion-icon>
@@ -498,7 +546,7 @@ const DataWrapper = styled.div`
   justify-content: flex-start;
   align-items: ${({ cart }) => (cart ? "flex-end" : "flex-start")};
   width: 100%;
-  height: ${({ cart }) => (cart ? "100%" : "40vh")};
+  height: ${({ cart }) => (cart ? "80vh" : "40vh")};
   margin-top: 2.25vh;
   ${({ cart }) => (cart ? "padding-right: 3vw" : "padding-left: 3vw")};
   ${({ cart }) => (cart ? "padding-left: 1vw" : "padding-right: 1vw")};
@@ -526,7 +574,7 @@ const GenreWrapper = styled.div`
   flex-direction: column;
   margin-top: 2.25vh;
 
-  .type{
+  .type {
     font-size: 24px;
   }
 `;
@@ -656,6 +704,7 @@ export const CloseIcon = styled.div`
 const Checkout = styled.div`
   font-family: "Roboto", sans-serif;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -673,5 +722,17 @@ const Checkout = styled.div`
     color: #dfdfdf;
     background-color: #008c02;
     border: 1px solid #00a302;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  p {
+    line-height: 25px;
+    margin-top: 5px;
+    width: 60%;
+    font-size: 20px;
+    color: #dfdfdf;
   }
 `;

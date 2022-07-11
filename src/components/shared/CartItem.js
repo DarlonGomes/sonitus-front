@@ -38,10 +38,10 @@ function ExcludeItem(index, setCartProducts, cartProducts) {
   }
 }
 
-export function CartItem({props, isHistory, isCheckout}) {
+export function CartItem({props, index, isHistory, isCheckout}) {
   const {cartProducts, setCartProducts} = useContext(DataContext);
   const excludeButton = isHistory ? null : (
-    <p onClick={()=> ExcludeItem(props.index, setCartProducts, cartProducts)}>
+    <p onClick={()=> ExcludeItem(index, setCartProducts, cartProducts)}>
       <ion-icon name="close"></ion-icon>
     </p>
   );

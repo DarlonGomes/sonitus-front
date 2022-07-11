@@ -104,7 +104,7 @@ const Render = () =>{
             <Container>
                 <h2>{genre}</h2>
                 <DoubleColumn>
-                    {genreAlbums.map(element => <AlbumWrapper key={element._id}>
+                    {genreAlbums.map((element, index) => <AlbumWrapper key={index}>
                         <img src={element.image} alt={element.album} onClick={()=>{navigate(`/${element.genre}/${element._id}`)}}/>
                         <div className="info">
                             <p className="bold">
