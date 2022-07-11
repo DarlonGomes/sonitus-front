@@ -9,16 +9,25 @@ import "react-loading-skeleton/dist/skeleton.css";
 
 import { DataContext } from "../../context/DataContext.js";
 
+const URL = process.env.REACT_APP_API_URI;
 
 export default function History () {
-    const { history } = useContext(DataContext);
-    const [isLoading, setIsLoading] = useState(false);
+    const { history, setHistory } = useContext(DataContext);
+    const [isLoading, setIsLoading] = useState(true);
     const [ isOpen, setIsOpen ] = useState(false);
-    console.log(history)
+   
+    const token = JSON.parse(localStorage.getItem("sonitusToken"));
+
+
     const Render = () =>{
         if(isLoading){
             return(
                 <Container>
+
+                    <h2><Skeleton width={200} height={40} /></h2>
+                    <Purchase>
+                        <Skeleton width={"100%"} height={160} />
+                    </Purchase>
 
                 </Container>
             )
@@ -27,6 +36,31 @@ export default function History () {
             return(
                 <Container>
                     <h2>History</h2>
+
+                    {history.map(element => <Purchase> 
+                        <div className="header">
+                            <p className="date">{element.date}</p>
+                            <p >{element.addres}</p>
+                            <Limiter open={isOpen}>
+                                {element.albums.map(e =>
+                                <div className="item">
+                                <img src={e.image} alt={e.album}/>
+                                <div className="info">
+                                    <h4>{e.artist}</h4>
+                                    <p>{e.album}</p>
+                                    <p className="green">$ {e.price}</p>
+                                    <p>{e.quantity}</p>
+                                </div>
+                            </div>)}
+                            </Limiter>
+                            <div className="footer">
+                            <p>Total :</p> <p className="total">{element.value}</p>
+                            {isOpen ? <ion-icon name="chevron-up-circle-outline" onClick={()=>{setIsOpen(false)}}></ion-icon> : <ion-icon name="chevron-down-circle-outline" onClick={()=>{setIsOpen(true)}}></ion-icon>}
+                        </div>
+                        </div>
+
+                    </Purchase>)}
+
                     <Purchase>
                         <div className="header">
                             <p className="date">11/07</p>
@@ -64,10 +98,31 @@ export default function History () {
                         </div>
                         
                     </Purchase>
+
                 </Container>
             )
         }
     }
+
+
+    async function getHistory(token) {
+        if (token === null) {
+          return;
+        }
+        try {
+          const response = await axios.get(`${URL}/history`, token);
+          setHistory(response.data);
+          setTimeout(setIsLoading(false), "1000");
+          return;
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
+
+    useEffect(()=>{
+        getHistory(token)
+    },[])
 
     return(
         <Render/>

@@ -24,7 +24,6 @@ function NoResults({ isCheckout }) {
 }
 
 function DoubleColumnList({ genreAlbums, navigate }) {
-  console.log(genreAlbums);
   const { cartProducts, setCartProducts } = useContext(DataContext);
   function validate(element) {
     
