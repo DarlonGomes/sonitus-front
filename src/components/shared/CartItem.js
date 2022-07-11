@@ -5,7 +5,7 @@ import empty from "../../assets/empty.png";
 import { useContext } from "react";
 import { DataContext } from "../../context/DataContext";
 
-export function EmptyCart({props, isHistory}) {
+export function EmptyCart({ isHistory }) {
   return (
     <ContentWrapper>
       <AlbumCover isHistory={isHistory} src={isHistory ? empty : record} alt={"Empty"} />
@@ -16,30 +16,31 @@ export function EmptyCart({props, isHistory}) {
   );
 }
 
+function ExcludeItem(index, setCartProducts, cartProducts) {
+  const response = window.confirm("Do you wish to delete this item from the cart?");
+  if(response){
+    cartProducts.splice(index, 1);
+    setCartProducts([...cartProducts]);
+    return;
+  }
+}
+
 export function CartItem({props, isHistory, isCheckout}) {
   const {cartProducts, setCartProducts} = useContext(DataContext);
   const excludeButton = isHistory ? null : (
-    <p onClick={()=>{
-      const response = window.confirm("Do you wish to delete this item from the cart?")
-      if(response){
-        const arr = cartProducts.splice(props.index, 1);
-        
-        setCartProducts(arr)
-        return;
-      }
-    }}>
+    <p onClick={()=> ExcludeItem(props.index, setCartProducts, cartProducts)}>
       <ion-icon name="close"></ion-icon>
     </p>
   );
   const date = isHistory ? (
-    <p>{props.quantity || 1} - 07/09</p>
+    <p>{props.quantity} - {props.date}</p>
   ) : (
-    <p>Qty {props.quantity || 1}</p>
+    <p>Qty {props.quantity}</p>
   );
   const convertToCash = Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
-  }).format(props.price );
+  }).format(props.price);
 
   return (
     <ContentWrapper contentFormat={isCheckout}>
@@ -62,7 +63,8 @@ export function CartItem({props, isHistory, isCheckout}) {
 const ContentWrapper = styled.div`
   min-width: 100%;
   max-width: 100%;
-  min-height: 115px;
+  min-height: 130px;
+  max-height: 130px;
   display: flex;
   margin-bottom: 2.5px;
   padding: 2.5%;
@@ -88,8 +90,8 @@ const AlbumText = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   padding-left: 5px;
-  font-size: 28px;
-  line-height: 36px;
+  font-size: 26px;
+  line-height: 28px;
   font-weight: 500;
   width: 100%;
   height: 100%;

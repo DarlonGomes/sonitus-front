@@ -3,9 +3,10 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { DataContext } from "../../context/DataContext";
 import { useNavigate, useParams } from "react-router-dom";
-import {CartItem} from "../shared/CartItem";
+import { CartItem } from "../shared/CartItem";
 import { InputButton, CloseIcon } from "../shared/Header";
 import { FormsWrapper } from "../../handlers/loginHandlers";
+
 
 const URL = process.env.REACT_APP_API_URI;
 
@@ -46,43 +47,18 @@ function PaymentForms({
 }
 
 export default function Checkout() {
-  const { dataRequest, reqData } = useContext(DataContext);
-  // const [test, setTest] = useState(null);
-  const [cart, setCart] = useState([]);
+  const { dataRequest, cartProducts } = useContext(DataContext);
+  const [cart, setCart] = useState(cartProducts);
   const [forms, setForms] = useState(false);
   const [address, setAddress] = useState("");
   const [cardNumber, setCardNumber] = useState("");
 
   useEffect(() => {
-    product();
     dataRequest();
   }, []);
 
-  // {
-  //   "_id": "62c6cc06067e3e346a1ca89e",
-  //   "artist": "Judy Garland",
-  //   "album": "Miss Show Business",
-  //   "image": "https://m.media-amazon.com/images/I/613waHj+QoS._SY355_.jpg",
-  //   "genre": "Pop",
-  //   "tags": "",
-  //   "embed": "<iframe style='border-radius:12px' src='https://open.spotify.com/embed/album/0uramtIEMZmRFjozebnomm?utm_source=generator' width='100%' height={heigth} frameBorder='0' allowfullscreen='' allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture'></iframe>",
-  //   "description": "Judy Garland's Miss Show Business was originally released in 1955 through Capitol Records and the album peaked at No. 5 on the Billboard 200. Universal Music Enterprises is now issuing the 60th Anniversary Edition, remastered on 180 gram vinyl, with notes by Lorna Luft.",
-  //   "price": 102.71,
-  //   "access": 0,
-  //   "stock": 100
-  // }
-
   async function handleSubmit(e) {
     e.preventDefault();
-    const cart = [
-      {
-        _id: "62c6cc06067e3e346a1ca89e",
-        artist: "Judy Garland",
-        album: "Miss Show Business",
-        price: 102.71,
-        quantity: 1,
-      },
-    ];
     const userEmail = JSON.parse(localStorage.getItem("data")).email
     const token = JSON.parse(localStorage.getItem("token"));
     const requisitionData = {
@@ -93,10 +69,8 @@ export default function Checkout() {
     }
     setAddress("");
     setCardNumber("");
-    console.log(requisitionData);
     try {
-      // const response = await axios.post(`${URL}/aonde???`, requisitionData, token)
-      const response = await axios.post(`http://localhost:5000/checkout`, requisitionData, token)
+      const response = await axios.post(`${URL}/checkout`, requisitionData, token)
       console.log(response.status.message);
     } catch(err) {
       console.log(err.response.data)
@@ -108,23 +82,32 @@ export default function Checkout() {
     setForms(false);
   }
 
-  const product = async () => {
-    // isso muda totalmente, as requisições são enviadas ao servidor quando o usuario clica em add ao carrinho
-    // e tambem sao salvas no local storage, na hora do checkout, se le do local não da API
-    // se o localstorage ta vazio, entao a req busca o dado do carrinho do usuario
-    // const response = await axios.get(
-    //   `${URL}/products/?id=62c83418460101f3304370f9`
-    // );
-    // console.log(response.data[0]);
-    // setTest(response.data[0]);
-  };
-
   const ShoppingList = () => {
-    return cart.length > 0 && cart.map((item) => <CartItem isCheckout={true} props={item} /> )
+    return cart.length > 0 && cart.map((item) => <CartItem key={item._id} isCheckout={true} props={item} /> )
   }
 
+  const ShoppingInfo = () => {
+    let items = 0;
+    let value = 0;
+    cart.length > 0 &&
+      cart.map((item) => {
+        items += 1 * item.quantity;
+        value += item.quantity * item.price;
+      });
+    return (
+      <Info>
+        <p>{items} item(s)</p>
+        <p>
+          {Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD",
+          }).format(value)}
+        </p>
+      </Info>
+    );
+  };
+
   function verifyLoginAndProceed() {
-    // varre o local storage por token, se achou, carrega pagina de pagamentos, senão da um erro
     const token = JSON.parse(localStorage.getItem("token"));
     if (token === null) {
       alert("!");
@@ -132,7 +115,6 @@ export default function Checkout() {
     }
     setForms(true);
   }
-  // o return vai ser um map do item carrinho no localstorage/requisição de servidor
   return (
     <Container>
       {forms && (
@@ -148,10 +130,7 @@ export default function Checkout() {
       <ContentWrapper>
         <ShoppingList />
       </ContentWrapper>
-      <Info>
-        <p>N items</p>
-        <p>M moneys</p>
-      </Info>
+        <ShoppingInfo />
       <CheckoutButton onClick={verifyLoginAndProceed}>
         Payment & Address
       </CheckoutButton>
@@ -193,8 +172,8 @@ const FormsContainer = styled(Container)`
 const ContentWrapper = styled.div`
   min-width: 100%;
   max-width: 100%;
-  min-height: 40vh;
-  max-height: 50vh;
+  min-height: 45vh;
+  max-height: 45vh;
   overflow-y: scroll;
   display: flex;
   flex-direction: column;
@@ -216,6 +195,10 @@ const Info = styled.div`
   p {
     font-family: "Jost";
     font-size: 28px;
+  }
+
+  p:last-child {
+    color: green;
   }
 `;
 

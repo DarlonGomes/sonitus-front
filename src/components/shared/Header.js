@@ -6,7 +6,8 @@ import { DataContext } from "../../context/DataContext";
 import { UserContext } from "../../context/UserContext";
 import { Login, SignUp } from "../../handlers/loginHandlers.js";
 import  { EmptyCart, CartItem } from "./CartItem";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const URL = process.env.REACT_APP_API_URI;
 //import Skeleton from "react-loading-skeleton";
@@ -61,6 +62,7 @@ function SideMenu({
   setData,
   setIsCart,
   cart,
+  token,
 }) {
   const {cartProducts} = useContext(DataContext)
   const navigate = useNavigate();
@@ -94,9 +96,23 @@ function SideMenu({
       </>
     );
   };
+  // toast.error("Quantity exceed our stock.", {
+  //   position: "top-right",
+  //   autoClose: 1500,
+  //   hideProgressBar: false,
+  //   closeOnClick: true,
+  //   pauseOnHover: false,
+  //   draggable: true,
+  //   progress: undefined,
+  //   theme: "colored",
+  // });
+  function checkIfLoggedIn(token) {
+    if(token !== null) {
+      navigate("/checkout")
+    }
+  }
 
   const CartData = () => {
-    console.log(cartProducts)
     if(cartProducts.length < 1){
       return(
         <>
@@ -104,25 +120,22 @@ function SideMenu({
           <EmptyCart />
         </DataWrapper>
         <DataWrapper cart={cart}>
-          <EmptyCart /> 
+          <EmptyCart isHistory={true} /> 
         </DataWrapper>
       </>
       )
     }else{
       return (
         <>
-          {/* <CartHeader /> */}
           <DataWrapper cart={cart}>
              {cartProducts.map(e=>
                <CartItem key={e._id} props={e} />)} 
           </DataWrapper>
           <Checkout>
-            <div onClick={() => navigate("/checkout")}>
+            <div onClick={() => checkIfLoggedIn(token)}>
               Go to Checkout <ion-icon name="cart-outline"></ion-icon>
             </div>
           </Checkout>
-          {/* <Subtotal /><Checkout /> */}
-          {/* <HistoryHeader /> */}
           <DataWrapper cart={cart}>
             <EmptyCart/> 
           </DataWrapper>
@@ -209,9 +222,8 @@ export default function Header() {
   const [password, setPassword] = useState("");
   const [repeat, setRepeat] = useState("");
   const [operation, setOperation] = useState(false);
-  const { reqData, productRequest } = useContext(DataContext);
-  const { data, setData, setToken, userLoadFromLocal } =
-  useContext(UserContext);
+  const { reqData } = useContext(DataContext);
+  const { data, setData, token, setToken, userLoadFromLocal } = useContext(UserContext);
 
   useEffect(() => {
     const load = async () => {
@@ -304,6 +316,7 @@ export default function Header() {
         setOperation={setOperation}
         setAccount={setAccount}
         setIsCart={setIsCart}
+        token={token}
       />
     ) : null;
 
@@ -330,7 +343,7 @@ export default function Header() {
   return (
     <>
       <ShowSideMenu />
-      <ShowCartMenu />
+      <ShowCartMenu token={token} />
       {account === null ? null : (
         <MenuCover
           handleSubmit={handleSubmit}
@@ -345,6 +358,7 @@ export default function Header() {
           operation={operation}
           Button={Button}
           setAccount={setAccount}
+          
         />
       )}
       <HeaderWrapper>
@@ -592,6 +606,7 @@ const Checkout = styled.div`
   justify-content: center;
   align-items: center;
   text-align: center;
+  margin-top: 10px;
   font-size: 36px;
 
   div {
