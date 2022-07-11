@@ -103,18 +103,23 @@ const AlbumText = styled.div`
   font-family: "Roboto", sans-serif;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
   padding-left: 5px;
-  font-size: 26px;
-  line-height: 28px;
+  font-size: 24px;
+  line-height: 26px;
   font-weight: 500;
   width: 100%;
   height: 100%;
+  min-height: 110px;
+  max-height: 110px;
   color: ${ ({contentFormat}) => contentFormat ? '#393939' : '#DFDFDF'};
 
-  p {
-    
-    font-size: 24px;
+  > p {
+    display: flex;
+    flex-grow: 1;
+    max-height: max-content;
+    overflow-y: hidden;
+    font-size: 20px;
     font-weight: 300;
   }
 
@@ -123,8 +128,8 @@ const AlbumText = styled.div`
 const AlbumHeader = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  height: 100%;
+  align-items: flex-start;
+  height: fit-content;
   width: 100%;
   box-sizing: border-box;
 
@@ -150,11 +155,11 @@ const AlbumHeader = styled.div`
 const AlbumFooter = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  height: 100%;
+  align-items: flex-end;
+  height: fit-content;
   width: 100%;
   box-sizing: border-box;
-  line-height: 36px;
+  line-height: 24px;
   font-weight: 500;
 
   p {
