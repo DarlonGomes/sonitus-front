@@ -73,7 +73,6 @@ export default function Checkout() {
     setAddress("");
     setCardNumber("");
     try {
-      // const response = await axios.post(`${URL}/checkout`, requisitionData, token)
       const response = await axios.post(`${URL}/checkout`, requisitionData, token)
       console.log(response.status.message);
     } catch(err) {

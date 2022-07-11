@@ -75,7 +75,7 @@ export function CartItem({props, index, isHistory, isCheckout}) {
   );
 }
 
-const ContentWrapper = styled.div`
+export const ContentWrapper = styled.div`
   min-width: 100%;
   max-width: 100%;
   min-height: 130px;
@@ -90,7 +90,7 @@ const ContentWrapper = styled.div`
   border-radius: 2px;
 `;
 
-const AlbumCover = styled.img`
+export const AlbumCover = styled.img`
   display: flex;
   height: 105px;
   height: 105px;
