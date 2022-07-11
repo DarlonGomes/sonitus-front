@@ -107,11 +107,11 @@ export default function Home (){
         
                     <MainCarousel title="Best Seller" arr={albumRequest.discover}/>
                     
-                    <SmallBanner text="Run To The Hills" image="https://www.cnnbrasil.com.br/wp-content/uploads/sites/12/2022/04/iron-maiden-ft-lauderdale-2019-jmc-53197.jpg" genre="Rock" id="62cafe6d7c1a44758db9367e"/>
+                    <SmallBanner text="Run To The Hills" image="https://www.cnnbrasil.com.br/wp-content/uploads/sites/12/2022/04/iron-maiden-ft-lauderdale-2019-jmc-53197.jpg" genre="Rock" id="62cbe90e94101861fbe5edc4"/>
                     
                     <MainCarousel title="Discover" arr={albumRequest.best}/>
                 
-                    <SmallBanner text="So What" image="https://polimorfismoperveso.files.wordpress.com/2016/11/miles-davis-foto-principal.jpg?w=1000&h=500&crop=1" genre="Jazz" id="62cafd7d7c1a44758db9366e" />
+                    <SmallBanner text="So What" image="https://polimorfismoperveso.files.wordpress.com/2016/11/miles-davis-foto-principal.jpg?w=1000&h=500&crop=1" genre="Jazz" id="62cbe90e94101861fbe5edda" />
                     <h2 className="partners">Partners</h2>
                     <PartnerBanner title="Night Owl" image="https://www.msc.com/-/media/images/msc-cargo/sectors/agriculture/coffee/msc21008133/msc21008133_s.jpg" link="https://projeto-14-front-eta.vercel.app/"/>
                     <PartnerBanner title="FreeShop" image="https://www.gemius.com/assets/images/f/online%20shopping-681f3faf.jpg" link="https://freestore-project.vercel.app"/>   
