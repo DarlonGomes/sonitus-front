@@ -17,13 +17,14 @@ export function EmptyCart({props, isHistory}) {
 }
 
 export function CartItem({props, isHistory, isCheckout}) {
-  const {cartProducts, setCartProduts} = useContext(DataContext);
+  const {cartProducts, setCartProducts} = useContext(DataContext);
   const excludeButton = isHistory ? null : (
     <p onClick={()=>{
       const response = window.confirm("Do you wish to delete this item from the cart?")
       if(response){
         const arr = cartProducts.splice(props.index, 1);
-        setCartProduts(arr)
+        
+        setCartProducts(arr)
         return;
       }
     }}>

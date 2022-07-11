@@ -17,7 +17,7 @@ export default function Album (){
     const [albumData, setAlbumData] = useState();
     const [spotify, setSpotify] = useState()
     const [isLoading, setIsLoading] = useState(true);
-    const [number, setNumber] = useState(0);
+    const [number, setNumber] = useState(1);
     const [limit , setLimit] = useState()
     
     const navigate = useNavigate();
