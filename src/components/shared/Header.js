@@ -70,7 +70,7 @@ function SideMenu({
     setData(null);
     localStorage.removeItem("sonitusData");
     localStorage.removeItem("sonitusToken");
-    toast.info("Logout made successfully.", {
+    toast.success("Logout made successfully.", {
       position: "top-right",
       autoClose: 1500,
       hideProgressBar: false,
@@ -93,21 +93,27 @@ function SideMenu({
             setAccount={setAccount}
             setData={setData}
           />
+          {data !== null ? (
+          <ButtonHandler>
+            <OptionButton onClick={()=>{navigate("/history")}}>
+            <ion-icon name="list-outline"></ion-icon>
+            <p>History</p>
+            </OptionButton>
+            <OptionButton onClick={logout}>
+              <ion-icon name="log-out-outline"></ion-icon>
+              <p>Logout</p>
+            </OptionButton>
+          </ButtonHandler>
+
+        ) : null}
           <Genres />
         </DataWrapper>
-        {data !== null ? (
-          <LogoutBox>
-            <LogoutButton onClick={logout}>
-              <ion-icon name="log-out-outline"></ion-icon>
-            </LogoutButton>
-          </LogoutBox>
-        ) : null}
       </>
     );
   };
 
   function handleClick() {
-    setAccount(true);
+    setAccount(true);>>>>>>> main
     setOperation(true);
     setIsCart(false);
   }
@@ -173,7 +179,7 @@ function SideMenu({
       return <EmptyCart isHistory={true} />;
     }
   };
-  const CartData = ({ setDisplay }) => {
+  const CartData = ({ setDisplay, isHistory }) => {
     if (cartProducts.length < 1) {
       return (
         <>
@@ -301,6 +307,7 @@ export default function Header() {
     try {
       const response = await axios.get(`${URL}/history`, token);
       setHistory(response.data);
+      console.log(`Peguei histórico ${response.data}`)
       return;
     } catch (error) {
       return error;
@@ -587,9 +594,9 @@ const DataWrapper = styled.div`
   justify-content: flex-start;
   align-items: ${({ cart }) => (cart ? "flex-end" : "flex-start")};
   width: 100%;
-  height: ${({ cart }) => (cart ? "80vh" : "40vh")};
+  height: ${({ cart }) => (cart ? "80vh" : "auto")};
   margin-top: 2.25vh;
-  ${({ cart }) => (cart ? "padding-right: 3vw" : "padding-left: 3vw")};
+  ${({ cart }) => (cart ? "padding-right: 3vw" : "padding-left: 0")};
   ${({ cart }) => (cart ? "padding-left: 1vw" : "padding-right: 1vw")};
   font-size: 32px;
   color: #dfdfdf;
@@ -604,9 +611,9 @@ const UserContentWrapper = styled.div`
   flex-direction: column;
   color: #dfdfdf;
   width: 95%;
-  height: 10vh;
+  margin-left: 5px;
   margin-bottom: 25px;
-  font-size: 28px;
+  font-size: 24px;
   box-sizing: border-box;
 `;
 
@@ -656,6 +663,7 @@ const SearchBar = styled.input`
   height: 3.5vh;
   margin: 0.5vh 1vw;
   border: none;
+  box-sizing: border-box;
 
   ::placeholder {
     font-family: "Roboto", sans-serif;
@@ -686,35 +694,46 @@ const AccountDescription = styled.div`
   line-height: 38px;
   width: 100%;
   height: 100px;
+  margin-left: 3vw;
 `;
 
-const LogoutBox = styled.div`
+const ButtonHandler = styled.div`
   font-family: "Roboto", sans-serif;
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
   width: 100%;
-  height: 40vh;
-  margin-bottom: 15vh;
-  padding-left: 4vw;
+  margin-bottom: 10px;
   font-size: 36px;
   color: #dbdbdb;
   font-weight: 500;
-  box-sizing: border-box;
+
 `;
 
-const LogoutButton = styled.div`
+const OptionButton = styled.div`
   display: flex;
-  text-align: center;
   justify-content: center;
   align-items: center;
-  border: 1px solid #454545;
-  background-color: #333333;
-  height: 50px;
-  width: 50px;
+  border-top: 1px solid #666666;
+  border-bottom: 1px solid #666666;;
+  background-color: #292929;
   font-size: 36px;
-  border-radius: 12px;
+  width: 100%;
+  height: 40px;
+  position: relative;
+  
+  ion-icon{
+    font-size: 30px;
+    position: absolute;
+    left: 10px;
+  }
+
+  p{
+    font-size: 20px;
+    margin-left: 10px;
+    
+  }
 `;
 
 export const InputButton = styled.button`

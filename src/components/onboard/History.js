@@ -11,7 +11,6 @@ import { DataContext } from "../../context/DataContext.js";
 
 const URL = process.env.REACT_APP_API_URI;
 
-
 export default function History () {
     const { history, setHistory } = useContext(DataContext);
     const [isLoading, setIsLoading] = useState(true);
@@ -19,14 +18,17 @@ export default function History () {
    
     const token = JSON.parse(localStorage.getItem("sonitusToken"));
 
+
     const Render = () =>{
         if(isLoading){
             return(
                 <Container>
+
                     <h2><Skeleton width={200} height={40} /></h2>
                     <Purchase>
                         <Skeleton width={"100%"} height={160} />
                     </Purchase>
+
                 </Container>
             )
         }
@@ -34,6 +36,7 @@ export default function History () {
             return(
                 <Container>
                     <h2>History</h2>
+
                     {history.map(element => <Purchase> 
                         <div className="header">
                             <p className="date">{element.date}</p>
@@ -57,11 +60,50 @@ export default function History () {
                         </div>
 
                     </Purchase>)}
-                    
+
+                    <Purchase>
+                        <div className="header">
+                            <p className="date">11/07</p>
+                            <p >Rua do Bilulu, 2000</p>
+                        </div>
+                        <Limiter open={isOpen}>
+                            <div className="item">
+                                <img src="https://www.billboard.com/wp-content/uploads/media/ninja-sex-party-press-photo-2018-cr-Fernando-Escovar-billboard-1548.jpg" alt="NSP"/>
+                                <div className="info">
+                                    <h4>Ninja Sex Party</h4>
+                                    <p>Cool Patrol</p>
+                                    <p className="green">$ 27.83</p>
+                                </div>
+                            </div>
+                            <div className="item">
+                                <img src="https://www.billboard.com/wp-content/uploads/media/ninja-sex-party-press-photo-2018-cr-Fernando-Escovar-billboard-1548.jpg" alt="NSP"/>
+                                <div className="info">
+                                    <h4>Ninja Sex Party</h4>
+                                    <p>Cool Patrol</p>
+                                    <p className="green">$ 27.83</p>
+                                </div>
+                            </div>
+                            <div className="item">
+                                <img src="https://www.billboard.com/wp-content/uploads/media/ninja-sex-party-press-photo-2018-cr-Fernando-Escovar-billboard-1548.jpg" alt="NSP"/>
+                                <div className="info">
+                                    <h4>Ninja Sex Party</h4>
+                                    <p>Cool Patrol</p>
+                                    <p className="green">$ 27.83</p>
+                                </div>
+                            </div>
+                        </Limiter>
+                        <div className="footer">
+                            <p>Total :</p> <p className="total">$83.49</p>
+                            {isOpen ? <ion-icon name="chevron-up-circle-outline" onClick={()=>{setIsOpen(false)}}></ion-icon> : <ion-icon name="chevron-down-circle-outline" onClick={()=>{setIsOpen(true)}}></ion-icon>}
+                        </div>
+                        
+                    </Purchase>
+
                 </Container>
             )
         }
     }
+
 
     async function getHistory(token) {
         if (token === null) {
@@ -81,6 +123,7 @@ export default function History () {
     useEffect(()=>{
         getHistory(token)
     },[])
+
     return(
         <Render/>
     )
