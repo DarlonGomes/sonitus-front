@@ -114,6 +114,7 @@ export default function Home (){
                     <SmallBanner text="So What" image="https://polimorfismoperveso.files.wordpress.com/2016/11/miles-davis-foto-principal.jpg?w=1000&h=500&crop=1" genre="Jazz" id="62cafd7d7c1a44758db9366e" />
                     <h2 className="partners">Partners</h2>
                     <PartnerBanner title="Night Owl" image="https://www.msc.com/-/media/images/msc-cargo/sectors/agriculture/coffee/msc21008133/msc21008133_s.jpg" link="https://projeto-14-front-eta.vercel.app/"/>
+                    <PartnerBanner title="FreeShop" image="https://www.gemius.com/assets/images/f/online%20shopping-681f3faf.jpg" link="https://freestore-project.vercel.app"/>   
                 </Container>
                 </>
             )

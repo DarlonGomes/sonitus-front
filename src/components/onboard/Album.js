@@ -9,6 +9,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import dayjs from "dayjs";
+import Spotify from "react-spotify-embed";
 
 const URL = process.env.REACT_APP_API_URI;
 
@@ -28,7 +29,7 @@ export default function Album() {
     try {
       const response = await axios.get(`${URL}/products/?id=${id}`);
       setAlbumData(response.data[0]);
-      setSpotify(response.data[0].embed);
+      setSpotify(response.data[0].embed)
       setLimit(response.data[0].stock);
       setTimeout(setIsLoading(false), "1000");
     } catch (error) {
@@ -88,7 +89,7 @@ export default function Album() {
       theme: "colored",
     });
     setCartProducts(newArr);
-  }
+  };
 
   
   const Render = () => {
@@ -108,7 +109,7 @@ export default function Album() {
             <AlbumInfo>
               <img src={albumData.image} alt={albumData.album} />
               <div className="info">
-                <div className="value"><p>R${albumData.price}</p></div>
+                <div className="value"><p>${albumData.price}</p></div>
 
                 <Quantity onSubmit={(event) => validate(event)}>
                   <div className="inputWrapper">
@@ -148,7 +149,9 @@ export default function Album() {
             </DescriptionText>
             
             <h2>Listen</h2>
-             <AlbumSample dangerouslySetInnerHTML={{ __html: spotify }} /> 
+             <AlbumSample>
+              <Spotify height={232} width={"100%"} link={spotify}/>
+              </AlbumSample> 
           </Container>
         </>
       );
@@ -264,8 +267,8 @@ const DescriptionText = styled.div`
     font-size: 30px;
     color: #7E7E7E;
     position: absolute;
-    bottom: 10px;
-    right: 10px;
+    bottom: 2px;
+    right: 2px;
   }
   
   

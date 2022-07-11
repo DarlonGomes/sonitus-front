@@ -3,6 +3,8 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { DataContext } from "../../context/DataContext";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import dayjs from "dayjs";
 //import { UserContext } from "../../context/UserContext";
 
 
@@ -13,7 +15,7 @@ const URL=process.env.REACT_APP_API_URI;
 
 export default function Genre () {
     const {genre} = useParams();
-    const {dataRequest}= useContext(DataContext);
+    const {dataRequest, cartProducts, setCartProducts }= useContext(DataContext);
     const [genreAlbums, setGenreAlbums] = useState();
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
@@ -27,6 +29,45 @@ export default function Genre () {
             console.log(error);
         }
     }
+
+    function validate(element) {
+    
+        const product = {
+          quantity: 1,
+          image: element.image,
+          album: element.album,
+          artist: element.artist,
+          price: element.price,
+          id: element._id,
+          index: cartProducts.length,
+          date: dayjs(Date()).format("MM/DD"),
+        };
+    
+        function matchIndex() {
+            const index = cartProducts.findIndex((item) => item.id === product.id)
+            return index;
+        }
+        
+        const newArr = [...cartProducts];
+    
+        if(cartProducts.length > 0 && matchIndex() !== -1) {
+            cartProducts[matchIndex()].quantity += product.quantity;
+            cartProducts[matchIndex()].date = dayjs(Date()).format("MM/DD");
+        } else {
+            newArr.push(product)
+        }
+        toast.success("Added to cart.",{
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+        setCartProducts(newArr);
+      };
 
 const Render = () =>{
     if(isLoading){
@@ -63,17 +104,17 @@ const Render = () =>{
             <Container>
                 <h2>{genre}</h2>
                 <DoubleColumn>
-                    {genreAlbums.map(element => <AlbumWrapper key={element._id}
-                     onClick={()=>{navigate(`/${element.genre}/${element._id}`)}}>
-                        <img src={element.image} alt={element.album}/>
+                    {genreAlbums.map(element => <AlbumWrapper key={element._id}>
+                        <img src={element.image} alt={element.album} onClick={()=>{navigate(`/${element.genre}/${element._id}`)}}/>
                         <div className="info">
                             <p className="bold">
                                 {element.album}
                             </p>
                             <p>{element.artist}</p>
                             <p className="bold">
-                               R$ {element.price}
+                               $ {element.price}
                             </p>
+                            <ion-icon name="cart-outline" onClick={()=>{validate(element)}}></ion-icon>
                         </div>
 
                     </AlbumWrapper>)}
@@ -129,6 +170,8 @@ const AlbumWrapper = styled.div`
     box-sizing: border-box;
     padding: 5px;
     box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+    position: relative;
+
     img{
         width: 140px;
         height: 140px;
@@ -156,9 +199,15 @@ const AlbumWrapper = styled.div`
     .bold{
         font-weight: 400;
         font-size: 16px;
-        color: #000000;
-        
-        
+        color: #000000;   
+    }
+
+    ion-icon{
+        font-size: 35px;
+        color: #535A53;
+        position: absolute;
+        right: 15px;
+        bottom: 10px;
     }
 `;
 

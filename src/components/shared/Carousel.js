@@ -65,7 +65,7 @@ function MainCarousel (props) {
                                 {element.artist}
                             </p>
                             <p className="bold">
-                                R$ {element.price}
+                                $ {element.price}
                             </p>
                             <ion-icon name="cart-outline" onClick={()=>{validate(element)}}></ion-icon>
                         </div>
@@ -221,7 +221,7 @@ export function GenreCarousel (props){
                                 {element.artist}
                             </p>
                             <p className="bold">
-                                R$ {element.price}
+                                $ {element.price}
                             </p>
                             <ion-icon name="cart-outline" onClick={()=>{validate(element)}}></ion-icon>
                         </div>

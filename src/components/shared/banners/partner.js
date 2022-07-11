@@ -18,14 +18,14 @@ export default function PartnerBanner (props){
 
 const Banner = styled.div`
     width: 100%;
-    height: 100px;
-    margin: 15px 0 ;
+    height: 60px;
+    margin: 10px 0 ;
     position: relative;
     border-radius: 5px;
     box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1);
     img{
         width: 100%;
-        height: 100px;
+        height: 60px;
         object-fit: cover;
         border-radius: 5px;
     }
