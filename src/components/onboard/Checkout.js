@@ -69,7 +69,6 @@ export default function Checkout() {
       email: userEmail,
       data: cart
     }
-    console.log(requisitionData, token, cart);
     setAddress("");
     setCardNumber("");
     try {
@@ -79,7 +78,16 @@ export default function Checkout() {
       setCart([])
       setForms(false);
     } catch(err) {
-      console.log(err.response.data)
+      toast.error("Checkout failed.", {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
       return err;
     }
   }

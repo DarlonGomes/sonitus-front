@@ -11,7 +11,6 @@ import { DataContext } from "../../context/DataContext.js";
 
 const URL = process.env.REACT_APP_API_URI;
 
-
 export default function History () {
     const { history, setHistory } = useContext(DataContext);
     const [isLoading, setIsLoading] = useState(true);
@@ -38,8 +37,26 @@ export default function History () {
                         <div className="header">
                             <p className="date">{element.date}</p>
                             <p >{element.addres}</p>
+                            <Limiter open={isOpen}>
+                                {element.albums.map(e =>
+                                <div className="item">
+                                <img src={e.image} alt={e.album}/>
+                                <div className="info">
+                                    <h4>{e.artist}</h4>
+                                    <p>{e.album}</p>
+                                    <p className="green">$ {e.price}</p>
+                                    <p>{e.quantity}</p>
+                                </div>
+                            </div>)}
+                            </Limiter>
+                            <div className="footer">
+                            <p>Total :</p> <p className="total">{element.value}</p>
+                            {isOpen ? <ion-icon name="chevron-up-circle-outline" onClick={()=>{setIsOpen(false)}}></ion-icon> : <ion-icon name="chevron-down-circle-outline" onClick={()=>{setIsOpen(true)}}></ion-icon>}
                         </div>
+                        </div>
+
                     </Purchase>)}
+
                     <Purchase>
                         <div className="header">
                             <p className="date">11/07</p>
@@ -77,6 +94,7 @@ export default function History () {
                         </div>
                         
                     </Purchase>
+
                 </Container>
             )
         }

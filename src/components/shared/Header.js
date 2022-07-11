@@ -312,7 +312,7 @@ export default function Header() {
       console.log(`Peguei histórico ${response.data}`)
       return;
     } catch (error) {
-      console.log(error);
+      return error;
     }
   }
   async function userLogin(credentials) {
@@ -334,6 +334,16 @@ export default function Header() {
       }
       return;
     } catch (err) {
+      toast.error("Login failed.", {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
       return err;
     }
   }
@@ -344,6 +354,16 @@ export default function Header() {
 
       return;
     } catch (err) {
+      toast.error("Signup failed.", {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
       return err;
     }
   }
