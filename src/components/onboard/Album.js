@@ -61,7 +61,6 @@ export default function Album() {
       artist: albumData.artist,
       price: albumData.price,
       id: albumData._id,
-      index: cartProducts.length,
       date: dayjs(Date()).format("MM/DD"),
     };
 
