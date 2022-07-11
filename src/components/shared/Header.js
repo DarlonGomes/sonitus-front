@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { DataContext } from "../../context/DataContext";
 import { UserContext } from "../../context/UserContext";
 import { Login, SignUp } from "../../handlers/loginHandlers.js";
-import  { EmptyCart, CartItem } from "./CartItem";
+import { EmptyCart, CartItem } from "./CartItem";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -252,7 +252,7 @@ export default function Header() {
   async function getHistory (token){
     
       try {
-        const response = await axios.get(`http://localhost:5000/history`, token);
+        const response = await axios.get(`${URL}/history`, token);
         setHistory(response.data);
         return
       } catch (error) {
@@ -262,7 +262,7 @@ export default function Header() {
   }
   async function userLogin(credentials) {
     try {
-      const response = await axios.post(`http://localhost:5000/user/signin`, credentials);
+      const response = await axios.post(`${URL}/user/signin`, credentials);
       if (response.status < 300) {
         const localData = { email: credentials.email, name: response.data.name }
         localStorage.setItem("sonitusData", JSON.stringify(localData));
