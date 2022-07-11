@@ -49,7 +49,7 @@ function PaymentForms({
 }
 
 export default function Checkout() {
-  const { dataRequest, cartProducts } = useContext(DataContext);
+  const { dataRequest, cartProducts, setCartProducts } = useContext(DataContext);
   const [cart, setCart] = useState(cartProducts);
   const [forms, setForms] = useState(false);
   const [address, setAddress] = useState("");
@@ -57,7 +57,7 @@ export default function Checkout() {
 
   useEffect(() => {
     dataRequest();
-  }, []);
+  }, [cartProducts]);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -73,8 +73,11 @@ export default function Checkout() {
     setAddress("");
     setCardNumber("");
     try {
-      const response = await axios.post(`${URL}/checkout`, requisitionData, token)
-      console.log(response.status.message);
+      // const response = await axios.post(`${URL}/checkout`, requisitionData, token)
+      const response = await axios.post(`http://localhost:5000/checkout`, requisitionData, token)
+      setCartProducts([]);
+      setCart([])
+      setForms(false);
     } catch(err) {
       console.log(err.response.data)
       return err;
