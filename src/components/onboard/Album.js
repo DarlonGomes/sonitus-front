@@ -33,7 +33,7 @@ export default function Album() {
       setLimit(response.data[0].stock);
       setTimeout(setIsLoading(false), "1000");
     } catch (error) {
-      console.log(error);
+      return error;
     }
   };
 
