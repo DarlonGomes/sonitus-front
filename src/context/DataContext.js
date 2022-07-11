@@ -11,6 +11,7 @@ const RequestProvider = ({ children }) => {
     const [products, setProducts] = useState(null);
     const [cartProducts, setCartProducts] = useState([]);
     const [history, setHistory] = useState(null)
+    const [search, setSearch] = useState(null);
 
     const productRequest = async(genre) => {
         try {
@@ -33,7 +34,7 @@ const RequestProvider = ({ children }) => {
     }
 
     return(
-        <DataContext.Provider value={{ reqData, dataRequest, products, productRequest, cartProducts, setCartProducts, history, setHistory }}>
+        <DataContext.Provider value={{ search, setSearch, reqData, dataRequest, products, productRequest, cartProducts, setCartProducts, history, setHistory }}>
             { children }
         </DataContext.Provider>
     )

@@ -113,7 +113,7 @@ function SideMenu({
   };
 
   function handleClick() {
-    setAccount(true);
+    setAccount(true);>>>>>>> main
     setOperation(true);
     setIsCart(false);
   }
@@ -126,8 +126,8 @@ function SideMenu({
   }
 
   function isCartEmpty() {
-    if(cartProducts.length !== 0) {
-      navigate('/checkout')
+    if (cartProducts.length !== 0) {
+      navigate("/checkout");
       return;
     }
     setIsCart(false);
@@ -144,12 +144,27 @@ function SideMenu({
     return;
   }
 
-  const CheckoutButton = () => <div onClick={isCartEmpty}> Go to Checkout <h1><ion-icon name="cart-outline"></ion-icon></h1></div>
+  const CheckoutButton = () => (
+    <div onClick={isCartEmpty}>
+      {" "}
+      Go to Checkout{" "}
+      <h1>
+        <ion-icon name="cart-outline"></ion-icon>
+      </h1>
+    </div>
+  );
 
-  const LoginButton = () => <>
-  <div onClick={handleClick} >Login<h1><ion-icon name="enter-outline"></ion-icon></h1></div>
-  <p>You need to Log In to checkout</p>
-  </>
+  const LoginButton = () => (
+    <>
+      <div onClick={handleClick}>
+        Login
+        <h1>
+          <ion-icon name="enter-outline"></ion-icon>
+        </h1>
+      </div>
+      <p>You need to Log In to checkout</p>
+    </>
+  );
 
   const HistoryData = () => {
     if (history) {
@@ -168,27 +183,30 @@ function SideMenu({
     if (cartProducts.length < 1) {
       return (
         <>
-        <DataWrapper cart={cart}>
-          <EmptyCart isHistory={isHistory}/>
-        </DataWrapper>
-        <Checkout >
-          { isLoggedIn(token) ? <CheckoutButton /> : <LoginButton /> }
-        </Checkout>
-        
-      </>
-      )
-      }else{
+          <DataWrapper cart={cart}>
+            <EmptyCart />
+          </DataWrapper>
+          <Checkout>
+            {isLoggedIn(token) ? <CheckoutButton /> : <LoginButton />}
+          </Checkout>
+        </>
+      );
+    } else {
       return (
         <>
           <DataWrapper cart={cart}>
             {cartProducts.map((e, index) => (
-              <CartItem key={e._id} index={index} props={e} setDisplay={setDisplay} />
+              <CartItem
+                key={e._id}
+                index={index}
+                props={e}
+                setDisplay={setDisplay}
+              />
             ))}
           </DataWrapper>
           <Checkout>
-            { isLoggedIn(token) ? <CheckoutButton /> : <LoginButton /> }
+            {isLoggedIn(token) ? <CheckoutButton /> : <LoginButton />}
           </Checkout>
-         
         </>
       );
     }
@@ -270,10 +288,9 @@ export default function Header() {
   const [password, setPassword] = useState("");
   const [repeat, setRepeat] = useState("");
   const [operation, setOperation] = useState(false);
-  const { reqData, setHistory } = useContext(DataContext);
+  const { reqData, setHistory, setSearch } = useContext(DataContext);
   const { data, setData, userLoadFromLocal } = useContext(UserContext);
-  const [ searchInput, setSearchInput] = useState("");
-  
+  const [searchInput, setSearchInput] = useState("");
 
   useEffect(() => {
     autoLogin();
@@ -284,7 +301,7 @@ export default function Header() {
   }, []);
 
   async function getHistory(token) {
-    if(token === null) {
+    if (token === null) {
       return;
     }
     try {
@@ -345,18 +362,17 @@ export default function Header() {
     setRepeat("");
   }
 
-  async function search(event){
+  async function search(event) {
     event.preventDefault();
 
     try {
-      const response = await axios.get(`${URL}/search/${searchInput}`);
+      const response = await axios.get(`${URL}/search/?id=${searchInput}`);
       setSearchInput("");
-
+      setSearch(response.data);
+      navigate("/search/results");
     } catch (error) {
-      
+      return error;
     }
-
-    navigate(`/search/${searchInput}`)
   }
   async function handleSubmit(e) {
     e.preventDefault();
@@ -475,9 +491,14 @@ export default function Header() {
         {/* QUANDO O HAMBURGUER DESCER TEM QUE IMPEDIR DO USUARIO APERTAR OS BOTÕES QUE ESTÃO ATRAS */}
         <SearchWrapper>
           <ion-icon name="search"></ion-icon>
-          <form onSubmit={(event)=>search(event)}>
-          <SearchBar type="text" onChange={e=> setSearchInput(e.target.value)} value={searchInput} placeholder="What are you looking for?" />
-          <ion-icon name="send" type="submit"></ion-icon>
+          <form onSubmit={(event) => search(event)}>
+            <SearchBar
+              type="text"
+              onChange={(e) => setSearchInput(e.target.value)}
+              value={searchInput}
+              placeholder="What are you looking for?"
+            />
+            <ion-icon name="send" type="submit"></ion-icon>
           </form>
         </SearchWrapper>
       </HeaderWrapper>
@@ -608,8 +629,7 @@ const SearchWrapper = styled.div`
     min-height: 24px;
     min-width: 24px;
   }
-  form{
-    width: 100%;
+  form {
     display: flex;
     flex-direction: row;
     align-items: center;

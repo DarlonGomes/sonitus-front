@@ -5,8 +5,6 @@ import { DataContext } from "../../context/DataContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
-//import { UserContext } from "../../context/UserContext";
-
 
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -67,7 +65,7 @@ export default function Genre () {
           theme: "colored",
         });
         setCartProducts(newArr);
-      };
+    };
 
 const Render = () =>{
     if(isLoading){
@@ -134,7 +132,7 @@ const Render = () =>{
     )
 }
 
-const Container = styled.div`
+export const Container = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -154,14 +152,14 @@ const Container = styled.div`
     }
 `;
 
-const DoubleColumn = styled.div`
+export const DoubleColumn = styled.div`
     width: 100%;
     height: auto;
     display: flex;
     flex-wrap: wrap;
 `;
 
-const AlbumWrapper = styled.div`
+export const AlbumWrapper = styled.div`
     width: 150px;
     height: 220px;
     background-color: #FFFFFF;
@@ -211,7 +209,7 @@ const AlbumWrapper = styled.div`
     }
 `;
 
-const LoadWrapper = styled.div`
+export const LoadWrapper = styled.div`
     margin: 10px 8px;
     z-index: 0;
 `;
