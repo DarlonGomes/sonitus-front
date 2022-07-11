@@ -1,15 +1,52 @@
 import styled from "styled-components";
-//import axios from "axios";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-//import { UserContext } from "../../context/UserContext";
-
-//import Skeleton from "react-loading-skeleton";
-//import "react-loading-skeleton/dist/skeleton.css";
+import { DataContext } from "../../context/DataContext";
+import { toast } from "react-toastify";
+import dayjs from "dayjs";
 
 function MainCarousel (props) {
     const [carouselData, setCarouselData] = useState(props.arr); 
+    const { cartProducts, setCartProducts } = useContext(DataContext);
     const navigate = useNavigate();
+    
+    function validate(element) {  
+    
+        const product = {
+          quantity: 1,
+          image: element.image,
+          album: element.album,
+          artist: element.artist,
+          price: element.price,
+          id: element._id,
+          index: cartProducts.length,
+          date: dayjs(Date()).format("MM/DD"),
+        };
+        function matchIndex() {
+            const index = cartProducts.findIndex((item) => item.id === product.id)
+            return index;
+        }
+        
+        const newArr = [...cartProducts];
+    
+        if(cartProducts.length > 0 && matchIndex() !== -1) {
+            cartProducts[matchIndex()].quantity += product.quantity;
+            cartProducts[matchIndex()].date = dayjs(Date()).format("MM/DD");
+        } else {
+            newArr.push(product)
+        }
+        toast.success("Added to cart.",{
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+        setCartProducts(newArr);
+      }
 
     return (
         <CarouselWrapper>
@@ -17,7 +54,7 @@ function MainCarousel (props) {
             <Carousel>
  
                 {carouselData.map(element => 
-                    <Item key={element._id} >
+                    <Item key={element._id}>
                         <img src={element.image} alt={element.album} 
                         onClick={()=>{navigate(`/${element.genre}/${element._id}`)}}/>
                         <div className="info">
@@ -30,6 +67,7 @@ function MainCarousel (props) {
                             <p className="bold">
                                 R$ {element.price}
                             </p>
+                            <ion-icon name="cart-outline" onClick={()=>{validate(element)}}></ion-icon>
                         </div>
                     </Item>)} 
                 
@@ -78,7 +116,7 @@ const Item = styled.div`
     padding: 5px 5px 0 5px;
     border-radius: 5px;
     box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1);
-
+    position: relative;
     img{
         width: 240px;
         height: 240px;
@@ -105,11 +143,61 @@ const Item = styled.div`
         font-size: 16px;
         color: #000000;
     }
+
+    ion-icon{
+        font-size: 35px;
+        color: #535A53;
+        position: absolute;
+        right: 15px;
+        bottom: 10px;
+    }
 `;
 
 export function GenreCarousel (props){
 
     const [carouselData, setCarouselData] = useState(props.arr); 
+    const { cartProducts, setCartProducts } = useContext(DataContext);
+
+    function validate(element) {  
+    
+        const product = {
+          quantity: 1,
+          image: element.image,
+          album: element.album,
+          artist: element.artist,
+          price: element.price,
+          id: element._id,
+          index: cartProducts.length,
+          date: dayjs(Date()).format("MM/DD"),
+        };
+        
+        function matchIndex() {
+            const index = cartProducts.findIndex((item) => item.id === product.id)
+            return index;
+        }
+        
+        const newArr = [...cartProducts];
+    
+        if(cartProducts.length > 0 && matchIndex() !== -1) {
+            cartProducts[matchIndex()].quantity += product.quantity;
+            cartProducts[matchIndex()].date = dayjs(Date()).format("MM/DD");
+        } else {
+            newArr.push(product)
+        }
+        toast.success("Added to cart.",{
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+        setCartProducts(newArr);
+      }
+
+
     const navigate = useNavigate();
     function goTo (param){
         navigate(`/${props.title}`);
@@ -135,12 +223,10 @@ export function GenreCarousel (props){
                             <p className="bold">
                                 R$ {element.price}
                             </p>
+                            <ion-icon name="cart-outline" onClick={()=>{validate(element)}}></ion-icon>
                         </div>
                     </GenreItem>)} 
-                    {/* <MoreItem onClick={()=>{goTo(props.title)}}>
-                    <ion-icon name="add-outline"></ion-icon>
-                    </MoreItem> */}
-                
+                    
             </CarouselGenre>
 
         </GenreWrapper>
@@ -194,6 +280,7 @@ const GenreItem = styled.div`
     padding: 5px;
     border-radius: 5px;
     box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1);
+    position: relative;
 
     img{
         width: 190px;
@@ -220,6 +307,14 @@ const GenreItem = styled.div`
         font-weight: 400;
         font-size: 16px;
         color: #000000;
+    }
+
+    ion-icon{
+        position: absolute;
+        bottom: 10px;
+        right: 15px;
+        font-size: 25px;
+        color: #6F6F6F;
     }
 `;
 
