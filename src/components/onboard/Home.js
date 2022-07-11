@@ -3,7 +3,7 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { DataContext } from "../../context/DataContext";
 import { toast, ToastContainer } from "react-toastify";
-
+import Spotify from "react-spotify-embed";
 
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -100,6 +100,7 @@ export default function Home (){
                     <h3>The old pleasure of <br/>listening is back</h3>
                 </BigScreen>
                 <Container>
+                    
                     <h2>Our Selection</h2>
                     <MainBanner title="Gigg's code playlist" image="https://i.pinimg.com/originals/77/dd/b9/77ddb90eee4b413ecdbf6b624315928c.png" id="giggs"/>
                     <MainBanner title="Chico's odd playlist" image="https://yt3.ggpht.com/ytc/AKedOLRCU7jn-QSPH2EVwGiT7sSjDvdsPfX3svE9n_CAbg=s900-c-k-c0x00ffffff-no-rj" id="Chico"/>

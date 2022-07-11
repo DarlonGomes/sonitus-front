@@ -10,8 +10,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const URL = process.env.REACT_APP_API_URI;
-//import Skeleton from "react-loading-skeleton";
-//import "react-loading-skeleton/dist/skeleton.css";
+
 
 // PENSAR EM COMPONENTIZAR EXTERNAMENTE A PARTIR DAQUI
 function AccountActions({ setAccount, setDisplay, setOperation }) {
@@ -71,7 +70,17 @@ function SideMenu({
     setDisplay(false);
     setData(null);
     localStorage.removeItem("sonitusData");
-    localStorage.removeItem("sonitusToken")
+    localStorage.removeItem("sonitusToken");
+    toast.info("Logout made successfully.", {
+      position: "top-right",
+      autoClose: 1500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    })
   }
 
   const MenuData = () => {
@@ -97,16 +106,7 @@ function SideMenu({
       </>
     );
   };
-  // toast.error("Quantity exceed our stock.", {
-  //   position: "top-right",
-  //   autoClose: 1500,
-  //   hideProgressBar: false,
-  //   closeOnClick: true,
-  //   pauseOnHover: false,
-  //   draggable: true,
-  //   progress: undefined,
-  //   theme: "colored",
-  // });
+  
   function checkIfLoggedIn(token) {
     if(token !== null) {
       navigate("/checkout")
@@ -126,7 +126,7 @@ function SideMenu({
       )
     }
   }
-  const CartData = () => {
+  const CartData = ({setDisplay}) => {
     if(cartProducts.length < 1){
       return(
         <>
@@ -144,7 +144,7 @@ function SideMenu({
         
           <DataWrapper cart={cart}>
              {cartProducts.map(e=>
-               <CartItem key={e._id} props={e} />)} 
+               <CartItem key={e._id} props={e} setDisplay={setDisplay}/>)} 
           </DataWrapper>
           <Checkout>
             <div onClick={() => checkIfLoggedIn(token)}>
@@ -164,7 +164,7 @@ function SideMenu({
   return (
     <>
       <SideMenuBody cart={cart}>
-        {cart ? <CartData /> : <MenuData />}
+        {cart ? <CartData setDisplay={setDisplay}/> : <MenuData />}
       </SideMenuBody>
       <SideMenuShadow
         onClick={() => (cart ? setIsCart(false) : setDisplay(false))}

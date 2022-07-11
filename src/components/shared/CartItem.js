@@ -23,7 +23,7 @@ function ExcludeItem(index, setCartProducts, cartProducts) {
   if(response){
     cartProducts.splice(index, 1);
     setCartProducts([...cartProducts]);
-    toast.success("Done", {
+    toast.info("Removed from the cart.", {
       position: "top-right",
       autoClose: 1500,
       hideProgressBar: false,
