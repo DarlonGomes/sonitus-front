@@ -95,7 +95,19 @@ export default function Album() {
     if (isLoading) {
       return (
         <Container>
-          <Skeleton width={300} height={300} />
+          <h2><Skeleton width={200} height={40}/></h2>
+          <p><Skeleton width={100} height={25} /></p>
+          <AlbumSample>
+            <Skeleton width={"100%"} height={200} />
+          </AlbumSample>
+          <h2><Skeleton width={150} height={40}/></h2>
+          <AlbumSample>
+          <Skeleton width={"100%"} height={150} />
+          </AlbumSample>
+          <h2><Skeleton width={100} height={40}/></h2>
+          <AlbumSample>
+            <Skeleton width={"100%"} height={236} />
+          </AlbumSample>
         </Container>
       );
     } else {
@@ -169,7 +181,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  background-color: #ffffff;
+  background-color: #DFDFDF;
   padding: 0 20px 30px;
   margin-top: 120px;
   background-color: #dfdfdf;
@@ -204,7 +216,7 @@ const AlbumInfo = styled.div`
   box-sizing: border-box;
   justify-content: space-between;
   box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1);
-
+  z-index: 0;
   img {
     width: 200px;
     height: 200px;
@@ -254,7 +266,7 @@ const DescriptionText = styled.div`
   box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1);
   overflow-y: ${(props) => props.open ? "none" : "hidden"};
   position: relative;
-
+  z-index: 0;
   p {
     font-family: "Jost";
     font-size: 16px;
@@ -338,4 +350,6 @@ const Quantity = styled.form`
   }
 `;
 
-const AlbumSample = styled.div``;
+const AlbumSample=styled.div`
+z-index: 0;
+`;

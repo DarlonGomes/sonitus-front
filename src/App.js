@@ -8,6 +8,7 @@ import Genre from "./components/onboard/Genre";
 import Album from "./components/onboard/Album";
 import RequestProvider from "./context/DataContext";
 import Checkout from "./components/onboard/Checkout";
+import History from "./components/onboard/History";
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
             <Route path="/:genre" element={<Genre />} />
             <Route path="/:genre/:id" element={<Album />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/history" element={<History />} />
           </Routes>
         </BrowserRouter>
         <Footer />

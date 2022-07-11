@@ -7,14 +7,14 @@ import { useEffect, useState, useContext } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-import {GenreCarousel} from "../shared/Carousel";
 import { DataContext } from "../../context/DataContext.js";
 
 
 export default function History () {
     const { history } = useContext(DataContext);
-    const [isLoading, setIsLoading] = useContext(true);
-
+    const [isLoading, setIsLoading] = useState(false);
+    const [ isOpen, setIsOpen ] = useState(false);
+    console.log(history)
     const Render = () =>{
         if(isLoading){
             return(
@@ -26,14 +26,53 @@ export default function History () {
         else{
             return(
                 <Container>
-                    
+                    <h2>History</h2>
+                    <Purchase>
+                        <div className="header">
+                            <p className="date">11/07</p>
+                            <p >Rua do Bilulu, 2000</p>
+                        </div>
+                        <Limiter open={isOpen}>
+                            <div className="item">
+                                <img src="https://www.billboard.com/wp-content/uploads/media/ninja-sex-party-press-photo-2018-cr-Fernando-Escovar-billboard-1548.jpg" alt="NSP"/>
+                                <div className="info">
+                                    <h4>Ninja Sex Party</h4>
+                                    <p>Cool Patrol</p>
+                                    <p className="green">$ 27.83</p>
+                                </div>
+                            </div>
+                            <div className="item">
+                                <img src="https://www.billboard.com/wp-content/uploads/media/ninja-sex-party-press-photo-2018-cr-Fernando-Escovar-billboard-1548.jpg" alt="NSP"/>
+                                <div className="info">
+                                    <h4>Ninja Sex Party</h4>
+                                    <p>Cool Patrol</p>
+                                    <p className="green">$ 27.83</p>
+                                </div>
+                            </div>
+                            <div className="item">
+                                <img src="https://www.billboard.com/wp-content/uploads/media/ninja-sex-party-press-photo-2018-cr-Fernando-Escovar-billboard-1548.jpg" alt="NSP"/>
+                                <div className="info">
+                                    <h4>Ninja Sex Party</h4>
+                                    <p>Cool Patrol</p>
+                                    <p className="green">$ 27.83</p>
+                                </div>
+                            </div>
+                        </Limiter>
+                        <div className="footer">
+                            <p>Total :</p> <p className="total">$83.49</p>
+                            {isOpen ? <ion-icon name="chevron-up-circle-outline" onClick={()=>{setIsOpen(false)}}></ion-icon> : <ion-icon name="chevron-down-circle-outline" onClick={()=>{setIsOpen(true)}}></ion-icon>}
+                        </div>
+                        
+                    </Purchase>
                 </Container>
             )
         }
     }
-    return(
 
+    return(
+        <Render/>
     )
+    
 }
 
 const Container = styled.div`
@@ -41,7 +80,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  background-color: #ffffff;
+  background-color: #DFDFDF;
   padding: 0 20px 30px;
   margin-top: 120px;
   background-color: #dfdfdf;
@@ -49,7 +88,7 @@ const Container = styled.div`
   z-index: 0;
 
   h2 {
-    margin: 30px 0 10px;
+    margin: 30px 0 20px;
     font-family: "Jost";
     font-size: 28px;
     font-weight: 700;
@@ -65,4 +104,112 @@ const Container = styled.div`
     color: #292929;
     z-index: 0;
   }
+`;
+
+const Purchase = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: #FFFFFF;
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1);
+    
+    h4{
+        font-family: "Jost";
+        font-size: 22px;
+        font-weight: 500;
+        color: #292929;
+        margin-bottom: 10px;
+    }
+    p{
+    font-family: "Jost";
+    font-size: 18px;
+    font-weight: 400;
+    color: #292929;
+    margin: 0;
+    }
+
+    .green{
+        color: green;
+        font-size: 20px;
+        font-weight: 500;
+        position: absolute;
+        bottom: 20px;
+    }
+
+
+    .header{
+        width: 100%;
+        height: 40px;
+        box-sizing: border-box;
+        padding: 5px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        border-bottom: 1px solid gray;
+        position: relative;
+    }
+    .footer{
+        width: 100%;
+        height: 40px;
+        box-sizing: border-box;
+        padding: 5px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        border-top: 1px solid #DFDFDF;
+        position: relative;
+    }
+
+    .total{
+        margin-left: 15px;
+        color: green;
+    }
+
+    .item{
+        width: 100%;
+        height: 160px;
+        padding: 5px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: row;
+        border-bottom: 1px solid gray;
+        position: relative;
+    }
+
+    img{
+        width: 150px;
+        height: 150px;
+        object-fit: fill;
+    }
+
+    .info{
+        height: 110px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    ion-icon{
+        position: absolute;
+        right: 7px;
+        font-size: 25px;
+    }
+    .date{
+        position: absolute;
+        left: 10px;
+    }
+
+    
+`;
+
+const Limiter = styled.div`
+    height: ${(props) => props.open ? "auto" : "160px"};
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: ${(props) => props.open ? "none" : "hidden"};
 `;

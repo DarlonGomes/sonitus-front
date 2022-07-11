@@ -290,6 +290,7 @@ export default function Header() {
     try {
       const response = await axios.get(`${URL}/history`, token);
       setHistory(response.data);
+      console.log(`Peguei histórico ${response.data}`)
       return;
     } catch (error) {
       console.log(error);
@@ -674,9 +675,9 @@ const OptionButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border-top: 1px solid #454545;
-  border-bottom: 1px solid #454545;;
-  background-color: #333333;
+  border-top: 1px solid #666666;
+  border-bottom: 1px solid #666666;;
+  background-color: #292929;
   font-size: 36px;
   width: 100%;
   height: 40px;

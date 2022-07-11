@@ -203,11 +203,11 @@ const AlbumWrapper = styled.div`
     }
 
     ion-icon{
-        font-size: 35px;
+        font-size: 25px;
         color: #535A53;
         position: absolute;
-        right: 15px;
-        bottom: 10px;
+        right: 5px;
+        bottom: 5px;
     }
 `;
 
