@@ -5,9 +5,23 @@ import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 import { useNavigate } from "react-router-dom";
 import { Container, DoubleColumn, LoadWrapper, AlbumWrapper } from "./Genre";
+import { ContentWrapper, AlbumCover } from "../shared/CartItem";
+import noresult from "../../assets/noresult.png";
 
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import styled from "styled-components";
+
+function NoResults({ isCheckout }) {
+  return (
+    <EmptyContentWrapper contentFormat={isCheckout}>
+      <AlbumCover src={noresult} alt={"Empty"} />
+      <AlbumText >
+          <p>We did not found anything</p>
+      </AlbumText>
+    </EmptyContentWrapper>
+  );
+}
 
 function DoubleColumnList({ genreAlbums, navigate }) {
   console.log(genreAlbums);
@@ -83,7 +97,7 @@ export default function Results() {
         dataArray[i] = search.filter((item) => item.genre === reqData[i]._id)
       }
     }
-    splitBetweenArrays();
+    search && splitBetweenArrays();
     setFilter(dataArray);
     setTimeout(() => setIsLoading(false), 1000);
   }, [search])
@@ -131,7 +145,7 @@ export default function Results() {
         return(
             <>
             <Container>
-              <ResultDisplay />
+              { filter !== null ? <NoResults isCheckout={true} /> : <ResultDisplay />}
             </Container>
             </>
         )
@@ -143,3 +157,23 @@ export default function Results() {
   </>
   )
 }
+
+const AlbumText = styled.div`
+  font-family: "Roboto", sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-left: 5px;
+  font-size: 32px;
+  color: #454545;
+  line-height: 26px;
+  font-weight: 500;
+  width: 100%;
+  height: 100%;
+`
+
+const EmptyContentWrapper = styled(ContentWrapper)`
+  margin: 9vh 0;
+  background-color: #DFDFDF;
+`
