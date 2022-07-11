@@ -4,6 +4,8 @@ import empty from "../../assets/empty.png";
 // import { useContext, useState } from "react";
 import { useContext } from "react";
 import { DataContext } from "../../context/DataContext";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export function EmptyCart({ isHistory }) {
   return (
@@ -21,6 +23,17 @@ function ExcludeItem(index, setCartProducts, cartProducts) {
   if(response){
     cartProducts.splice(index, 1);
     setCartProducts([...cartProducts]);
+    toast.success("Done", {
+      position: "top-right",
+      autoClose: 1500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+   
     return;
   }
 }
@@ -43,6 +56,7 @@ export function CartItem({props, isHistory, isCheckout}) {
   }).format(props.price);
 
   return (
+    <>
     <ContentWrapper contentFormat={isCheckout}>
       <AlbumCover src={props.image} alt={props.album} />
       <AlbumText contentFormat={isCheckout}>
@@ -50,13 +64,14 @@ export function CartItem({props, isHistory, isCheckout}) {
           <h1>{props.album}</h1>
           {excludeButton}
         </AlbumHeader>
-        <p>{props.artist}</p>
+        <p className="limit">{props.artist}</p>
         <AlbumFooter>
           {date}
           <p>{convertToCash}</p>
         </AlbumFooter>
       </AlbumText>
     </ContentWrapper>
+    </>
   );
 }
 
@@ -98,9 +113,11 @@ const AlbumText = styled.div`
   color: ${ ({contentFormat}) => contentFormat ? '#393939' : '#DFDFDF'};
 
   p {
+    
     font-size: 24px;
     font-weight: 300;
   }
+
 `;
 
 const AlbumHeader = styled.div`

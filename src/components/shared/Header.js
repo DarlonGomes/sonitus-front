@@ -64,7 +64,7 @@ function SideMenu({
   cart,
   token,
 }) {
-  const {cartProducts} = useContext(DataContext)
+  const {cartProducts, history} = useContext(DataContext)
   const navigate = useNavigate();
 
   function logout() {
@@ -112,6 +112,21 @@ function SideMenu({
     }
   }
 
+  const HistoryData = () =>{
+    console.log(token)
+    console.log(history)
+    if(history){
+      return(
+        <>
+          {history.map((element, index) => <p key={index}> {element.albums}</p>)}
+        </>
+      )
+    }else{
+      return(
+        <EmptyCart/>
+      )
+    }
+  }
   const CartData = () => {
     if(cartProducts.length < 1){
       return(
@@ -120,13 +135,14 @@ function SideMenu({
           <EmptyCart />
         </DataWrapper>
         <DataWrapper cart={cart}>
-          <EmptyCart isHistory={true} /> 
+          <HistoryData/>
         </DataWrapper>
       </>
       )
-    }else{
+      }else{
       return (
         <>
+        
           <DataWrapper cart={cart}>
              {cartProducts.map(e=>
                <CartItem key={e._id} props={e} />)} 
@@ -137,7 +153,7 @@ function SideMenu({
             </div>
           </Checkout>
           <DataWrapper cart={cart}>
-            <EmptyCart/> 
+          <HistoryData/>
           </DataWrapper>
         </>
       );
@@ -224,27 +240,39 @@ export default function Header() {
   const [operation, setOperation] = useState(false);
   const { reqData } = useContext(DataContext);
   const { data, setData, token, setToken, userLoadFromLocal } = useContext(UserContext);
+  const {history , setHistory} = useContext(DataContext);
 
   useEffect(() => {
     const load = async () => {
       await userLoadFromLocal();
     };
     load();
-  }, []);
+    getHistory();
+  }, [isCart]);
 
+  async function getHistory (){
+    try {
+      const response = await axios.get(`http://localhost:5000/history`, token);
+      console.log(response.data)
+      setHistory(response.data);
+    } catch (error) {
+      console.log(error)
+    }
+  }
   async function userLogin(credentials) {
     try {
-      const response = await axios.post(`${URL}/user/signin`, credentials);
+      const response = await axios.post(`http://localhost:5000/user/signin`, credentials);
       if (response.status < 300) {
         const localData = { email: credentials.email, name: response.data.name }
         localStorage.setItem("data", JSON.stringify(localData));
         setData({ ...response.data });
         const token = {
           headers: {
-            Authentication: `Bearer ${response.data.token}`,
+            Authorization: `Bearer ${response.data.token}`,
           },
         };
         setToken(token);
+        localStorage.setItem("token", JSON.stringify(token));
       }
       return;
     } catch (err) {
@@ -255,10 +283,7 @@ export default function Header() {
   async function userRegister(credentials) {
     try {
       const response = await axios.post(`${URL}/user/signup`, credentials);
-      if (response.status < 300) {
-        localStorage.setItem("token", JSON.stringify(response.data.token));
-        localStorage.setItem("uid", JSON.stringify(response.data._id));
-      }
+      
       return;
     } catch (err) {
       return err;
@@ -362,6 +387,7 @@ export default function Header() {
         />
       )}
       <HeaderWrapper>
+        <ToastContainer/>
         <TopMenu>
           <ion-icon onClick={() => setDisplay(true)} name="menu"></ion-icon>
           <ion-icon onClick={() => navigate("/")} name="disc"></ion-icon>

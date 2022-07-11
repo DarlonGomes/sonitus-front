@@ -2,8 +2,8 @@ import styled from "styled-components";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { DataContext } from "../../context/DataContext";
+import { toast, ToastContainer } from "react-toastify";
 
-//import { UserContext } from "../../context/UserContext";
 
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -35,6 +35,7 @@ export default function Home (){
         if(isLoading){
             return(
                 <>
+    
                 <BigScreen>
                     <h2> S  O  N  I  T  U  S</h2>
                     <h3>The old pleasure of <br/>listening is back</h3>

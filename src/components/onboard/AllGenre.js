@@ -104,7 +104,7 @@ function GenreList () {
                 <>
                 <Container>
                     <h2> All Genres</h2>
-                    {carouselData.map(element => <GenreCarousel title={element.title} arr={element.arr}/>)}
+                    {carouselData.map((element, index) => <GenreCarousel key={index} title={element.title} arr={element.arr}/>)}
                    
                 </Container>
                 </>
