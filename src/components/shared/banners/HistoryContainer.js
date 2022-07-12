@@ -52,6 +52,7 @@ const Purchase = styled.div`
         margin-bottom: 10px;
     }
     p{
+    
     font-family: "Jost";
     font-size: 18px;
     font-weight: 400;

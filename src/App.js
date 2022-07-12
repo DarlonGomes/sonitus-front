@@ -26,7 +26,7 @@ export default function App() {
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/history" element={<History />} />
             <Route path="/search/results" element={<Results />} />
-            <Route path="/history" element={<History/>} />
+            
           </Routes>
         </BrowserRouter>
         <Footer />
