@@ -50,7 +50,7 @@ export function SignUp({
         type={"text"}
         onChange={(e) => setName(e.target.value)}
         placeholder="Name"
-        pattern="[a-zA-Z]{1,64}"
+        pattern="[a-zA-Z\s.]{1,64}"
         title=""
         required
       />

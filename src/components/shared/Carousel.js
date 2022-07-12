@@ -311,25 +311,10 @@ const GenreItem = styled.div`
 
     ion-icon{
         position: absolute;
-        bottom: 10px;
-        right: 15px;
+        bottom: 7px;
+        right: 7px;
         font-size: 25px;
         color: #6F6F6F;
     }
 `;
 
-const MoreItem = styled.div`
-    min-width: 60px;
-    height: 60px;
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #EEEEEE;
-    margin:105px 30px;
-    box-shadow: 0 3px 9px 0 rgb(213 217 217 / 50%);
-   ion-icon{
-    font-size: 28px;
-    color: #DFDFDF;
-   }
-`;
