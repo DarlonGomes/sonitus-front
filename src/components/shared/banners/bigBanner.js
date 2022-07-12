@@ -7,7 +7,7 @@ function MainBanner (props){
     const navigate = useNavigate();
 
     return (
-        <SuggestedBox onClick={()=>{navigate(`/selection/${props.id}`)}}>
+        <SuggestedBox onClick={()=>{navigate(`/${props.id}`)}}>
                 <img src={props.image} alt={props.title}/>
                 <h3>{props.title}</h3>
         </SuggestedBox>
