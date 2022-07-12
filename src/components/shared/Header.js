@@ -63,7 +63,7 @@ function SideMenu({
   token,
 }) {
 
-  const { cartProducts, history } = useContext(DataContext);
+  const { cartProducts } = useContext(DataContext);
   const navigate = useNavigate();
 
   function logout() {
@@ -168,20 +168,8 @@ function SideMenu({
     </>
   );
 
-  const HistoryData = () => {
-    if (history) {
-      return (
-        <>
-          {history.map((element, index) => (
-            <p key={index}> {element.albums}</p>
-          ))}
-        </>
-      );
-    } else {
-      return <EmptyCart isHistory={true} />;
-    }
-  };
-  const CartData = ({ setDisplay, isHistory }) => {
+  
+  const CartData = ({ setDisplay }) => {
     if (cartProducts.length < 1) {
       return (
         <>
@@ -291,7 +279,7 @@ export default function Header() {
   const [repeat, setRepeat] = useState("");
   const [operation, setOperation] = useState(false);
   const { reqData, setHistory, setSearch } = useContext(DataContext);
-  const { data, setData, userLoadFromLocal } = useContext(UserContext);
+  const { data, setData } = useContext(UserContext);
   const [searchInput, setSearchInput] = useState("");
 
   useEffect(() => {
@@ -309,7 +297,6 @@ export default function Header() {
     try {
       const response = await axios.get(`${URL}/history`, token);
       setHistory(response.data);
-      console.log(`Peguei histórico ${response.data}`)
       return;
     } catch (error) {
       return error;
@@ -350,8 +337,7 @@ export default function Header() {
 
   async function userRegister(credentials) {
     try {
-      const response = await axios.post(`${URL}/user/signup`, credentials);
-
+      await axios.post(`${URL}/user/signup`, credentials);
       return;
     } catch (err) {
       toast.error("Signup failed.", {

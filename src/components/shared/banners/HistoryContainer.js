@@ -28,7 +28,7 @@ export default function Wrapper (props){
             </Limiter>
             <div className="footer">
                 <p>Total:</p>
-                <p className="total">{data.value.toFixed(2)}</p>
+                <p className="total">$ {data.value.toFixed(2)}</p>
                 {isOpen ? <ion-icon name="chevron-up-circle-outline" onClick={()=>{setIsOpen(false)}}></ion-icon> : <ion-icon name="chevron-down-circle-outline" onClick={()=>{setIsOpen(true)}}></ion-icon>}
             </div>
         </Purchase>
@@ -52,6 +52,7 @@ const Purchase = styled.div`
         margin-bottom: 10px;
     }
     p{
+    
     font-family: "Jost";
     font-size: 18px;
     font-weight: 400;
