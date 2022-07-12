@@ -101,7 +101,7 @@ export default function Results() {
     setFilter(dataArray);
     setTimeout(() => setIsLoading(false), 1000);
   }, [search])
-
+  
   const ResultDisplay = () =>
   {
     return filter.map((genre, index) =>

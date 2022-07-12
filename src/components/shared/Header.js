@@ -377,7 +377,9 @@ export default function Header() {
       const response = await axios.get(`${URL}/search/?id=${searchInput}`);
       setSearchInput("");
       setSearch(response.data);
-      navigate("/search/results");
+      
+      setTimeout(navigate("/search/results"), "1000")
+      
     } catch (error) {
       return error;
     }
