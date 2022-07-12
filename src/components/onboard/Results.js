@@ -90,6 +90,7 @@ export default function Results() {
   const [filter, setFilter] = useState(null);
 
   useEffect(() => {
+    
     const dataArray = [];
     const splitBetweenArrays = () => {
       for(let i = 0; i < reqData.length; i++) {
@@ -99,8 +100,8 @@ export default function Results() {
     search && splitBetweenArrays();
     setFilter(dataArray);
     setTimeout(() => setIsLoading(false), 1000);
-  }, [search])
-
+  }, [])
+  
   const ResultDisplay = () =>
   {
     return filter.map((genre, index) =>
@@ -144,7 +145,7 @@ export default function Results() {
         return(
             <>
             <Container>
-              { filter !== null ? <NoResults isCheckout={true} /> : <ResultDisplay />}
+              { filter === null ? <NoResults isCheckout={true} /> : <ResultDisplay />}
             </Container>
             </>
         )

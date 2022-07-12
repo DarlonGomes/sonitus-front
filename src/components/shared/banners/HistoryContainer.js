@@ -3,7 +3,7 @@ import { useState } from "react";
 
 export default function Wrapper (props){
     const [ isOpen, setIsOpen ] = useState(false);
-    const [data , setData] = useState(props.element)
+    const [data ] = useState(props.element)
 
 
     return(
@@ -14,7 +14,7 @@ export default function Wrapper (props){
                 <p>{data.addres}</p>
             </div>
             <Limiter open={isOpen}>
-                {data.albums.map(album => <div className="item">
+                {data.albums.map((album, index) => <div className="item" key={index}>
                     <img src={album.image} alt={album.album} />
                     <div className="info">
                         <h4>{album.artist}</h4>
