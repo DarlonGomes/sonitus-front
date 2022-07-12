@@ -90,6 +90,7 @@ export default function Results() {
   const [filter, setFilter] = useState(null);
 
   useEffect(() => {
+    setIsLoading(true)
     const dataArray = [];
     const splitBetweenArrays = () => {
       for(let i = 0; i < reqData.length; i++) {
@@ -144,7 +145,7 @@ export default function Results() {
         return(
             <>
             <Container>
-              { filter !== null ? <NoResults isCheckout={true} /> : <ResultDisplay />}
+              { filter === null ? <NoResults isCheckout={true} /> : <ResultDisplay />}
             </Container>
             </>
         )
