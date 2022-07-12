@@ -15,7 +15,6 @@ const URL = process.env.REACT_APP_API_URI;
 export default function History () {
     const { history, setHistory } = useContext(DataContext);
     const [isLoading, setIsLoading] = useState(true);
-    const [ isOpen, setIsOpen ] = useState(false);
    
     const token = JSON.parse(localStorage.getItem("sonitusToken"));
 
@@ -52,7 +51,7 @@ export default function History () {
           setTimeout(setIsLoading(false), "1000");
           return;
         } catch (error) {
-          console.log(error);
+          
         }
       }
 

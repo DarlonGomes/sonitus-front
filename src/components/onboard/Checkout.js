@@ -2,7 +2,7 @@ import styled from "styled-components";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { DataContext } from "../../context/DataContext";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { CartItem } from "../shared/CartItem";
 import { InputButton, CloseIcon } from "../shared/Header";
 import { FormsWrapper } from "../../handlers/loginHandlers";
@@ -54,6 +54,7 @@ export default function Checkout() {
   const [forms, setForms] = useState(false);
   const [address, setAddress] = useState("");
   const [cardNumber, setCardNumber] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     dataRequest();
@@ -73,8 +74,8 @@ export default function Checkout() {
     setAddress("");
     setCardNumber("");
     try {
-      //const response = await axios.post(`${URL}/checkout`, requisitionData, token)
-       const response = await axios.post(`http://localhost:5000/checkout`, requisitionData, token)
+      await axios.post(`${URL}/checkout`, requisitionData, token)
+    //const response = await axios.post(`http://localhost:5000/checkout`, requisitionData, token)
       setCartProducts([]);
       setCart([])
       setForms(false);
@@ -109,7 +110,7 @@ export default function Checkout() {
   }
 
   const ShoppingList = () => {
-    return cart.length > 0 && cart.map((item, index) => <CartItem key={index} isCheckout={true} props={item} /> )
+    return cart.length > 0 && cart.map((item, index) => <CartItem key={index} isCheckout={true} props={item} onClick={()=>{navigate(`/${item.genre}/${item._id}`)}}/> )
   }
 
   const ShoppingInfo = () => {
