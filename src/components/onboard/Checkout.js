@@ -69,14 +69,26 @@ export default function Checkout() {
       email: userEmail,
       data: cart
     }
+
     setAddress("");
     setCardNumber("");
     try {
-      const response = await axios.post(`${URL}/checkout`, requisitionData, token)
-      // const response = await axios.post(`http://localhost:5000/checkout`, requisitionData, token)
+      //const response = await axios.post(`${URL}/checkout`, requisitionData, token)
+       const response = await axios.post(`http://localhost:5000/checkout`, requisitionData, token)
       setCartProducts([]);
       setCart([])
       setForms(false);
+      toast.success("Success!", {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      }
+      )
     } catch(err) {
       toast.error("Checkout failed.", {
         position: "top-right",

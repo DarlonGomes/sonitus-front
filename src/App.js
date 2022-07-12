@@ -10,7 +10,7 @@ import RequestProvider from "./context/DataContext";
 import Checkout from "./components/onboard/Checkout";
 import History from "./components/onboard/History";
 import Results from "./components/onboard/Results";
-import History from "./components/onboard/History";
+
 
 export default function App() {
   return (
