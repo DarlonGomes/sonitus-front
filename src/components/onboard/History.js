@@ -88,9 +88,9 @@ const Container = styled.div`
   }
 
   p {
-    margin: 0 0 15px;
+    
     font-family: "Jost";
-    font-size: 25px;
+    font-size: 18px;
     font-weight: 400;
     color: #292929;
     z-index: 0;
